@@ -1,13 +1,9 @@
-from fastapi import FastAPI,HTTPException, Depends, status
-from pydantic import BaseModel
-from typing import Annotated
-from models import receta
-from database.database import engine, SessionLocal
-from sqlalchemy.orm import Session
-from routers import recetas
+from fastapi import FastAPI
+from routers import recetas,usuarios
 
 app = FastAPI()
-# app.include_router(recetas.router)
+app.include_router(recetas.app)
+app.include_router(usuarios.app)
 
 def get_db():
     db=SessionLocal()

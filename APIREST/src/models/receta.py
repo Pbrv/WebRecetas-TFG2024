@@ -1,4 +1,3 @@
-from typing import Optional
 from sqlalchemy import String, Integer, Column, Text
 from pydantic import BaseModel
 from database.database import Base

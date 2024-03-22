@@ -28,7 +28,7 @@ async def recetas_mostrar(db:db_con):
 
 @app.post("/registrar_usuario")
 async def recetas_mostrar(insertar: usuario.RegistrarUsuario,db:db_con):
-    informacion_usuario = insertar.dict
+    informacion_usuario = insertar.dict()
     informacion_usuario['suscripcion_usuario'] = 1 #Crearle de base la suscripcion gratuita
      # Se podria usar **insertar.dict si no queremos modificar o añadir ningun campo a lo que hemos pedido al usuario para que inserte
     usuario_insertar = usuario.Usuario(**informacion_usuario)

@@ -1,5 +1,6 @@
 from sqlalchemy import String, Integer, Column, Text
 from pydantic import BaseModel
+from typing import Optional
 from database.database import Base
 
 # Clase con la tabla que hay en la base de datos para luego hacer querys

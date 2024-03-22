@@ -3,7 +3,7 @@ from sqlalchemy import String, Integer, Column, Text
 from pydantic import BaseModel
 from database.database import Base
 
-# Crear clase con la tabla que hay en la base de datos para luego hacer querys
+# Clase con la tabla que hay en la base de datos para luego hacer querys
 class Receta(Base):
     __tablename__="receta"
     id_receta = Column(Integer, primary_key=True, index=True)
@@ -16,7 +16,7 @@ class Receta(Base):
     pais_receta = Column(Integer)
     tipo_receta = Column(String(30))
 
-# Crear el modelo de lo que se va a pedir al usuario para insertar una nueva receta en este caso
+# Modelo de lo que se va a pedir al usuario para insertar una nueva receta en este caso
 class InsertarReceta(BaseModel):
     nombre_receta: str
     ingredientes_receta: str
@@ -24,3 +24,12 @@ class InsertarReceta(BaseModel):
     dificultad_receta: int
     pais_receta: int
     tipo_receta: str
+    
+# Optional y None para poder modificar sólo ciertos campos
+class ActualizarReceta(BaseModel):
+    nombre_receta: Optional[str] = None
+    ingredientes_receta: Optional[str] = None
+    elaboracion_receta: Optional[str] = None
+    dificultad_receta: Optional[int] = None
+    pais_receta: Optional[int] = None
+    tipo_receta: Optional[str] = None

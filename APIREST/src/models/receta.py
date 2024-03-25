@@ -15,6 +15,9 @@ class Receta(Base):
     usuario_receta = Column(Integer)
     pais_receta = Column(Integer)
     tipo_receta = Column(String(30))
+    
+    def to_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 # Modelo de lo que se va a pedir al usuario para insertar una nueva receta en este caso
 class InsertarReceta(BaseModel):

@@ -1,10 +1,12 @@
 from fastapi import APIRouter,Depends,HTTPException, status
+from fastapi.responses import JSONResponse
 from typing import Annotated
 from models import receta,pais
 from database.database import SessionLocal
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, class_mapper
 from sqlalchemy.exc import SQLAlchemyError
 from pydantic import ValidationError
+import json
 
 
 app = APIRouter()
@@ -18,7 +20,6 @@ def get_db():
 
 db_con = Annotated[Session,Depends(get_db)]
 
-
 # GET
 
 @app.get("/mostrar_recetas") # mostrar todas las recetas
@@ -28,7 +29,8 @@ async def mostrar_recetas(db:db_con):
         #Asi seria la consulta con "where" siempre al final hay que añadir "first" si solo quieres una fila si no "all"
         # recetas = db.query(receta.Receta).where(receta.Receta.dificultad_receta == 1).first()
         # recetas = db.query(receta.Receta).where(receta.Receta.dificultad_receta == 1).all()
-        return recetas
+        return [r.to_dict() for r in recetas]
+        # return recetas
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 

@@ -1,6 +1,6 @@
 from fastapi import APIRouter,Depends,HTTPException, status
 from typing import Annotated
-from models import receta
+from models import receta,pais
 from database.database import SessionLocal
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
@@ -39,6 +39,38 @@ async def mostrar_receta(id_receta: int, db: db_con):
         if receta_encontrada is None:
             return {"error": "Receta no encontrada"}
         return receta_encontrada
+    except SQLAlchemyError as se:
+        raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+    
+#Pasar quizas nombre de usuario para que pueda ser mas facil desde el front
+@app.get("/recetas_usuario/{id_usuario}") # mostrar receta pasando id de usuario
+async def mostrar_receta(id_usuario: int, db: db_con):
+    try:
+        recetas = db.query(receta.Receta).filter(receta.Receta.usuario_receta == id_usuario).all()
+        if recetas is None:
+            return {"error": "Usuario no encontrado"}
+        return recetas
+    except SQLAlchemyError as se:
+        raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+    
+@app.get("/recetas_pais/{pais_nom}") # mostrar receta pasando nombre del pais
+async def mostrar_receta(pais_nom: str, db: db_con):
+    try:
+        recetas = db.query(receta.Receta).join(pais.Pais).filter(pais.Pais.nombre_pais == pais_nom).all()
+        if recetas is None:
+            return {"error": "Pais no encontrado"}
+        return recetas
+    except SQLAlchemyError as se:
+        raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+    
+@app.get("/recetas_filtros/{filtro_ingredientes}") # mostrar receta pasando un filtro de ingredientes
+async def mostrar_receta(filtro_ingredientes: str, db: db_con):
+    try:
+        #Devuelve todas las recetas que contengan esos ingredientes
+        recetas = db.query(receta.Receta).filter(receta.Receta.ingredientes_receta.like(f'%{filtro_ingredientes}%')).all()
+        if recetas is None:
+            return {"error": "No hay recetas con ese filtro"}
+        return recetas
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 

@@ -17,3 +17,6 @@ class RegistrarUsuario(BaseModel):
     nombre_usuario: str
     pass_usuario: str
     correo_usuario: str
+
+class ModificarSuscripcion(BaseModel):
+    suscripcion_usuario: int

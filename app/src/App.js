@@ -1,7 +1,10 @@
-import logo from './logo.svg';
-import './App.css';
+import './stylesheets/App.css';
+import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import Receta from '../src/componentes/Receta';
 import { useEffect, useState } from 'react';
+import Navbar from './componentes/Navbar';
+import Home from './componentes/Home';
+import LoginForm from './componentes/LoginForm';
 
 function App() {
   // HOOKS
@@ -15,16 +18,26 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <h1>RECETAS</h1>
-      <div className="contenedor-recetas">
-        {/* {recetas.map((receta) => (
-          <Receta 
-          nombre={receta.nombre_receta} />
-        ))} */}
-        {recetas?.map((receta) => (<li key={receta.id_receta}>{receta.nombre_receta}</li>))}
-      </div>
-    </div>
+
+    <Router>
+      <Navbar />
+      <Home />
+      <Routes>
+        <Route path="/login" component={LoginForm} />
+      </Routes>
+    </Router>
+    // <div className="App">
+    //   <Navbar />
+    //   <h1>RECETAS</h1>
+    //   <div className="contenedor-recetas">
+    //     {recetas.map((receta) => (
+    //       <Receta 
+    //       nombre={receta.nombre_receta}
+    //       dificultad={receta.valoracion_receta}
+    //       valoracion={receta.dificultad_receta}/>
+    //     ))}
+    //   </div>
+    // </div>
   );
 }
 

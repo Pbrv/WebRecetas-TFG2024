@@ -9,7 +9,7 @@ function App() {
   const [recetas, setRecetas] = useState([]);
 
   useEffect(() => {
-    fetch("/mostrar_recetas")
+    fetch("http://localhost:8000/mostrar_recetas")
       .then(response => response.json())
       .then((recetas) => setRecetas(recetas));
   }, []);

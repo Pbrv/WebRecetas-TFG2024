@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import Navbar from './componentes/Navbar';
 import Home from './componentes/Home';
 import LoginForm from './componentes/LoginForm';
+import Footer from './componentes/Footer';
 
 function App() {
   // HOOKS
@@ -21,10 +22,13 @@ function App() {
 
     <Router>
       <Navbar />
-      <Home />
+      
       <Routes>
+        <Route path="/" element={<Home recetas={recetas} />} />
         <Route path="/login" component={LoginForm} />
       </Routes>
+
+      <Footer />
     </Router>
     // <div className="App">
     //   <Navbar />

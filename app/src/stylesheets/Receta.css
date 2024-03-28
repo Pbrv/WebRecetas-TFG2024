@@ -1,14 +1,14 @@
 .contenedor-receta {
     margin: 10px 10px;
-    border: 1px solid black;
     display: flex;
     flex-direction: column;
     /* align-items: center;
     justify-content: center; */
     background-color: #ffffff;
-    box-shadow: 0 3px 13px 1px rgb(0 0 0 / 9%);
+    /* box-shadow: 0 3px 13px 1px rgb(0 0 0 / 9%); */
     width: 400px;
     height: 400px;
+    padding-bottom: 2vw;
 }
 
 .img-receta {
@@ -19,6 +19,8 @@
 .contenedor-info-receta {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .descripcion-receta {

@@ -25,23 +25,11 @@ function App() {
       
       <Routes>
         <Route path="/" element={<Home recetas={recetas} />} />
-        <Route path="/login" component={LoginForm} />
+        <Route path="/login" element={<LoginForm />} />
       </Routes>
 
       <Footer />
     </Router>
-    // <div className="App">
-    //   <Navbar />
-    //   <h1>RECETAS</h1>
-    //   <div className="contenedor-recetas">
-    //     {recetas.map((receta) => (
-    //       <Receta 
-    //       nombre={receta.nombre_receta}
-    //       dificultad={receta.valoracion_receta}
-    //       valoracion={receta.dificultad_receta}/>
-    //     ))}
-    //   </div>
-    // </div>
   );
 }
 

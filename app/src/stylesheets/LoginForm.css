@@ -1,0 +1,109 @@
+body {
+    display: flex;
+    /* min-height: 100vh; */
+}
+
+.titulo-form {
+    margin: auto;
+    margin-bottom: 4vh;
+    color: #3B6064;
+}
+
+.form {
+    background-color: #fff;
+    margin: auto;
+    max-width: 400px;
+    padding: 4.5em 3em;
+    border-top: 1px solid #3B6064;
+    border-bottom: 1px solid #3B6064;
+    text-align: center;
+}
+
+.contenedor {
+    margin-top: 10vh;
+    display: flex;
+    flex-direction: column;
+    /* gap: 2.5em; */
+    /* align-items: center;
+    justify-content: center; */
+    height: 50vh;
+    width: 100vw;
+}
+
+p {
+    font-weight: 300;
+}
+
+a {
+    font-weight: 400;
+    color: #000;
+}
+
+.contenedor-form {
+    display: grid;
+    gap: 2.5em;
+}
+
+.form-group {
+    position: relative;
+    --color: #5757577e;
+}
+
+.form-input {
+    width: 100%;
+    background: none;
+    color: #3B6064;
+    padding: .9em .3em;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid var(--color);
+    /* font-family: ; los input no heredan la fuente por defecto */
+}
+
+.form-input:not(:placeholder-shown) {
+    color: #000000;
+}
+
+.form-input:focus + .form-label,
+.form-input:not(:placeholder-shown) + .form-label { /* Animaciones login*/
+    transform: translateY(-12px) scale(.7);
+    transform-origin: left top;
+    color: #FF725C;
+}
+
+.form-label {
+    color: var(--color);
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 5px;
+    transform: translateY(10px);
+    transition: transform .5s, color .3s;
+}
+
+.form-submit {
+    background: #3B6064;
+    color: #fff;
+    padding: .8em 0;
+    border: none;
+    border-radius: .5em;
+    font-size: .9em;
+}
+
+.form-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #3B6064;
+    transform: scale(0);
+    transform: left bottom;
+    transition: transform .4s;
+}
+
+.form-input:focus ~ .form-line,
+.form-input:not(:placeholder-shown) ~ .form-line {
+    transform: scale(1);
+}
+

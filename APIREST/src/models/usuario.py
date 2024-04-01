@@ -20,3 +20,7 @@ class RegistrarUsuario(BaseModel):
 
 class ModificarSuscripcion(BaseModel):
     suscripcion_usuario: int
+    
+class LoginInput(BaseModel):
+    nombre_usuario: str
+    pass_usuario: str

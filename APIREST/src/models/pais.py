@@ -13,4 +13,4 @@ class Pais(Base):
 class InsertarPais(BaseModel):
     nombre_pais: str
     #Coger continente de una consulta a una api o algo asi
-    continente_pais: str
+    continente_pais: int

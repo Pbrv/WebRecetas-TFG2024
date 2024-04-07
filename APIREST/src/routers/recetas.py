@@ -65,14 +65,28 @@ async def mostrar_receta(pais_nom: str, db: db_con):
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
     
+
+#REVISAR ENDPOINT PARA QUE ADMITA MAS DE UN INGREDIENTE
 @app.get("/recetas_filtros/{filtro_ingredientes}") # mostrar receta pasando un filtro de ingredientes
 async def mostrar_receta(filtro_ingredientes: str, db: db_con):
     try:
-        #Devuelve todas las recetas que contengan esos ingredientes
-        recetas = db.query(receta.Receta).filter(receta.Receta.ingredientes_receta.like(f'%{filtro_ingredientes}%')).all()
+        # Divide los ingredientes por el caracter ';'
+        ingredientes = filtro_ingredientes.split(';')
+
+        # Inicia la consulta
+        query = db.query(receta.Receta)
+
+        # Aplica el filtro para cada ingrediente
+        for ingrediente in ingredientes:
+            query = query.filter(receta.Receta.ingredientes_receta.notlike(f'%{ingrediente}%'))
+
+        # Ejecuta la consulta
+        recetas = query.all()
+
         if recetas is None:
             return {"error": "No hay recetas con ese filtro"}
         return recetas
+
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 

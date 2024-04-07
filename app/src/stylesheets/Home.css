@@ -13,6 +13,9 @@
     gap: 4vw;
     color: #fff;
 }
+#root{
+    overflow-x: hidden;
+}
 
 .busqueda {
     width: 40vw;

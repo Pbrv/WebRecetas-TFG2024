@@ -39,7 +39,7 @@ async def insertar_pais(insertar: pais.InsertarPais,db:db_con):
         db.commit()
         return "Pais insertado correctamente"
     except SQLAlchemyError as se:
-       raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+        raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
 # ENDPOINT que no se va a usar al igual que el delete pero por si acaso 
 # @app.put("/modificar_pais")

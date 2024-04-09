@@ -5,28 +5,32 @@ import Navbar from './componentes/Navbar';
 import Home from './componentes/Home';
 import Recetas from '../src/componentes/Recetas';
 import LoginForm from './componentes/LoginForm';
+import MiCuenta from './componentes/MiCuenta';
 import Footer from './componentes/Footer';
 
 function App() {
   // HOOKS
-
   const [recetas, setRecetas] = useState([]);
+  const [isLogged, setIsLogged] = useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLogged(!!token);
+
     fetch("http://localhost:8000/mostrar_recetas")
       .then(response => response.json())
       .then((recetas) => setRecetas(recetas));
   }, []);
 
   return (
-
     <Router>
-      <Navbar />
+      <Navbar isLogged={isLogged} setIsLogged={setIsLogged} />
       
       <Routes>
         <Route path="/" element={<Home recetas={recetas} />} />
-        <Route path="/login" element={<LoginForm />} />
+        <Route path="/login" element={<LoginForm setIsLogged={setIsLogged} />} />
         <Route path="/recetas" element={<Recetas/>} />
+        <Route path="/mi-cuenta" element={<MiCuenta />} />
       </Routes>
 
       <Footer />
@@ -35,3 +39,4 @@ function App() {
 }
 
 export default App;
+

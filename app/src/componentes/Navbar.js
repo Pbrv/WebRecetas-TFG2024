@@ -1,24 +1,25 @@
 import { useEffect, useState } from "react";
 import React from "react";
 import "../stylesheets/Navbar.css"
+import LogoutButton from "./Logout";
 import jwtDecode from "jwt-decode";
 
-function Navbar() {
+function Navbar({ isLogged, setIsLogged }) {
     const [isDropdownVisible, setDropdownVisible] = useState(false);
-    const [isLogged, setIsLogged] = useState(false);
+    // const [isLogged, setIsLogged] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
         setIsLogged(!!token);
     }, []);
 
-    const handleMouseOver = () => {
+    const handleMouseEnter = () => {
         if (isLogged) {
             setDropdownVisible(true);
         }
     };
 
-    const handleMouseOut = () => {
+    const handleMouseLeave = () => {
         setDropdownVisible(false);
     };
 
@@ -29,13 +30,14 @@ function Navbar() {
                 <li><a href="/recetas">Recetas</a></li>
                 <li><a href="/paises">Países</a></li>
             </ul>
-            <div className="iconos">
+            <div className="iconos" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                 <a href="/buscar"><img src="lupa.png" alt="Buscar" /></a>
-                <div onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+                <div className="icono-usuario">
                     <a href="/login"><img src="usuario.png" alt="Login" /></a>
                     {isDropdownVisible && (
                         <div className="dropdown">
-                            <a href="/logout">Cerrar sesión</a>
+                            <a className="a-user" href="/mi-cuenta">Mi Cuenta</a>
+                            <LogoutButton setIsLogged={setIsLogged} />
                         </div>
                     )}
                 </div>

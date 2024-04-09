@@ -1,12 +1,12 @@
 import '../stylesheets/LoginForm.css';
 import React, { useState } from 'react';
-// import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
-function LoginForm() {
+function LoginForm({ setIsLogged }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    // const history = useHistory();
+    const navigate = useNavigate();
 
     // INICIO SESIÓN
     const handleSubmit = async event => {
@@ -27,7 +27,8 @@ function LoginForm() {
             const data = await response.json();
             if (response.ok) {
                 localStorage.setItem("token", data.access_token); // almacena el token en local
-                // history.push('/'); // redirige al usuario a la página principal
+                setIsLogged(true);
+                navigate('/'); // redirige al usuario a la página principal
             } else {
                 console.log('No se ha podido iniciar sesión', data);
             }

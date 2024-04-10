@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import React from "react";
 import "../stylesheets/Navbar.css"
 import LogoutButton from "./Logout";
 import jwtDecode from "jwt-decode";

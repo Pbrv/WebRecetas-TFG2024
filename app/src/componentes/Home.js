@@ -1,4 +1,3 @@
-import React from "react";
 import Receta from '../../src/componentes/Receta';
 import "../stylesheets/Home.css"
 function Home({ recetas }) {

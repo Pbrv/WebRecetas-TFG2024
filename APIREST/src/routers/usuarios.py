@@ -94,28 +94,6 @@ async def recetas_mostrar(insertar: RegistrarUsuario,db:db_con):
 
 # INICIO SESION
 
-# @app.post("/login")
-# async def login(nombre_usuario: str, pass_usuario: str, db: Session = Depends(get_db)):
-#     # Obtener el usuario de la base de datos por nombre de usuario
-#     user = db.query(usuario).filter(usuario.nombre_usuario == nombre_usuario).first()
-    
-#     # Si el usuario no existe, lanzar una excepción
-#     if not user:
-#         raise HTTPException(status_code=404, detail="Usuario no encontrado")
-
-#     # Verificar la contraseña
-#     hashed_password = hashlib.sha256(pass_usuario.encode()).hexdigest()
-#     if user.pass_usuario != hashed_password:
-#         raise HTTPException(status_code=401, detail="Credenciales inválidas")
-
-#     # Crear el token JWT sin fecha de expiración
-#     token_data = {"sub": nombre_usuario}
-#     access_token = create_access_token(token_data)
-    
-#     # Si la contraseña es correcta, devolver el token JWT
-#     return {"access_token": access_token, "token_type": "bearer"}
-
-# ____________
 @app.post("/login")
 async def login(request: Request, db: Session = Depends(get_db)):
     # Obtener los datos de la solicitud en el cuerpo

@@ -1,43 +1,55 @@
-import '../stylesheets/Form.css';
+// import "../stylesheets/Registro.css"
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { validateLoginForm } from './validacion';
+import { validateEmail, validateUsername, validateRegistroForm } from './validacion';
 
-function LoginForm({ setIsLogged }) {
+function Registro() {
     const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    // INICIO SESIÓN
     const handleSubmit = async event => {
         event.preventDefault();
 
-        const formValido = validateLoginForm(username, password);
+        const formValido = validateRegistroForm(username, password, email);
         
-        // validar que todos los campos estén rellenos --> SOLO ALERT
+        // validar que todos los campos estén rellenos
         if (!formValido) {
             alert("Debes completar todos los campos");
         }
+        
+        // Validar con expresiones regulares
+        if (!validateUsername(username)) {
+            alert("No se ha validado el nombre")
+            return;
+    }
+
+        if (!validateEmail(email)) {
+            // Mostrar un mensaje de error o tomar alguna acción si el correo electrónico no es válido
+            alert("No se ha validado el email")
+            return;
+    }
 
         try {
-            const response = await fetch("http://localhost:8000/login", {
+            const response = await fetch("http://localhost:8000/registrar_usuario", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
+                    correo_usuario: email,
                     nombre_usuario: username,
                     pass_usuario: password
                 })
             });
-            
+
             const data = await response.json();
             if (response.ok) {
-                localStorage.setItem("token", data.access_token); // almacena el token en local
-                setIsLogged(true);
-                navigate('/'); // redirige al usuario a la página principal
+                // Redirige al usuario a la página de inicio de sesión
+                navigate('/login');
             } else {
-                console.log('No se ha podido iniciar sesión', data);
+                console.log('No se ha podido registrar', data);
             }
         } catch (error) {
             console.log('Error al enviar la solicitud', error);
@@ -46,7 +58,7 @@ function LoginForm({ setIsLogged }) {
 
     return (
         <div className='contenedor'>
-            <h2 className='titulo-form'>Inicia Sesión</h2>
+            <h2 className='titulo-form'>Registrarse</h2>
             <form className="form" onSubmit={handleSubmit}>
                 <div className="contenedor-form">
                     <div className="form-group">
@@ -64,6 +76,18 @@ function LoginForm({ setIsLogged }) {
                     <div className="form-group">
                         <input
                             className="form-input"
+                            id="email"
+                            type="email"
+                            placeholder="  "
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                        />
+                        <label htmlFor="name" className="form-label">Correo electrónico:</label>
+                        <span className="form-line"></span>
+                    </div>
+                    <div className="form-group">
+                        <input
+                            className="form-input"
                             id="password"
                             type="password"
                             placeholder="  "
@@ -73,13 +97,13 @@ function LoginForm({ setIsLogged }) {
                         <label htmlFor="password" className="form-label">Contraseña:</label>
                         <span className="form-line"></span>
                     </div>
-                    <input type="submit" className="form-submit" value="Entrar" />
-                    <p>¿Aún no tienes una cuenta? 
-                        <a href="/registro" className='enlace-registro'> Regístrate aquí</a></p>
+                    <input type="submit" className="form-submit" value="Crear cuenta" />
+                    <p>¿Ya tienes una cuenta? 
+                        <a href="/login" className='enlace-registro'> Inicia sesión aquí</a></p>
                 </div>
             </form>
         </div>
     );
 }
 
-export default LoginForm;
+export default Registro;

@@ -1,0 +1,26 @@
+.titulo {
+    padding: 4vw 0;
+    margin: 0 10vw;
+    color: #2f4a4e;
+}
+
+.nombre_usuario {
+    margin: 0 10vw;
+    padding-bottom: 3vw;
+}
+
+.contenedor_datos_usuario {
+    margin: 0 10vw;
+    padding: 4vw;
+    border: 1px solid #3B6064;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.datos_usuario {
+    border: 1px solid #3B6064;
+    border-radius: 7px;
+    width: 45%;
+}

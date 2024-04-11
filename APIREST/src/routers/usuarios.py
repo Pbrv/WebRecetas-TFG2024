@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from typing import Annotated
-from models.usuario import Usuario, RegistrarUsuario
+from models.usuario import Usuario, RegistrarUsuario, InfoUsuario
 from database.database import SessionLocal
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
@@ -41,8 +41,25 @@ def decode_token(token: str):
     except JWTError:
         raise HTTPException(status_code=401, detail="Token inválido")
 
-
+# Función para identificar al usuario con el token JWT
+def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: int = payload.get("sub")
+        if user_id is None:
+            raise HTTPException(status_code=401, detail="Could not validate credentials")
+        user = db.query(Usuario).filter(Usuario.id_usuario == user_id).first()
+        if user is None:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        return InfoUsuario(nombre_usuario=user.nombre_usuario, correo_usuario=user.correo_usuario, 
+                        pass_usuario=user.pass_usuario, suscripcion_usuario=user.suscripcion_usuario)
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Could not validate credentials")
+    
+    
 # METODO DE PRUEBA
+
 @app.get("/mostrar_usuarios")
 async def recetas_mostrar(db:db_con):
     try:
@@ -54,6 +71,14 @@ async def recetas_mostrar(db:db_con):
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
+
+# Obtener usuario con el Token de Sesión
+
+@app.get("/mi_cuenta")
+async def mi_cuenta(current_user: InfoUsuario = Depends(get_current_user)):
+    return current_user
+
+
 @app.get("/recetas_guardadas_usuario/{usuario_nombre}")
 async def recetas_mostrar(usuario_nombre:str, db:db_con):
     try:
@@ -62,6 +87,7 @@ async def recetas_mostrar(usuario_nombre:str, db:db_con):
         return recetas_id
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+
 
 @app.get("/suscripcion_usuario/{usuario_nombre}")
 async def recetas_mostrar(usuario_nombre:str, db:db_con):
@@ -114,7 +140,7 @@ async def login(request: Request, db: Session = Depends(get_db)):
         raise HTTPException(status_code=401, detail="Credenciales inválidas")
 
     # Crear el token JWT sin fecha de expiración
-    token_data = {"sub": nombre_usuario}
+    token_data = {"sub": str(user.id_usuario)}
     access_token = create_access_token(token_data)
     
     # Si la contraseña es correcta, devolver el token JWT

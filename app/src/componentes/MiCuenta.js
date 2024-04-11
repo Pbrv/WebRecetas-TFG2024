@@ -1,23 +1,58 @@
+import { useState, useEffect } from "react";
 import "../stylesheets/MiCuenta.css";
 
 function MiCuenta() {
-    // Aquí va la lógica y la presentación de la página de la cuenta del usuario
+    const [userData, setUserData] = useState(null);
+
+    useEffect(() => {
+        const fetchDatosUsuario = async () => {
+            try {
+                const response = await fetch("http://localhost:8000/mi_cuenta", {
+                method: 'GET',    
+                headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error("No se obtuvieron los datos del usuario");
+                }
+                const DatosUsuario = await response.json();
+
+                setUserData(DatosUsuario);
+            } catch (error) {
+                console.error("Error al hacer fetch", error);
+            }
+        };
+        fetchDatosUsuario();
+    }, []);
+
     return (
         <div>
-            <h1 className="titulo">Mi Cuenta</h1>
-            <p className="nombre_usuario">Hola </p>
+            <h1 className="titulo-h1">Mi Cuenta</h1>
+            <p className="nombre_usuario">Hola {userData.nombre_usuario}</p>
+
             <div className="contenedor_datos_usuario">
 
                 {/* DATOS */}
                 <div className="datos_usuario">
-                    <h2 className="titulo">Mis Datos</h2>
-                    <a>Editar</a>
+                    <div className="encabezado_datos_usuario">
+                        <h2 className="titulo-h2">Mis Datos</h2>
+                        <a className="enlace_mod">Editar mis datos</a>
+                    </div>
+                    <div className="cuerpo_datos_usuario">
+                        <p className="titulos">Nombre</p>
+                        <p className="datos">{userData.nombre_usuario}</p>
+                        <p className="titulos">Correo electrónico</p>
+                        <p className="datos">{userData.correo_usuario}</p>
+                        <p className="titulos">Suscripción</p>
+                        <p className="datos">{userData.suscripcion_usuario}</p>
+                    </div>
                 </div>
 
                 {/* RECETAS */}
                 <div className="datos_usuario">
                     <h2 className="titulo">Mis Recetas</h2>
-                    <a>Añadir más recetas</a>
+                    <a className="enlace_mod">Añadir más recetas</a>
                 </div>
 
             </div>

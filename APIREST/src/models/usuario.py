@@ -24,3 +24,9 @@ class ModificarSuscripcion(BaseModel):
 class LoginInput(BaseModel):
     nombre_usuario: str
     pass_usuario: str
+    
+class InfoUsuario(BaseModel):
+    nombre_usuario: str
+    correo_usuario: str
+    pass_usuario: str
+    suscripcion_usuario: int

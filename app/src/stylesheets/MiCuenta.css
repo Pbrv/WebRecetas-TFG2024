@@ -1,7 +1,21 @@
-.titulo {
-    padding: 4vw 0;
+.titulo-h1 {
+    padding: 3vw 0;
     margin: 0 10vw;
     color: #2f4a4e;
+}
+
+.titulo-h2 {
+    padding: 2vw;
+    color: #2f4a4e;
+}
+
+.titulos {
+    color: #3B6064;
+    margin-bottom: 0.7vw;
+}
+
+.datos {
+    margin-bottom: 1.2vw;
 }
 
 .nombre_usuario {
@@ -20,7 +34,31 @@
 }
 
 .datos_usuario {
+    /* display: flex;
+    flex-direction: column; */
     border: 1px solid #3B6064;
-    border-radius: 7px;
+    border-radius: 2px;
     width: 45%;
+}
+
+.encabezado_datos_usuario {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #3B6064;
+}
+
+.cuerpo_datos_usuario {
+    padding: 3vw 3vw;
+}
+
+.enlace_mod {
+    font-size: 0.7em;
+    align-self: flex-end;
+    padding: 2.5vw;
+    color: #3B6064;
+}
+
+.enlace_mod:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }

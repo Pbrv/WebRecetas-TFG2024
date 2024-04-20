@@ -1,6 +1,6 @@
 from fastapi import APIRouter,Depends,HTTPException, status
 from fastapi.responses import JSONResponse
-from typing import Annotated
+from typing import Annotated, Optional
 from models import receta,pais
 from database.database import SessionLocal
 from sqlalchemy.orm import Session, class_mapper
@@ -58,27 +58,28 @@ async def mostrar_receta(id_usuario: int, db: db_con):
 @app.get("/recetas_pais/{pais_nom}") # mostrar receta pasando nombre del pais
 async def mostrar_receta(pais_nom: str, db: db_con):
     try:
-        recetas = db.query(receta.Receta).join(pais.Pais).filter(pais.Pais.nombre_pais == pais_nom).all()
-        if recetas is None:
+        idPais = db.query(pais.Pais.id_pais).filter(pais.Pais.nombre_pais == pais_nom).first()
+        if idPais is None:
             return {"error": "Pais no encontrado"}
+        recetas = db.query(receta.Receta).filter(receta.Receta.pais_receta == idPais[0]).all()
         return recetas
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
     
 
-#REVISAR ENDPOINT PARA QUE ADMITA MAS DE UN INGREDIENTE
-@app.get("/recetas_filtros/{filtro_ingredientes}") # mostrar receta pasando un filtro de ingredientes
-async def mostrar_receta(filtro_ingredientes: str, db: db_con):
+@app.get("/recetas_filtros") # mostrar receta pasando un filtro de ingredientes
+async def mostrar_receta(filtro: str,db: db_con):
     try:
-        # Divide los ingredientes por el caracter ';'
-        ingredientes = filtro_ingredientes.split(';')
 
         # Inicia la consulta
         query = db.query(receta.Receta)
 
-        # Aplica el filtro para cada ingrediente
-        for ingrediente in ingredientes:
-            query = query.filter(receta.Receta.ingredientes_receta.notlike(f'%{ingrediente}%'))
+        # Si hay algun filtro
+        if(filtro != ''):
+            # Divide los ingredientes por el caracter ';'
+            ingredientes = filtro.split(';')
+            for ingrediente in ingredientes:
+                query = query.filter(receta.Receta.ingredientes_receta.notlike(f'%{ingrediente}%'))
 
         # Ejecuta la consulta
         recetas = query.all()

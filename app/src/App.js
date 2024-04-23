@@ -8,6 +8,7 @@ import LoginForm from './componentes/LoginForm';
 import MiCuenta from './componentes/MiCuenta';
 import Registro from './componentes/Registro';
 import Paises from './componentes/Paises';
+import NuevaReceta from './componentes/NuevaReceta';
 import Footer from './componentes/Footer';
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
         <Route path="/recetas" element={<Recetas/>} />
         <Route path="/paises" element={<Paises/>}/>
         <Route path="/mi-cuenta" element={<MiCuenta />} />
+        <Route path="/nueva-receta" element={<NuevaReceta />} />
       </Routes>
 
       <Footer />

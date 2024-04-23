@@ -1,0 +1,36 @@
+.form-nueva-receta {
+    border: 1px solid grey;
+    margin: auto;
+    width: 70vw;
+}
+
+.contenedor-form-nueva-receta {
+    display: flex;
+    justify-content: space-around;
+
+    padding: 2em;
+    
+    border: 1px solid black;
+}
+
+
+.columna{
+    border: 1px solid red;
+
+    display: flex;
+    flex-direction: column;
+    width: 30vw;
+}
+
+.label-nueva-receta {
+    padding: 1vw;
+}
+
+.form-submit {
+    padding: 1em 4em;
+    margin-top: 3vw;
+}
+
+.input-nueva-receta {
+    margin: auto;
+}

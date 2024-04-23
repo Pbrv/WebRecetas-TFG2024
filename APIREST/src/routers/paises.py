@@ -37,6 +37,7 @@ async def mostrar_receta(nom_continente: str, db: db_con):
     
     
 # PRUEBA (ESTO DEBE IR EN UNA RUTA DE CONTINENTES)
+
 @app.get("/mostrar_continentes") # mostrar continentes
 async def mostrar_receta(db: db_con):
     try:

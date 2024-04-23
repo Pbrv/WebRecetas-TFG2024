@@ -16,6 +16,7 @@
 
 .datos {
     margin-bottom: 1.2vw;
+    font-size: 0.8em;
 }
 
 .nombre_usuario {
@@ -28,7 +29,6 @@
     padding: 4vw;
     border: 1px solid #3B6064;
     display: flex;
-    flex-direction: row;
     justify-content: space-around;
     flex-wrap: wrap;
 }
@@ -41,13 +41,17 @@
     width: 45%;
 }
 
-.encabezado_datos_usuario {
+.encabezado_datos {
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid #3B6064;
 }
 
 .cuerpo_datos_usuario {
+    padding: 3vw 3vw;
+}
+
+.cuerpo_datos_recetas {
     padding: 3vw 3vw;
 }
 

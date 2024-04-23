@@ -1,4 +1,5 @@
 from fastapi import APIRouter,Depends,HTTPException, status
+from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from typing import Annotated, Optional
 from models import receta,pais
@@ -6,7 +7,7 @@ from database.database import SessionLocal
 from sqlalchemy.orm import Session, class_mapper
 from sqlalchemy.exc import SQLAlchemyError
 from pydantic import ValidationError
-import json
+import json, base64
 
 
 app = APIRouter()
@@ -34,17 +35,36 @@ async def mostrar_recetas(db:db_con):
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
+
 @app.get("/mostrar_receta/{id_receta}") # mostrar receta pasando id
 async def mostrar_receta(id_receta: int, db: db_con):
     try:
         receta_encontrada = db.query(receta.Receta).filter(receta.Receta.id_receta == id_receta).first()
         if receta_encontrada is None:
             return {"error": "Receta no encontrada"}
-        return receta_encontrada
+
+        # Convertir el objeto de SQLAlchemy a un diccionario
+        receta_dict = jsonable_encoder(receta_encontrada)
+
+        # Codificar la imagen en base64
+        if receta_dict["imagen_receta"] is not None:
+            
+            # Nos aseguramos de que sea un objeto de bytes
+            if isinstance(receta_dict["imagen_receta"], str):
+                
+                # Convertir la cadena de texto a bytes
+                receta_dict["imagen_receta"] = bytes(receta_dict["imagen_receta"], 'utf-8')
+                
+            # Codificar la imagen en base64
+            receta_dict["imagen_receta"] = base64.b64encode(receta_dict["imagen_receta"]).decode()
+
+        return receta_dict
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
     
+    
 #Pasar quizas nombre de usuario para que pueda ser mas facil desde el front
+
 @app.get("/recetas_usuario/{id_usuario}") # mostrar receta pasando id de usuario
 async def mostrar_receta(id_usuario: int, db: db_con):
     try:
@@ -54,6 +74,7 @@ async def mostrar_receta(id_usuario: int, db: db_con):
         return recetas
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+    
     
 @app.get("/recetas_pais/{pais_nom}") # mostrar receta pasando nombre del pais
 async def mostrar_receta(pais_nom: str, db: db_con):

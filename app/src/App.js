@@ -20,6 +20,7 @@ function App() {
     const token = localStorage.getItem("token");
     setIsLogged(!!token);
 
+    //Probar a moverlo en el propio componente
     fetch("http://localhost:8000/mostrar_recetas")
       .then(response => response.json())
       .then((recetas) => setRecetas(recetas));

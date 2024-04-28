@@ -1,61 +1,74 @@
-import {React, useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import "../stylesheets/Home.css";
 import Receta from "./Receta";
-import Boton from './Boton';
+import Boton from "./Boton";
 
-function Paises (){
+function Paises() {
     const [recetas, setRecetas] = useState([]);
-    const [paises, setPaises] = useState(['España']);
+    const [paises, setPaises] = useState(null);
     const [botones, setBotones] = useState([]);
-    const [continente, setContinentes] = useState(['Europa']);
-    var value;
-    // Hacer que se muestren todas las recetas si no hay paises
-
-    // useEffect(() => {
-    //     fetch(`http://localhost:8000/mostrar_continentes`)
-    //         .then(response => response.json())
-    //         .then((cont) => {
-    //             // console.log(continente)
-    //             // setContinentes(continente)
-    //             for(value in cont){
-    //                 setContinentes(cont[value]['nombre_continente'])
-    //             }
-    //         });
-    // }, []);
+    const continentes = ["Europa","Asia","Africa","America","Oceania"];
 
     useEffect(() => {
-        fetch(`http://localhost:8000/mostrar_paises/${continente}`)
-            .then(response => response.json())
-            .then((paises) => setBotones(paises));
-    }, [continente]);
+        // Obtener datos de los países
+        const obtenerDatosPaises = async () => {
+            const datosPaises = await Promise.all(
+                continentes.map(async (continente) => {
+                    const response = await fetch(
+                    `http://localhost:8000/mostrar_paises/${continente}`
+                    );
+                    const pais = await response.json();
+                    return pais;
+                })
+            );
+            // Actualizar el estado con los datos de los países
+            const paisesData = datosPaises.flat(); // Aplanar el array de datos
+            setBotones(paisesData); //Actualizar los botones
+        };
+        obtenerDatosPaises();
+    }, []);
 
+  //Mostrar solo recetas de un unico pais
     useEffect(() => {
-        fetch(`http://localhost:8000/recetas_pais/${paises}`)
-            .then(response => response.json())
-            .then((receta) => setRecetas(receta));
-    },[paises]);
+        const obtenerRecetas = async () => {
+            if(paises === null){
+                console.log("Entra por null")
+                    const response = await fetch(
+                        `http://localhost:8000/mostrar_recetas`
+                    );
+                    const receta = await response.json();
+                    setRecetas(receta);
+            } else {
+                console.log("Entra por valor")
+                const response = await fetch(
+                    `http://localhost:8000/recetas_pais/${paises}`
+                );
+                const receta = await response.json();
+                setRecetas(receta);
+            }
+        };
+        obtenerRecetas();
+    }, [paises]);
 
-
-    //Filtrar por un unico pais/continente o permitir mas de uno?
-    function cambiar_paises (value) {
+    function cambiarPaises(value) {
         setPaises(value);
     }
 
-    return(
+
+    //Poner boton para borrar filtro o si se vuelve a hacer clic en el ultimo pais se elimina el filtro
+    return (
         <div>
-            {/* ID puesto para saber que contiene */}
             <div id="filtros">
-                {botones.map((boton) => {
-                    return <Boton onClick={(e) => cambiar_paises(e.target.innerText)} key={boton.id} {...boton} />
-                })}
+                {botones.map((boton, index) => (
+                    <Boton key={index} onClick={(e) => cambiarPaises(e.target.innerText)} {...boton} />
+                ))}
             </div>
             <div className="recetas-destacadas">
-                {recetas.map((receta) => {
-                    return <Receta key={receta.id} {...receta} />
-                })}
+                {recetas.map((receta, index) => (
+                    <Receta key={index} {...receta} />
+                ))}
             </div>
         </div>
-        
     );
 }
 

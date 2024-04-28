@@ -117,3 +117,14 @@ a {
     color: #2f4a4e;
 }
 
+.enlace-mostrar-password {
+    position: absolute;
+    top: 15%;
+    right: 0;
+}
+
+.mostrar-password {
+    width: 26px;
+    cursor: pointer;
+}
+

@@ -6,7 +6,11 @@ import { validateLoginForm } from './validacion';
 function LoginForm({ setIsLogged }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     // INICIO SESIÓN
     const handleSubmit = async event => {
@@ -65,12 +69,17 @@ function LoginForm({ setIsLogged }) {
                         <input
                             className="form-input"
                             id="password"
-                            type="password"
+                            type={showPassword ? 'text' : 'password'}
                             placeholder="  "
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                         />
                         <label htmlFor="password" className="form-label">Contraseña:</label>
+                        <a className="enlace-mostrar-password" type={showPassword ? 'text' : 'password'}>
+                            <img 
+                            src={showPassword ? "esconder.png" : "ver.png"} alt="" 
+                            className="mostrar-password" onClick={togglePasswordVisibility} />
+                        </a>
                         <span className="form-line"></span>
                     </div>
                     <input type="submit" className="form-submit" value="Entrar" />

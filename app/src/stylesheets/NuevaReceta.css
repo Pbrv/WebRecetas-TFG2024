@@ -1,3 +1,7 @@
+.titulo-form {
+    padding-bottom: 2em;
+}
+
 .form-nueva-receta {
     border: 1px solid grey;
     margin: auto;
@@ -28,9 +32,14 @@
 
 .form-submit {
     padding: 1em 4em;
+    
     margin-top: 3vw;
 }
 
 .input-nueva-receta {
+    margin: auto;
+}
+
+.prueba {
     margin: auto;
 }

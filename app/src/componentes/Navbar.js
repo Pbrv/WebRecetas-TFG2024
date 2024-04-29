@@ -36,6 +36,7 @@ function Navbar({ isLogged, setIsLogged }) {
                     {isDropdownVisible && (
                         <div className="dropdown">
                             <a className="a-user" href="/mi-cuenta">Mi Cuenta</a>
+                            <a className="a-user" href="/nueva-receta">Subir Receta</a>
                             <LogoutButton setIsLogged={setIsLogged} />
                         </div>
                     )}

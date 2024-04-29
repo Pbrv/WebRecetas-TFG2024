@@ -57,10 +57,10 @@ const NuevaReceta = () => {
                         
                         <label className="label-nueva-receta">Selecciona la dificultad:</label>
                             <select name="dificultad_receta" onChange={handleChange} required>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
+                                <option value="1">Dificultad 1</option>
+                                <option value="2">Dificultad 2</option>
+                                <option value="3">Dificultad 3</option>
+                                <option value="4">Dificultad 4</option>
                             </select>
                         
                         <label className="label-nueva-receta">Continente:</label>
@@ -104,10 +104,11 @@ const NuevaReceta = () => {
                                 onChange={handleChange} 
                             />
                         </label>
+                        <input type="submit" className="form-submit" value="Subir Receta" />
                     </div>
                     
                 </div>
-                <input type="submit" className="form-submit" value="Subir Receta" />
+                
             </form>
         </div>
     );

@@ -1,10 +1,11 @@
-from fastapi import APIRouter,Depends,HTTPException, status
+from fastapi import APIRouter,Depends,HTTPException, status, UploadFile, File
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from typing import Annotated, Optional
 from models import receta,pais
 from database.database import SessionLocal
-from sqlalchemy.orm import Session, class_mapper
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, class_mapper, sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
 from pydantic import ValidationError
 import json, base64
@@ -116,10 +117,12 @@ async def mostrar_receta(filtro: str,db: db_con):
 # POST
 
 @app.post("/insertar_receta")
-async def insertar_receta(insertar: receta.InsertarReceta,db:db_con):
+async def insertar_receta(insertar: receta.InsertarReceta, imagen_receta: UploadFile = File(...)):
     try:
+        db: Session = SessionLocal()
         informacion_receta = insertar.dict()
         informacion_receta['usuario_receta'] = 1 #Coger el id del usuario que esta ejecutando este post
+        informacion_receta['imagen_receta'] = await imagen_receta.read()  # Leer los bytes de la imagen
         # Se podria usar **insertar.dict si no queremos modificar o añadir ningun campo a lo que hemos pedido al usuario para que inserte
         receta_insertar = receta.Receta(**informacion_receta)
         db.add(receta_insertar)
@@ -129,7 +132,8 @@ async def insertar_receta(insertar: receta.InsertarReceta,db:db_con):
         raise HTTPException(status_code=422, detail=f"Validación fallida: {ve}")
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
-
+    finally:
+        db.close()
 
 # PUT
 

@@ -1,7 +1,15 @@
+
+/* ESTILOS DE PRUEBA */
+
 .boton {
     /* border-radius: 25px; */
     width: 150px;
     height: 40px;
     padding: 0;
     margin: 10px;
+}
+
+.boton-selected {
+    border-color: red;
+    opacity: 0.5;
 }

@@ -9,6 +9,7 @@ import MiCuenta from './componentes/MiCuenta';
 import Registro from './componentes/Registro';
 import Paises from './componentes/Paises';
 import NuevaReceta from './componentes/NuevaReceta';
+import RecetaUnica from './componentes/RecetaUnica';
 import Footer from './componentes/Footer';
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
         <Route path="/login" element={<LoginForm setIsLogged={setIsLogged} />} />
         <Route path="/registro" element={<Registro/>} />
         <Route path="/recetas" element={<Recetas/>} />
+        <Route path="/receta/:id" element={<RecetaUnica/>} />
         <Route path="/paises" element={<Paises/>}/>
         <Route path="/mi-cuenta" element={<MiCuenta />} />
         <Route path="/nueva-receta" element={<NuevaReceta />} />

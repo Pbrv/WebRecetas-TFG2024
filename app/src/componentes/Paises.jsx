@@ -7,13 +7,13 @@ function Paises() {
     const [recetas, setRecetas] = useState([]);
     const [paises, setPaises] = useState(null);
     const [botones, setBotones] = useState([]);
-    const continentes = ["Europa","Asia","Africa","America","Oceania"];
+    const CONTINENTES = ["Europa","Asia","Africa","America","Oceania"];
 
     useEffect(() => {
         // Obtener datos de los países
         const obtenerDatosPaises = async () => {
             const datosPaises = await Promise.all(
-                continentes.map(async (continente) => {
+                CONTINENTES.map(async (continente) => {
                     const response = await fetch(
                     `http://localhost:8000/mostrar_paises/${continente}`
                     );
@@ -28,18 +28,32 @@ function Paises() {
         obtenerDatosPaises();
     }, []);
 
+    // async function obtenerRecetas() {
+    //     if(paises === null){
+    //             const response = await fetch(
+    //                 `http://localhost:8000/mostrar_recetas`
+    //             );
+    //             const receta = await response.json();
+    //             setRecetas(receta);
+    //     } else {
+    //         const response = await fetch(
+    //             `http://localhost:8000/recetas_pais/${paises}`
+    //         );
+    //         const receta = await response.json();
+    //         setRecetas(receta);
+    //     }
+    // };
+
   //Mostrar solo recetas de un unico pais
     useEffect(() => {
         const obtenerRecetas = async () => {
             if(paises === null){
-                console.log("Entra por null")
-                    const response = await fetch(
-                        `http://localhost:8000/mostrar_recetas`
-                    );
-                    const receta = await response.json();
-                    setRecetas(receta);
+                const response = await fetch(
+                    `http://localhost:8000/mostrar_recetas`
+                );
+                const receta = await response.json();
+                setRecetas(receta);
             } else {
-                console.log("Entra por valor")
                 const response = await fetch(
                     `http://localhost:8000/recetas_pais/${paises}`
                 );
@@ -50,17 +64,27 @@ function Paises() {
         obtenerRecetas();
     }, [paises]);
 
-    function cambiarPaises(value) {
-        setPaises(value);
+    function cambiarPaises(value, e) {
+        comprobarBotonSeleccionado(e);
+        paises === value ? setPaises(null) : setPaises(value);
     }
 
+    function comprobarBotonSeleccionado(e) {
+        var divBotones = document.querySelector("#filtros");
+        divBotones.childNodes.forEach((boton) => {
+            if(boton.classList.contains("boton-selected") && boton.textContent !== e.textContent){
+                boton.classList.remove("boton-selected");
+            }
+        })
+        e.classList.toggle("boton-selected");
+    }
 
-    //Poner boton para borrar filtro o si se vuelve a hacer clic en el ultimo pais se elimina el filtro
     return (
         <div>
             <div id="filtros">
+                {/* Se pasa index porque al ser un array tienen un index y es unico */}
                 {botones.map((boton, index) => (
-                    <Boton key={index} onClick={(e) => cambiarPaises(e.target.innerText)} {...boton} />
+                    <Boton key={index} onClick={(e) => cambiarPaises(e.target.innerText, e.target)} value={boton.nombre_pais} />
                 ))}
             </div>
             <div className="recetas-destacadas">

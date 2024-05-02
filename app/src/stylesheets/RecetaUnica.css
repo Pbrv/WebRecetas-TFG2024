@@ -1,0 +1,15 @@
+.contenedor-recetaUnica {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.comentarios {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+/* .conetenedor-receta{
+
+} */

@@ -1,9 +1,9 @@
 import {React, useEffect,useState} from "react";
 import "../stylesheets/Boton.css";
 
-function Boton ({onClick, nombre_pais}) {
+function Boton ({onClick, value}) {
     return(
-        <button className="boton" onClick={onClick}>{nombre_pais}</button>
+        <button className="boton" onClick={onClick}>{value}</button>
     );
 };
 

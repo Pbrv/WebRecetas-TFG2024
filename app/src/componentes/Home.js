@@ -13,7 +13,7 @@ function Home({ recetas }) {
                 <h2>Destacados</h2>
                 <div className="recetas-destacadas">
                     {recetasDestacadas.map((receta) => (
-                        <Receta key={receta.id} {...receta} />
+                        <Receta key={receta.id_receta} {...receta} />
                     ))}
                 </div>
             </div>
@@ -21,7 +21,7 @@ function Home({ recetas }) {
                 <h2>Menú de la semana</h2>
                 <div className="recetas-menu">
                     {recetasDestacadas.map((receta) => (
-                        <Receta key={receta.id} {...receta} />
+                        <Receta key={receta.id_receta} {...receta} />
                     ))}
                 </div>
                 <button>Desbloquéalo / Accede a tu menú</button>

@@ -1,3 +1,4 @@
+from typing import Optional
 from sqlalchemy import String, Integer, Column
 from pydantic import BaseModel
 from database.database import Base
@@ -12,7 +13,7 @@ class Comentario(Base):
     valoracion_comentario = Column(Integer)
 
 class InsertarComentario(BaseModel):
-    id_usuario_comentario: int
+    id_usuario_comentario: str
     id_receta_comentario: int
     descripcion_comentario: str
-    valoracion_comentario: int
+    valoracion_comentario: Optional[int]

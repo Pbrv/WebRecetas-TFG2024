@@ -10,6 +10,12 @@ function RecetaUnica() {
     
     const [comentarios, setComentarios] = useState([]);
     const [recetas, setRecetas] = useState([]);
+    const [comentario, setComentario] = useState({
+        id_receta_comentario: id,
+        id_usuario_comentario: localStorage.getItem('token'),
+        descripcion_comentario: "",
+        valoracion_comentario: null
+    })
 
     useEffect(() => {
         const obtenerDatos = async () => {
@@ -28,6 +34,24 @@ function RecetaUnica() {
         obtenerDatos();
     }, []);
 
+    async function enviarComentario() {
+        let coment = document.getElementById("comentario");
+        try {
+            setComentario({...comentario, "descripcion_comentario": coment.value})
+            const response = await fetch("/insertar_comentario", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(comentario)
+            });
+            const data = await response.json();
+            coment.value = '';
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
         <> 
             <div className="contenedor-home"></div>
@@ -39,18 +63,27 @@ function RecetaUnica() {
                         <li key={index}>{ingrediente}</li>
                     ))}
                 </section>
-                <aside className="elaboracion">
+                <section className="elaboracion">
                     <p>Elaboracion</p>
                     {/* Si estan cargados los valores se muestran */}
                     {recetas && recetas.elaboracion_receta && recetas.elaboracion_receta.split(';').map((paso, index) => (
                         <li key={index}>{paso}</li>
                     ))}
-                </aside>
+                </section>
             </div>
             <div className="comentarios">
                 {comentarios.map((comentario) => (
                     <Comentario key={comentario.id_comentario} {...comentario} />
                 ))}
+            </div>
+            <div>
+                <section>
+                    <label>
+                        <textarea name="descripcion" id="comentario" placeholder="Introduce tu comentario..." rows={10} cols={80} />
+                    </label>
+                    <br />
+                    <button onClick={enviarComentario}>Enviar comentario</button>
+                </section>
             </div>
         </>
     );

@@ -25,14 +25,14 @@ function Navbar({ isLogged, setIsLogged }) {
     return (
         <nav>
             <ul>
-                <li><a href="/"><img src="logo.png" alt="Logo"  id="logo" /></a></li>
+                <li><a href="/"><img src="logo.png" alt="Logo" id="logo" /></a></li>
                 <li><a href="/recetas">Recetas</a></li>
                 <li><a href="/paises">Países</a></li>
             </ul>
-            <div className="iconos" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+            <div className="iconos" onMouseLeave={handleMouseLeave}>
                 <a href="/buscar"><img src="lupa.png" alt="Buscar" /></a>
                 <div className="icono-usuario">
-                    <a href="/login"><img src="usuario.png" alt="Login" /></a>
+                    <a href="/login" onMouseEnter={handleMouseEnter} ><img src="usuario.png" alt="Login" /></a>
                     {isDropdownVisible && (
                         <div className="dropdown">
                             <a className="a-user" href="/mi-cuenta">Mi Cuenta</a>

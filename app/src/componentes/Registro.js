@@ -7,7 +7,11 @@ function Registro() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
     const handleSubmit = async event => {
         event.preventDefault();
@@ -23,13 +27,13 @@ function Registro() {
         if (!validateUsername(username)) {
             alert("No se ha validado el nombre")
             return;
-    }
+        }
 
         if (!validateEmail(email)) {
             // Mostrar un mensaje de error o tomar alguna acción si el correo electrónico no es válido
             alert("No se ha validado el email")
             return;
-    }
+        }
 
         try {
             const response = await fetch("http://localhost:8000/registrar_usuario", {
@@ -89,12 +93,17 @@ function Registro() {
                         <input
                             className="form-input"
                             id="password"
-                            type="password"
+                            type={showPassword ? 'text' : 'password'}
                             placeholder="  "
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                         />
                         <label htmlFor="password" className="form-label">Contraseña:</label>
+                        <a className="enlace-mostrar-password" type={showPassword ? 'text' : 'password'}>
+                            <img 
+                            src={showPassword ? "esconder.png" : "ver.png"} alt="" 
+                            className="mostrar-password" onClick={togglePasswordVisibility} />
+                        </a>
                         <span className="form-line"></span>
                     </div>
                     <input type="submit" className="form-submit" value="Crear cuenta" />

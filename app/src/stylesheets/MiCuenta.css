@@ -10,7 +10,7 @@
 }
 
 .titulos {
-    color: #3B6064;
+    color: #2f4a4e;
     margin-bottom: 0.7vw;
 }
 
@@ -27,7 +27,8 @@
 .contenedor_datos_usuario {
     margin: 0 10vw;
     padding: 4vw;
-    border: 1px solid #3B6064;
+    border: 1px solid rgb(219, 216, 216);
+    border-radius: 5px;
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
@@ -36,15 +37,15 @@
 .datos_usuario {
     /* display: flex;
     flex-direction: column; */
-    border: 1px solid #3B6064;
-    border-radius: 2px;
+    border: 1px solid rgb(219, 216, 216);
+    border-radius: 5px;
     width: 45%;
 }
 
 .encabezado_datos {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid #3B6064;
+    border-bottom: 1px solid rgb(219, 216, 216);
 }
 
 .cuerpo_datos_usuario {

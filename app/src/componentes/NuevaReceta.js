@@ -13,6 +13,9 @@ const NuevaReceta = () => {
     });
 
     const [continentes, setContinentes] = useState([]);
+    const [continenteSeleccionado, setContinenteSeleccionado] = useState('');
+    const [paises, setPaises] = useState([]);
+    const [ingredientes, setIngredientes] = useState(['']);
 
     useEffect(() => {
         fetch("/mostrar_continentes")
@@ -20,9 +23,32 @@ const NuevaReceta = () => {
             .then(data => setContinentes(data));
     }, []);
 
+    useEffect(() => {
+        if (continenteSeleccionado) {
+            fetch(`/mostrar_paises/${continenteSeleccionado}`)
+                .then(response => response.json())
+                .then(data => setPaises(data));
+        }
+    }, [continenteSeleccionado]);
+
+    const handleContinenteChange = (event) => {
+        setContinenteSeleccionado(event.target.value);
+    };
+
     const handleChange = (e) => {
         setReceta({...receta, [e.target.name]: e.target.value});
     }
+
+    const handleIngredienteChange = (index, event) => {
+        const values = [...ingredientes];
+        values[index] = event.target.value;
+        setIngredientes(values);
+        setReceta({...receta, ingredientes_receta: values});
+    };
+
+    const handleAddIngredient = () => {
+        setIngredientes([...ingredientes, '']);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -56,7 +82,7 @@ const NuevaReceta = () => {
                             />
                         
                         <label className="label-nueva-receta">Selecciona la dificultad:</label>
-                            <select name="dificultad_receta" onChange={handleChange} required>
+                            <select name="dificultad_receta" onChange={handleChange} className="input-nueva-receta" required>
                                 <option value="1">Dificultad 1</option>
                                 <option value="2">Dificultad 2</option>
                                 <option value="3">Dificultad 3</option>
@@ -64,29 +90,55 @@ const NuevaReceta = () => {
                             </select>
                         
                         <label className="label-nueva-receta">Continente:</label>
-                            <select name="Continente" onChange={handleChange} required>
+                        {/* onChange={handleChange} */}
+                            <select name="continente" onChange={handleContinenteChange} className="input-nueva-receta" required>
                                 {continentes.map(continente => (
                                     <option key={continente.id} value={continente.id}>
-                                        {continente.nombre}
+                                        {continente.nombre_continente}
                                     </option>
                                 ))}
                             </select>
+
+                        <label className="label-nueva-receta">País:</label>
+                        {/* onChange={handleChange} */}
+                        <select name="pais" className="input-nueva-receta" required>
+                        {paises.map((pais, index) => 
+                            <option key={index} value={pais.nombre_pais}>
+                                {pais.nombre_pais}
+                            </option>
+                        )} 
+                        </select>
                         
                         <label className="label-nueva-receta">Tipo de receta:</label>
-                            <select name="tipo" onChange={handleChange} required>
-                                {continentes.map(continente => (
-                                    <option key={continente.id} value={continente.id}>
-                                        {continente.nombre}
-                                    </option>
-                                ))}
+                            <select name="tipo" onChange={handleChange} className="input-nueva-receta" required>
+                                <option value="1">Comida</option>
+                                <option value="2">Cena</option>
+                                <option value="3">Postre</option>
+                                <option value="4">Desayuno</option>
+                                <option value="4">Bebida</option>
                             </select>
                         
-                        <label className="label-nueva-receta">Ingredientes:</label>
+                        {/* <label className="label-nueva-receta">Ingredientes:</label>
                             <input
                                 type="text" 
                                 name="nombre_receta" 
+                                className="input-nueva-receta"
                                 onChange={handleChange} required
-                            />
+                            /> */}
+
+                        <label className="label-nueva-receta">Ingredientes:</label>
+                        {ingredientes.map((ingrediente, index) => (
+                            <div key={index}>
+                                <input
+                                    type="text" 
+                                    value={ingrediente}
+                                    className="input-nueva-receta"
+                                    onChange={event => handleIngredienteChange(index, event)}
+                                    required
+                                />
+                            </div>
+                        ))}
+                        <button type="button" onClick={handleAddIngredient} className="nuevo-ingrediente">Añadir ingrediente</button>
                         
                     </div>
                     <div className="columna">
@@ -106,9 +158,7 @@ const NuevaReceta = () => {
                         </label>
                         <input type="submit" className="form-submit" value="Subir Receta" />
                     </div>
-                    
                 </div>
-                
             </form>
         </div>
     );

@@ -26,6 +26,8 @@ class InsertarReceta(BaseModel):
     ingredientes_receta: str
     elaboracion_receta: str
     dificultad_receta: int
+    # Poner pais_receta como string ya que cogemos en el front el pais como string
+    # Cuando vayamos a insertarlo hacemos una consulta y lo transformamos a int para insertarlo en la base de datos
     pais_receta: int
     tipo_receta: str
     imagen_receta: bytes

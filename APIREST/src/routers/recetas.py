@@ -112,17 +112,26 @@ async def mostrar_receta(filtro: str,db: db_con):
 
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
-
+    
+@app.get("/ultima_receta")
+async def ultima_receta(db: db_con):
+    try:
+        ultima_receta = db.query(receta.Receta).order_by(receta.Receta.id.desc()).first()
+        if ultima_receta is None:
+            return {"error": "Error en la base de datos"}
+        return ultima_receta
+    except SQLAlchemyError as se:
+        raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
 # POST
 
 @app.post("/insertar_receta")
-async def insertar_receta(insertar: receta.InsertarReceta, imagen_receta: UploadFile = File(...)):
+async def insertar_receta(insertar: receta.InsertarReceta):#, imagen_receta: UploadFile = File(...)):
     try:
         db: Session = SessionLocal()
         informacion_receta = insertar.dict()
         informacion_receta['usuario_receta'] = 1 #Coger el id del usuario que esta ejecutando este post
-        informacion_receta['imagen_receta'] = await imagen_receta.read()  # Leer los bytes de la imagen
+        # informacion_receta['imagen_receta'] = await imagen_receta.read()  # Leer los bytes de la imagen
         # Se podria usar **insertar.dict si no queremos modificar o añadir ningun campo a lo que hemos pedido al usuario para que inserte
         receta_insertar = receta.Receta(**informacion_receta)
         db.add(receta_insertar)

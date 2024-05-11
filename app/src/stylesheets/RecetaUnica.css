@@ -1,15 +1,78 @@
+main {
+    display: grid;
+}
+
 .contenedor-recetaUnica {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    /* border: 1px solid black; */
+    margin: 5px;
+}
+.ingredientes {
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 15px;
+    width: 300px;
+    height: 250px;
+    margin: 10px;
+}
+.ingredientes li {
+    list-style-type: circle;
+}
+.ingredientes li::before {
+    /*content: "🛍️";  Agrega el emoji antes de cada elemento de la lista */
+    /*padding-right: 5px;  Añade un poco de espacio a la derecha del emoji */
+}
+
+.elaboracion {
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 15px;
+    width: 300px;
+    height: 250px;
+}
+.elaboracion li {
+    list-style-type: decimal;
+}
+.elaboracion li::before {
+    /*content: "🍴";  Agrega el emoji antes de cada elemento de la lista */
+    /*padding-right: 5px;  Añade un poco de espacio a la derecha del emoji */
 }
 
 .comentarios {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    /* border: 1px solid black; */
+    margin: 10px;
+}
+.nuevoComentario {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border: 1px solid black; */
+    margin: 10px;
 }
 
-/* .conetenedor-receta{
+.div-comentario {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 15px;
+    width: 300px;
+    height: 250px;
+    overflow: hidden;
+}
+p{
+    margin: 5px;
+    text-align: center;
+}
 
-} */
+textarea {
+    margin-top: 10px;
+    resize: none;
+}

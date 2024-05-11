@@ -23,13 +23,11 @@ db_con = Annotated[Session,Depends(get_db)]
 @app.get("/mostrar_paises/{nom_continente}") # mostrar paises pasando nombre continente
 async def mostrar_receta(nom_continente: str, db: db_con):
     try:
-        nom_pais = db.query(pais.Pais.nombre_pais)\
+        nom_pais = db.query(pais.Pais)\
             .join(continente.Continente, pais.Pais.continente_pais == continente.Continente.id_continente)\
             .filter(continente.Continente.nombre_continente == nom_continente).all()
-        # nom_pais = db.query(pais.Pais).join(continente.Continente).filter(continente.Continente.nombre_continente == nom_continente).all()
         if nom_pais is None:
             return {"error": "Continente no valido"}
-        nom_pais = [row._asdict() for row in nom_pais]
         return nom_pais
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")

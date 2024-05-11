@@ -53,20 +53,22 @@ function RecetaUnica() {
     }
 
     return (
-        <> 
-            <div className="contenedor-home"></div>
+        <main>
+            {recetas && recetas.imagen_receta &&(
+                <div style={{backgroundImage: `url(${recetas.imagen_receta})`}} className="imagen-receta"></div>
+            )}            
             <div className="contenedor-recetaUnica">
                 <section className="ingredientes">
                     <p>Ingredientes</p>
                     {/* Si estan cargados los valores se muestran */}
-                    {recetas && recetas.ingredientes_receta && recetas.ingredientes_receta.split(';').map((ingrediente, index) => (
+                    {recetas.ingredientes_receta && recetas.ingredientes_receta.split(';').map((ingrediente, index) => (
                         <li key={index}>{ingrediente}</li>
                     ))}
                 </section>
                 <section className="elaboracion">
                     <p>Elaboracion</p>
                     {/* Si estan cargados los valores se muestran */}
-                    {recetas && recetas.elaboracion_receta && recetas.elaboracion_receta.split(';').map((paso, index) => (
+                    {recetas.elaboracion_receta && recetas.elaboracion_receta.split(';').map((paso, index) => (
                         <li key={index}>{paso}</li>
                     ))}
                 </section>
@@ -76,16 +78,16 @@ function RecetaUnica() {
                     <Comentario key={comentario.id_comentario} {...comentario} />
                 ))}
             </div>
-            <div>
+            <div className="nuevoComentario">
                 <section>
                     <label>
-                        <textarea name="descripcion" id="comentario" placeholder="Introduce tu comentario..." rows={10} cols={80} />
+                        <textarea name="descripcion" id="comentario" placeholder="Introduce tu comentario..." rows={12} cols={52} />
                     </label>
                     <br />
                     <button onClick={enviarComentario}>Enviar comentario</button>
                 </section>
             </div>
-        </>
+        </main>
     );
 }
 export default RecetaUnica;

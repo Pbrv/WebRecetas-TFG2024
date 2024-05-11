@@ -24,6 +24,7 @@ const NuevaReceta = () => {
     }, []);
 
     useEffect(() => {
+        //Si se pone este condicional hay que poner por defecto un continente si no no se muestra ningun pais cuando carga por primera vez y no seleccionan otro continente
         if (continenteSeleccionado) {
             fetch(`/mostrar_paises/${continenteSeleccionado}`)
                 .then(response => response.json())
@@ -36,6 +37,7 @@ const NuevaReceta = () => {
     };
 
     const handleChange = (e) => {
+        console.log(e.target.value)
         setReceta({...receta, [e.target.name]: e.target.value});
     }
 
@@ -48,10 +50,14 @@ const NuevaReceta = () => {
 
     const handleAddIngredient = () => {
         setIngredientes([...ingredientes, '']);
-    };
+    };    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        //Descomentar, esta comentado porque solo funciona la primera vez que le das a subir receta
+        // let ingredientesString = receta.ingredientes_receta.join(';')
+        // setReceta({...receta, ingredientes_receta:ingredientesString})
+        console.log(receta)
         try {
             const response = await fetch("/insertar_receta", {
                 method: 'POST',
@@ -100,22 +106,21 @@ const NuevaReceta = () => {
                             </select>
 
                         <label className="label-nueva-receta">País:</label>
-                        {/* onChange={handleChange} */}
-                        <select name="pais" className="input-nueva-receta" required>
+                        <select onChange={handleChange} name="pais_receta" className="input-nueva-receta" required>
                         {paises.map((pais, index) => 
-                            <option key={index} value={pais.nombre_pais}>
+                            <option key={pais.id_pais} value={pais.id_pais}>
                                 {pais.nombre_pais}
                             </option>
                         )} 
                         </select>
                         
                         <label className="label-nueva-receta">Tipo de receta:</label>
-                            <select name="tipo" onChange={handleChange} className="input-nueva-receta" required>
-                                <option value="1">Comida</option>
-                                <option value="2">Cena</option>
-                                <option value="3">Postre</option>
-                                <option value="4">Desayuno</option>
-                                <option value="4">Bebida</option>
+                            <select name="tipo_receta" onChange={handleChange} className="input-nueva-receta" required>
+                                <option value="Comida">Comida</option>
+                                <option value="Cena">Cena</option>
+                                <option value="Postre">Postre</option>
+                                <option value="Desayuno">Desayuno</option>
+                                <option value="Bebida">Bebida</option>
                             </select>
                         
                         {/* <label className="label-nueva-receta">Ingredientes:</label>
@@ -144,7 +149,7 @@ const NuevaReceta = () => {
                     <div className="columna">
                         <label className="label-nueva-receta">
                             Elaboración:
-                            <textarea  rows={5} cols={30}>
+                            <textarea name='elaboracion_receta' rows={5} cols={30} onChange={handleChange}>
 
                             </textarea>
                         </label>
@@ -153,7 +158,7 @@ const NuevaReceta = () => {
                             <input
                                 type="file" 
                                 name="imagen_receta" 
-                                onChange={handleChange} 
+                                onChange={handleChange}
                             />
                         </label>
                         <input type="submit" className="form-submit" value="Subir Receta" />

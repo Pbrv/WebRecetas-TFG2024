@@ -15,6 +15,7 @@ const NuevaReceta = () => {
     const [continentes, setContinentes] = useState([]);
     const [continenteSeleccionado, setContinenteSeleccionado] = useState('');
     const [paises, setPaises] = useState([]);
+    const [pasos, setPasos] = useState(['', '']);
     const [ingredientes, setIngredientes] = useState(['']);
 
     useEffect(() => {
@@ -52,6 +53,17 @@ const NuevaReceta = () => {
         setIngredientes([...ingredientes, '']);
     };    
 
+    const handlePasoChange = (index, event) => {
+        const values = [...pasos];
+        values[index] = event.target.value;
+        setPasos(values);
+    };
+
+    const handleAddPaso = () => {
+        setPasos([...pasos, '']);
+    };
+
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         //Descomentar, esta comentado porque solo funciona la primera vez que le das a subir receta
@@ -74,10 +86,11 @@ const NuevaReceta = () => {
     }
 
     return (
-        <div className="contenedor">
-            <h2 className="titulo-form">Nueva Receta</h2>
+        <div className="contenedor-nueva-receta">
+            <h2 className="titulo-nueva-receta">Nueva Receta</h2>
             <form className="form-nueva-receta" onSubmit={handleSubmit}>
                 <div className="contenedor-form-nueva-receta">
+                    {/* 1ª COLUMNA */}
                     <div className="columna">
                         <label className="label-nueva-receta">Nombre: </label>
                             <input
@@ -122,46 +135,57 @@ const NuevaReceta = () => {
                                 <option value="Desayuno">Desayuno</option>
                                 <option value="Bebida">Bebida</option>
                             </select>
-                        
-                        {/* <label className="label-nueva-receta">Ingredientes:</label>
-                            <input
-                                type="text" 
-                                name="nombre_receta" 
-                                className="input-nueva-receta"
-                                onChange={handleChange} required
-                            /> */}
 
                         <label className="label-nueva-receta">Ingredientes:</label>
                         {ingredientes.map((ingrediente, index) => (
-                            <div key={index}>
+                            <div key={index} className="div-añadir">
                                 <input
                                     type="text" 
                                     value={ingrediente}
-                                    className="input-nueva-receta"
+                                    className="input-ingredientes"
                                     onChange={event => handleIngredienteChange(index, event)}
                                     required
                                 />
+                                {index === ingredientes.length - 1 && (
+                                    <a href="#" onClick={(event) => {event.preventDefault(); handleAddIngredient();}}>
+                                        <img src="mas.png" alt="Añadir ingrediente" className="icono-añadir"/>
+                                    </a>
+                                )}
                             </div>
                         ))}
-                        <button type="button" onClick={handleAddIngredient} className="nuevo-ingrediente">Añadir ingrediente</button>
-                        
                     </div>
+                    {/* 2ª COLUMNA */}
                     <div className="columna">
-                        <label className="label-nueva-receta">
-                            Elaboración:
-                            <textarea name='elaboracion_receta' rows={5} cols={30} onChange={handleChange}>
-
-                            </textarea>
-                        </label>
-                        <label className="label-nueva-receta">
-                            Imagen:
+                        <label className="label-nueva-receta">Elaboración:</label>
+                        {pasos.map((paso, index) => (
+                            <div key={index} className="div-añadir">
+                                <label className="label-pasos">Paso {index + 1}:</label>
+                                <input
+                                    type="text" 
+                                    value={paso}
+                                    className="input-elaboracion"
+                                    onChange={event => handlePasoChange(index, event)}
+                                    required
+                                />
+                                {index === pasos.length - 1 && (
+                                    <a href="#" onClick={(event) => {event.preventDefault(); handleAddPaso();}}>
+                                        <img src="mas.png" alt="Añadir paso" className="icono-añadir"/>
+                                    </a>
+                                )}
+                            </div>
+                        ))}
+                        
+                        <label className="label-nueva-receta">Imagen:</label>
                             <input
                                 type="file" 
                                 name="imagen_receta" 
+                                className="input_imagen"
                                 onChange={handleChange}
                             />
-                        </label>
-                        <input type="submit" className="form-submit" value="Subir Receta" />
+                        
+                        <div className="prueba">
+                            <input type="submit" className="boton-nueva-receta" value="Subir Receta" />
+                        </div>
                     </div>
                 </div>
             </form>

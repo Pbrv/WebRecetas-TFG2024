@@ -57,7 +57,7 @@ function RecetaUnica() {
             {recetas && recetas.imagen_receta &&(
                 <div style={{backgroundImage: `url(${recetas.imagen_receta})`}} className="imagen-receta"></div>
             )}    
-            <div className="nombre-receta">
+            <div className="nombre-recetaUnica">
                 <h1>{recetas.nombre_receta}</h1>
             </div>
             <div className="contenedor-recetaUnica">

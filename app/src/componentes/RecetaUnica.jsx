@@ -56,21 +56,28 @@ function RecetaUnica() {
         <main>
             {recetas && recetas.imagen_receta &&(
                 <div style={{backgroundImage: `url(${recetas.imagen_receta})`}} className="imagen-receta"></div>
-            )}            
+            )}    
+            <div className="nombre-receta">
+                <h1>{recetas.nombre_receta}</h1>
+            </div>
             <div className="contenedor-recetaUnica">
-                <section className="ingredientes">
-                    <p>Ingredientes</p>
+                <section className="section-ingredientes">
+                    <p className="titulo-recetaUnica">Ingredientes</p>
                     {/* Si estan cargados los valores se muestran */}
-                    {recetas.ingredientes_receta && recetas.ingredientes_receta.split(';').map((ingrediente, index) => (
-                        <li key={index}>{ingrediente}</li>
-                    ))}
+                    <div className="ingredientes">
+                        {recetas.ingredientes_receta && recetas.ingredientes_receta.split(';').map((ingrediente, index) => (
+                            <li key={index}>{ingrediente.charAt(0).toUpperCase() + ingrediente.slice(1)}</li>
+                        ))}
+                    </div>
                 </section>
-                <section className="elaboracion">
-                    <p>Elaboracion</p>
+                <section className="section-elaboracion">
+                    <p className="titulo-recetaUnica">Elaboración</p>
                     {/* Si estan cargados los valores se muestran */}
-                    {recetas.elaboracion_receta && recetas.elaboracion_receta.split(';').map((paso, index) => (
-                        <li key={index}>{paso}</li>
-                    ))}
+                    <div className="elaboracion">
+                        {recetas.elaboracion_receta && recetas.elaboracion_receta.split(';').map((paso, index) => (
+                            <li key={index}>{paso}</li>
+                        ))}
+                    </div>
                 </section>
             </div>
             <div className="comentarios">

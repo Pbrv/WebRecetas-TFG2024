@@ -5,25 +5,42 @@
     /* align-items: center;
     justify-content: center; */
     background-color: #ffffff;
-    /* box-shadow: 0 3px 13px 1px rgb(0 0 0 / 9%); */
+    /* border: 1px solid purple; */
     width: 400px;
     height: 400px;
     padding-bottom: 2vw;
+    gap: 5px;
 }
-
-.img-receta {
-    width: 100%;
-    height: 100%;
-}
+    .img-receta {
+        width: 100%;
+        height: 100%;
+    }
 
 .contenedor-info-receta {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    /* border: 1px solid red; */
+    gap: 5px;
 }
-
-.descripcion-receta {
-    display: flex;
-    justify-content: space-around;
-}
+    .div-info {
+        display: flex;
+        align-items: center;
+        /* border: 1px solid pink; */
+        width: 100%;
+        gap: 3px;
+    }
+    .div-estrellas {
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+    }
+    .estrella {
+        width: 20px;
+    }
+    .gorrito {
+        width: 18px;
+        height: auto;
+    }
+    .info {
+        font-size: .8em;
+    }

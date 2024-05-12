@@ -1,41 +1,61 @@
 main {
     display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Esto crea dos columnas de igual tamaño */
 }
-
+.nombre-receta {
+    grid-column: 1 / 3;
+    margin:auto;
+    padding: 2vw;
+}
 .contenedor-recetaUnica {
+    grid-column: 1 / 3;
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    /* border: 1px solid black; */
+    justify-content: center;
+    align-items: baseline;
+    gap: 2vw;
+    border: 1px solid red;
     margin: 5px;
 }
-.ingredientes {
+
+.titulo-recetaUnica {
+    font-size: 1.3em;
+    font-weight: bold;
+    padding-bottom: 1vw;
+    border-bottom: 1px solid black;
+}
+.section-ingredientes {
     border: 1px solid black;
     padding: 10px;
     border-radius: 15px;
-    width: 300px;
-    height: 250px;
-    margin: 10px;
+    width: 20vw;
 }
-.ingredientes li {
+.ingredientes {
+    padding: 1vw 2vw;
+}
+.section-ingredientes li {
     list-style-type: circle;
+    margin-bottom: 0.5vw;
 }
-.ingredientes li::before {
+.section-ingredientes li::before {
     /*content: "🛍️";  Agrega el emoji antes de cada elemento de la lista */
     /*padding-right: 5px;  Añade un poco de espacio a la derecha del emoji */
 }
 
-.elaboracion {
+.section-elaboracion {
     border: 1px solid black;
     padding: 10px;
     border-radius: 15px;
-    width: 300px;
-    height: 250px;
+    width: 50vw;
 }
-.elaboracion li {
+    .elaboracion {
+        padding: 2vw 2vw;
+        text-align: justify;
+    }
+.section-elaboracion li {
     list-style-type: decimal;
+    margin-bottom: 0.7vw;
 }
-.elaboracion li::before {
+.section-elaboracion li::before {
     /*content: "🍴";  Agrega el emoji antes de cada elemento de la lista */
     /*padding-right: 5px;  Añade un poco de espacio a la derecha del emoji */
 }

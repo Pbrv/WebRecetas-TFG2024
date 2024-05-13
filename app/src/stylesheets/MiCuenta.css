@@ -1,37 +1,32 @@
-.titulo-h1 {
-    padding: 3vw 0;
-    margin: 0 10vw;
-    color: #2f4a4e;
+.prueba {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
 }
+    .titulo-micuenta {
+        padding: 3vw 0;
+        margin: 0 10vw;
+        color: #2f4a4e;
+    }
+    .nombre-usuario-micuenta {
+        font-size: 1.2em;
+        margin: 0 10vw;
+        padding-bottom: 3vw;
+    }
 
 .titulo-h2 {
     padding: 2vw;
     color: #2f4a4e;
 }
 
-.titulos {
-    color: #2f4a4e;
-    margin-bottom: 0.7vw;
-}
-
-.datos {
-    margin-bottom: 1.2vw;
-    font-size: 0.8em;
-}
-
-.nombre_usuario {
-    margin: 0 10vw;
-    padding-bottom: 3vw;
-}
-
 .contenedor_datos_usuario {
-    margin: 0 10vw;
-    padding: 4vw;
-    border: 1px solid rgb(219, 216, 216);
-    border-radius: 5px;
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
+    margin: 0 10vw 5vw 10vw;
+    padding: 4vw;
+    border: 1px solid rgb(219, 216, 216);
+    border-radius: 5px;
 }
 
 .datos_usuario {
@@ -49,8 +44,20 @@
 }
 
 .cuerpo_datos_usuario {
-    padding: 3vw 3vw;
+    /* display: flex;
+    flex-direction: column;
+    align-items: start; */
+    /* padding: 3vw 3vw; */
 }
+    .titulos {
+        color: #4a6d72;
+        font-weight: bold;
+        /* margin-bottom: 0.7vw; */
+    }
+    .datos {
+        margin-bottom: 1.2vw;
+        font-size: 0.8em;
+    }
 
 .cuerpo_datos_recetas {
     padding: 3vw 3vw;

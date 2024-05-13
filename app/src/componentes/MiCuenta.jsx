@@ -28,12 +28,15 @@ function MiCuenta() {
 
     return (
         <div>
-            <h1 className="titulo-h1">Mi Cuenta</h1>
+            
 
             {/* Controla si los datos de usuario son nulos */}
             {userData ? (
             <>
-                <p className="nombre_usuario">Hola {userData.nombre_usuario}</p>
+                <div className="prueba">
+                    <h1 className="titulo-micuenta">Mi Cuenta</h1>
+                    <p className="nombre-usuario-micuenta">Hola {userData.nombre_usuario}</p>
+                </div>
 
                 <div className="contenedor_datos_usuario">
 

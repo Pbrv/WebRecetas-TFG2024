@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from typing import Annotated
 from models.usuario import Usuario, RegistrarUsuario, InfoUsuario
+from models.suscripcion import Suscripcion
 from database.database import SessionLocal
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
@@ -83,19 +84,30 @@ async def mi_cuenta(current_user: InfoUsuario = Depends(get_current_user)):
 async def recetas_mostrar(usuario_nombre:str, db:db_con):
     try:
         recetas_id = db.query(Usuario.recetas_guardadas_usuario).filter(Usuario.nombre_usuario == usuario_nombre).first()
-        #Devuelve todos los datos de esa columna(ids de las recetas)
+        print(recetas_id)
+        if recetas_id is None:
+            raise HTTPException(status_code=404, detail="El usuario no tiene recetas guardadas")
+        
+        # Devuelve todos los datos de esa columna(ids de las recetas)
         return recetas_id
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
 
-@app.get("/suscripcion_usuario/{usuario_nombre}")
-async def recetas_mostrar(usuario_nombre:str, db:db_con):
+@app.get("/nombre_suscripcion/{id_suscripcion}")
+async def obtener_nombre_suscripcion(id_suscripcion: int, db: db_con):
     try:
-        suscripcion = db.query(Usuario.suscripcion_usuario).filter(Usuario.nombre_usuario == usuario_nombre).first()
-        return suscripcion
+        suscripcion_nombre_tuple = db.query(Suscripcion.nombre_suscripcion).filter(Suscripcion.id_suscripcion == id_suscripcion).first()
+
+        if suscripcion_nombre_tuple is None:
+            raise HTTPException(status_code=404, detail="No se encontró ninguna suscripción con el ID dado")
+
+        suscripcion_nombre = suscripcion_nombre_tuple[0]
+
+        return {"nombre_suscripcion": suscripcion_nombre}
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+
 
 
 # INSERTAR USUARIO

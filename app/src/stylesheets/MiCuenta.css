@@ -1,4 +1,4 @@
-.prueba {
+.div-titlo-micuenta {
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -6,7 +6,7 @@
     .titulo-micuenta {
         padding: 3vw 0;
         margin: 0 10vw;
-        color: #2f4a4e;
+        color: #3B6064;
     }
     .nombre-usuario-micuenta {
         font-size: 1.2em;
@@ -16,7 +16,7 @@
 
 .titulo-h2 {
     padding: 2vw;
-    color: #2f4a4e;
+    color: #3B6064;
 }
 
 .contenedor_datos_usuario {
@@ -25,14 +25,16 @@
     flex-wrap: wrap;
     margin: 0 10vw 5vw 10vw;
     padding: 4vw;
-    border: 1px solid rgb(219, 216, 216);
+    /* border: 1px solid rgb(219, 216, 216); */
+    border: 2px solid #F4ECD6;
     border-radius: 5px;
 }
 
 .datos_usuario {
     /* display: flex;
     flex-direction: column; */
-    border: 1px solid rgb(219, 216, 216);
+    /* border: 1px solid rgb(219, 216, 216); */
+    border: 2px solid #F4ECD6;
     border-radius: 5px;
     width: 45%;
 }
@@ -40,23 +42,30 @@
 .encabezado_datos {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid rgb(219, 216, 216);
+    /* border-bottom: 1px solid rgb(219, 216, 216); */
+    border-bottom: 2px solid #F4ECD6;
 }
 
 .cuerpo_datos_usuario {
-    /* display: flex;
-    flex-direction: column;
-    align-items: start; */
-    /* padding: 3vw 3vw; */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    padding: 1vw 2vw;
 }
+    .cuerpo_datos_usuario > p {
+        justify-self: start;
+    }
     .titulos {
-        color: #4a6d72;
+        color: #3B6064;
         font-weight: bold;
+        /* justify-self: flex-start; */
         /* margin-bottom: 0.7vw; */
     }
     .datos {
         margin-bottom: 1.2vw;
-        font-size: 0.8em;
+        margin-left: 1vw;
+        font-size: 0.9em;
+        /* justify-self: center; */
     }
 
 .cuerpo_datos_recetas {
@@ -64,7 +73,7 @@
 }
 
 .enlace_mod {
-    font-size: 0.7em;
+    font-size: 0.8em;
     align-self: flex-end;
     padding: 2.5vw;
     color: #3B6064;

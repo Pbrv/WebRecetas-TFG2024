@@ -4,7 +4,7 @@ from database.database import Base
 
 # Crear clase con la tabla que hay en la base de datos para luego hacer querys
 class Usuario(Base):
-    __tablename__="usuario"
+    __tablename__ = "usuario"
     id_usuario = Column(Integer, primary_key=True, index=True)
     nombre_usuario = Column(String (45))
     pass_usuario = Column(String(64))

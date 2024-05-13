@@ -16,8 +16,22 @@ function MiCuenta() {
                 if (!response.ok) {
                     throw new Error("No se obtuvieron los datos del usuario");
                 }
-                const DatosUsuario = await response.json();
+                let DatosUsuario = await response.json();
+                // Obtén el nombre de la suscripción
+                const responseSuscripcion = await fetch(`http://localhost:8000/nombre_suscripcion/${DatosUsuario.suscripcion_usuario}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    }
+                });
+                if (!responseSuscripcion.ok) {
+                    throw new Error("No se obtuvo el nombre de la suscripción");
+                }
+                const DatosSuscripcion = await responseSuscripcion.json();
                 
+                // Reemplaza el ID de la suscripción con el nombre de la suscripción
+                DatosUsuario.suscripcion_usuario = DatosSuscripcion.nombre_suscripcion;
+
                 setUserData(DatosUsuario);
             } catch (error) {
                 console.error("Error al hacer fetch", error);
@@ -33,7 +47,7 @@ function MiCuenta() {
             {/* Controla si los datos de usuario son nulos */}
             {userData ? (
             <>
-                <div className="prueba">
+                <div className="div-titlo-micuenta">
                     <h1 className="titulo-micuenta">Mi Cuenta</h1>
                     <p className="nombre-usuario-micuenta">Hola {userData.nombre_usuario}</p>
                 </div>

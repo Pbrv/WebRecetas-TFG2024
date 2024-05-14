@@ -1,4 +1,4 @@
-.div-titlo-micuenta {
+.div-titulo-micuenta {
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -12,6 +12,10 @@
         font-size: 1.2em;
         margin: 0 10vw;
         padding-bottom: 3vw;
+    }
+    .prueba {
+        display: flex;
+        justify-content: space-between;
     }
 
 .titulo-h2 {

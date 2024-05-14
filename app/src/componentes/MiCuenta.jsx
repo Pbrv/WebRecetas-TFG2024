@@ -48,9 +48,12 @@ function MiCuenta() {
             {/* Controla si los datos de usuario son nulos */}
             {userData ? (
             <>
-                <div className="div-titlo-micuenta">
+                <div className="div-titulo-micuenta">
                     <h1 className="titulo-micuenta">Mi Cuenta</h1>
-                    <p className="nombre-usuario-micuenta">Hola {userData.nombre_usuario}</p>
+                    <div className="prueba">
+                        <p className="nombre-usuario-micuenta">Hola {userData.nombre_usuario}</p>
+                        <button>Hola</button>
+                    </div>
                 </div>
 
                 <div className="contenedor_datos_usuario">

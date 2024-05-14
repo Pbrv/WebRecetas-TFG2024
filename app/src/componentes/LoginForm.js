@@ -7,6 +7,7 @@ function LoginForm({ setIsLogged }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
     const navigate = useNavigate();
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -20,7 +21,7 @@ function LoginForm({ setIsLogged }) {
         
         // validar que todos los campos estén rellenos --> SOLO ALERT
         if (!formValido) {
-            alert("Debes completar todos los campos");
+            setErrorMessage("Debes completar todos los campos");
         }
 
         try {
@@ -41,7 +42,11 @@ function LoginForm({ setIsLogged }) {
                 setIsLogged(true);
                 navigate('/'); // redirige al usuario a la página principal
             } else {
-                console.log('No se ha podido iniciar sesión', data);
+                if (response.status === 404) {
+                    setErrorMessage('Usuario no encontrado');
+                } else if (response.status === 401) {
+                    setErrorMessage('Contraseña incorrecta');
+                }
             }
         } catch (error) {
             console.log('Error al enviar la solicitud', error);
@@ -51,9 +56,11 @@ function LoginForm({ setIsLogged }) {
     return (
         <div className='contenedor'>
             <h2 className='titulo-form'>Inicia Sesión</h2>
+            
             <form className="form" onSubmit={handleSubmit}>
                 <div className="contenedor-form">
                     <div className="form-group">
+                        
                         <input
                             className="form-input"
                             id="username"
@@ -82,6 +89,9 @@ function LoginForm({ setIsLogged }) {
                         </a>
                         <span className="form-line"></span>
                     </div>
+                    {/* MENSAJE ERROR */}
+                    {errorMessage && <div className="mensaje-error"><p>{errorMessage}</p></div>}
+
                     <input type="submit" className="form-submit" value="Entrar" />
                     <p>¿Aún no tienes una cuenta? 
                         <a href="/registro" className='enlace-registro'> Regístrate aquí</a></p>

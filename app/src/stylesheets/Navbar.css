@@ -37,6 +37,7 @@ a {
 
 .div-iconos {
     display: flex;
+    align-items: center;
     gap: 2vw;
     margin-left: auto;
     margin-right: 3vw;
@@ -52,9 +53,11 @@ a {
 }
     
     .div-barra-busqueda > button{
+        border-radius: 4px;
+        font-weight: bolder;
         width: 2vw;
         border: none;
-        background-color: #FF725C;
+        background-color: transparent;
         opacity: 0.7;
         transition: transform 0.3s ease, color 0.3s ease;
     }
@@ -62,6 +65,7 @@ a {
         /* width: 2vw;
         border: none;
         background-color: #FF725C; */
+        
         opacity: 1;
         transform: scale(1.05);
         cursor: pointer;

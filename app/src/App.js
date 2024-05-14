@@ -10,6 +10,7 @@ import Registro from './componentes/Registro';
 import Paises from './componentes/Paises';
 import NuevaReceta from './componentes/NuevaReceta';
 import RecetaUnica from './componentes/RecetaUnica';
+import RecetasGuardadas from './componentes/RecetasGuardadas';
 import Footer from './componentes/Footer';
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
         <Route path="/paises" element={<Paises/>}/>
         <Route path="/mi-cuenta" element={<MiCuenta />} />
         <Route path="/nueva-receta" element={<NuevaReceta />} />
+        <Route path="/recetas-guardadas" element={<RecetasGuardadas />} />
       </Routes>
 
       <Footer />

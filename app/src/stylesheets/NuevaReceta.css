@@ -1,6 +1,7 @@
 .contenedor-nueva-receta {
     display: flex;
     flex-direction: column;
+    margin-bottom: 4vw;
 }
 
 .titulo-nueva-receta{

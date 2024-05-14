@@ -17,7 +17,8 @@ function MiCuenta() {
                     throw new Error("No se obtuvieron los datos del usuario");
                 }
                 let DatosUsuario = await response.json();
-                // Obtén el nombre de la suscripción
+
+                // Obtiene el nombre de la suscripción
                 const responseSuscripcion = await fetch(`http://localhost:8000/nombre_suscripcion/${DatosUsuario.suscripcion_usuario}`, {
                     method: 'GET',
                     headers: {
@@ -74,7 +75,7 @@ function MiCuenta() {
                     <div className="datos_usuario">
                         <div className="encabezado_datos">
                             <h2 className="titulo-h2">Mis Recetas</h2>
-                            <a className="enlace_mod">Añadir más recetas</a>
+                            <a className="enlace_mod">Editar mis recetas</a>
                         </div>
                         <div className="cuerpo_datos_recetas">
                             

@@ -42,7 +42,7 @@ function MiCuenta() {
     }, []);
 
     return (
-        <div>
+        <div className="contenedor-micuenta">
             
 
             {/* Controla si los datos de usuario son nulos */}
@@ -50,9 +50,9 @@ function MiCuenta() {
             <>
                 <div className="div-titulo-micuenta">
                     <h1 className="titulo-micuenta">Mi Cuenta</h1>
-                    <div className="prueba">
+                    <div className="div-nombre-boton">
                         <p className="nombre-usuario-micuenta">Hola {userData.nombre_usuario}</p>
-                        <button>Hola</button>
+                        <a href="/nueva-receta" className="nueva-receta-micuenta">Subir Receta</a>
                     </div>
                 </div>
 
@@ -62,12 +62,12 @@ function MiCuenta() {
                     <div className="datos_usuario">
                         <div className="encabezado_datos">
                             <h2 className="titulo-h2">Mis Datos</h2>
-                            <a className="enlace_mod">Editar mis datos</a>
+                            <a href="#" className="enlace_mod">Editar mis datos</a>
                         </div>
                         <div className="cuerpo_datos_usuario">
                             <p className="titulos">Nombre</p>
                             <p className="datos">{userData.nombre_usuario}</p>
-                            <p className="titulos">Correo electrónico</p>
+                            <p className="titulos">Email</p>
                             <p className="datos">{userData.correo_usuario}</p>
                             <p className="titulos">Suscripción</p>
                             <p className="datos">{userData.suscripcion_usuario}</p>
@@ -78,7 +78,7 @@ function MiCuenta() {
                     <div className="datos_usuario">
                         <div className="encabezado_datos">
                             <h2 className="titulo-h2">Mis Recetas</h2>
-                            <a className="enlace_mod">Editar mis recetas</a>
+                            <a href="#" className="enlace_mod">Editar mis recetas</a>
                         </div>
                         <div className="cuerpo_datos_recetas">
                             

@@ -1,21 +1,39 @@
 .div-titulo-micuenta {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    align-items: start;
+    align-items: start; */
+    margin: 0 10vw;
 }
     .titulo-micuenta {
         padding: 3vw 0;
-        margin: 0 10vw;
         color: #3B6064;
     }
     .nombre-usuario-micuenta {
         font-size: 1.2em;
-        margin: 0 10vw;
-        padding-bottom: 3vw;
+        justify-self: flex-start;
     }
-    .prueba {
+    .div-nombre-boton {
         display: flex;
+        align-items: center;
         justify-content: space-between;
+        margin-bottom: 2vw;
+    }
+    .nueva-receta-micuenta {
+        color: #fff;
+        font-size: 1em;
+        padding: 0.5vw 1vw;
+        border: none;
+        border-radius: 5px;
+        background-color: #FF725C;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+    }
+    .nueva-receta-micuenta:hover {
+        color: #fff;
+        font-size: 1em;
+        border: none;
+        background-color: #f75036;
+        transform: scale(1.05);
     }
 
 .titulo-h2 {
@@ -35,9 +53,6 @@
 }
 
 .datos_usuario {
-    /* display: flex;
-    flex-direction: column; */
-    /* border: 1px solid rgb(219, 216, 216); */
     border: 2px solid #F4ECD6;
     border-radius: 5px;
     width: 45%;
@@ -54,7 +69,7 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    padding: 1vw 2vw;
+    padding: 2vw;
 }
     .cuerpo_datos_usuario > p {
         justify-self: start;
@@ -62,8 +77,6 @@
     .titulos {
         color: #3B6064;
         font-weight: bold;
-        /* justify-self: flex-start; */
-        /* margin-bottom: 0.7vw; */
     }
     .datos {
         margin-bottom: 1.2vw;
@@ -86,4 +99,46 @@
 .enlace_mod:hover {
     text-decoration: underline;
     cursor: pointer;
+}
+
+@media (max-width: 1133px) {
+    .contenedor-micuenta {
+        font-size: 0.8em;
+    }
+}
+@media (max-width: 919px) {
+    .contenedor-micuenta {
+        font-size: 0.7em;
+    }
+    .contenedor_datos_usuario {
+        margin: 0 3vw 5vw 3vw;
+    }
+}
+@media (max-width: 650px) {
+    .contenedor_datos_usuario {
+        margin: 2vw auto 5vw auto;
+        flex-direction: column;
+        align-items: center;
+        width: 70vw;
+        gap: 4vw;
+    }
+    .datos_usuario {
+        width: 100%;
+    }
+    .div-titulo-micuenta {
+        width: 80vw;
+        margin: auto;
+        font-size: 0.9em;
+    }
+}
+@media (max-width: 490px) {
+    
+    .cuerpo_datos_usuario {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .titulos {
+
+    }
 }

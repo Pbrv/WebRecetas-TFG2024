@@ -86,30 +86,29 @@
         width: 20vw;
         margin: 4vw 0 2vw 0;
         border-radius: 2px;
-        background:#3B6064;
-        color:#fff;
-        border:none;
-        position:relative;
-        height:60px;
-        font-size:1.1em;
-        /* padding:2em 2em; */
-        cursor:pointer;
-        transition:800ms ease all;
-        outline:none;
+        background: #3B6064;
+        color: #fff;
+        border: none;
+        position: relative;
+        height: 60px;
+        font-size: 1.1em;
+        cursor: pointer;
+        transition: 800ms ease all;
+        outline: none;
     }
     .boton-menu-semanal:hover {
         background:#fff;
         color:#FF725C;
     }
     .boton-menu-semanal:before,.boton-menu-semanal:after{
-        content:'';
-        position:absolute;
-        top:0;
-        right:0;
-        height:2px;
-        width:0;
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 2px;
+        width: 0;
         background: #FF725C;
-        transition:400ms ease all;
+        transition: 400ms ease all;
     }
     .boton-menu-semanal:after{
         right:inherit;

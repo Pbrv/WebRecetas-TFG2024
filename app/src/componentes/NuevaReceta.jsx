@@ -15,8 +15,8 @@ const NuevaReceta = () => {
     const [continentes, setContinentes] = useState([]);
     const [continenteSeleccionado, setContinenteSeleccionado] = useState('');
     const [paises, setPaises] = useState([]);
-    const [pasos, setPasos] = useState(['', '']);
-    const [ingredientes, setIngredientes] = useState(['']);
+    const [pasos, setPasos] = useState(['', '', '']);
+    const [ingredientes, setIngredientes] = useState(['', '']);
 
     useEffect(() => {
         fetch("/mostrar_continentes")
@@ -185,12 +185,12 @@ const NuevaReceta = () => {
                         {pasos.map((paso, index) => (
                             <div key={index} className="div-añadir">
                                 <label className="label-pasos">Paso {index + 1}:</label>
-                                <input
-                                    type="text" 
+                                <textarea
+                                    rows={4}
                                     value={paso}
                                     className="input-elaboracion"
                                     onChange={event => handlePasoChange(index, event)}
-                                    required={index === 0} // Solo el primer input es obligatorio
+                                    required={index === 0} // Solo el primer textarea es obligatorio
                                 />
                                 {index === pasos.length - 1 && (
                                     <a href="#" onClick={(event) => {event.preventDefault(); handleAddPaso();}}>

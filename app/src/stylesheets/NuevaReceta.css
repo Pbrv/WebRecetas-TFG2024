@@ -21,6 +21,7 @@
     /* border: 1px solid red; */
     display: flex;
     justify-content: center;
+    /* align-items: center; */
     padding: 2em;
 }
 
@@ -113,6 +114,7 @@
 
 .div-añadir {
     display: flex;
+    align-items: center;
 }
 
 .icono-añadir {

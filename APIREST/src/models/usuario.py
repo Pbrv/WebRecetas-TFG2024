@@ -26,6 +26,7 @@ class LoginInput(BaseModel):
     pass_usuario: str
     
 class InfoUsuario(BaseModel):
+    id_usuario: int
     nombre_usuario: str
     correo_usuario: str
     pass_usuario: str

@@ -1,44 +1,60 @@
 import { useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 import "../stylesheets/MiCuenta.css";
 
 function MiCuenta() {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        const fetchDatosUsuario = async () => {
-            try {
-                const response = await fetch("http://localhost:8000/mi_cuenta", {
-                method: 'GET',    
-                headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
-                    }
-                });
-                if (!response.ok) {
-                    throw new Error("No se obtuvieron los datos del usuario");
+    const fetchDatosUsuario = async () => {
+        try {
+            const response = await fetch("http://localhost:8000/mi_cuenta", {
+            method: 'GET',    
+            headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
                 }
-                let DatosUsuario = await response.json();
-
-                // Obtiene el nombre de la suscripción
-                const responseSuscripcion = await fetch(`http://localhost:8000/nombre_suscripcion/${DatosUsuario.suscripcion_usuario}`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
-                    }
-                });
-                if (!responseSuscripcion.ok) {
-                    throw new Error("No se obtuvo el nombre de la suscripción");
-                }
-                const DatosSuscripcion = await responseSuscripcion.json();
-                
-                // Reemplaza el ID de la suscripción con el nombre de la suscripción
-                DatosUsuario.suscripcion_usuario = DatosSuscripcion.nombre_suscripcion;
-
-                setUserData(DatosUsuario);
-            } catch (error) {
-                console.error("Error al hacer fetch", error);
+            });
+            if (!response.ok) {
+                throw new Error("No se obtuvieron los datos del usuario");
             }
-        };
-        fetchDatosUsuario();
+            let DatosUsuario = await response.json();
+            
+            // Obtiene el nombre de la suscripción
+            const responseSuscripcion = await fetch(`http://localhost:8000/nombre_suscripcion/${DatosUsuario.suscripcion_usuario}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            });
+            if (!responseSuscripcion.ok) {
+                throw new Error("No se obtuvo el nombre de la suscripción");
+            }
+            const DatosSuscripcion = await responseSuscripcion.json();
+            
+            // Reemplaza el ID de la suscripción con el nombre de la suscripción
+            DatosUsuario.suscripcion_usuario = DatosSuscripcion.nombre_suscripcion;
+
+            // Obtiene las recetas CREADAS por el usuario
+            const responseRecetas = await fetch(`http://localhost:8000/usuario/${DatosUsuario.id_usuario}/recetas`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                }
+            });
+            if (!responseRecetas.ok) {
+                throw new Error("No se obtuvieron las recetas del usuario");
+            }
+            const DatosRecetas = await responseRecetas.json();
+
+            // Añade las recetas a los datos del usuario
+            DatosUsuario.recetas = DatosRecetas;
+
+            setUserData(DatosUsuario);
+        } catch (error) {
+            console.error("Error al hacer fetch", error);
+        }
+    };
+    fetchDatosUsuario();
     }, []);
 
     return (
@@ -81,7 +97,14 @@ function MiCuenta() {
                             <a href="#" className="enlace_mod">Editar mis recetas</a>
                         </div>
                         <div className="cuerpo_datos_recetas">
-                            
+                        {userData.recetas.map((receta, index) => (
+                            <div key={index} className="resumen-recetas">
+                                <Link to={`/receta/${receta.id_receta}`}>
+                                    <p className="enlaces-resumen-recetas">{receta.nombre_receta}</p>
+                                </Link>
+                                <p>Valoración: {receta.valoracion_receta}</p>
+                            </div>
+                        ))}
                         </div>
                     </div>
 

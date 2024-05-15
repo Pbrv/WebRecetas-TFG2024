@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Request
 from typing import Annotated
 from models.usuario import Usuario, RegistrarUsuario, InfoUsuario
 from models.suscripcion import Suscripcion
+from models.receta import Receta
 from database.database import SessionLocal
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
@@ -53,7 +54,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         if user is None:
             raise HTTPException(status_code=404, detail="User not found")
         
-        return InfoUsuario(nombre_usuario=user.nombre_usuario, correo_usuario=user.correo_usuario, 
+        return InfoUsuario(id_usuario=user.id_usuario, nombre_usuario=user.nombre_usuario, correo_usuario=user.correo_usuario, 
                         pass_usuario=user.pass_usuario, suscripcion_usuario=user.suscripcion_usuario)
     except JWTError:
         raise HTTPException(status_code=401, detail="Could not validate credentials")
@@ -92,6 +93,19 @@ async def recetas_mostrar(usuario_nombre:str, db:db_con):
         return recetas_id
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+    
+    
+# Obtener recetas CREADAS por el usuario
+
+@app.get("/usuario/{id_usuario}/recetas")
+async def obtener_recetas_usuario(id_usuario: int, db: Session = Depends(get_db)):
+    try:
+        # Obtener las recetas del usuario
+        recetas = db.query(Receta).filter(Receta.usuario_receta == id_usuario).all()
+        return recetas
+    except SQLAlchemyError as se:
+        raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+
 
 
 @app.get("/nombre_suscripcion/{id_suscripcion}")
@@ -173,6 +187,33 @@ async def logout(token: str = Depends(oauth2_scheme), db: Session = Depends(get_
     # Por ahora, simplemente devolvemos un mensaje indicando que la sesión se ha cerrado correctamente
     return {"message": "Sesión cerrada correctamente"}
 
+
+# Guardar receta
+@app.post("/guardar_receta")
+async def guardar_receta(request: Request, db: Session = Depends(get_db)):
+    # Obtener los datos de la solicitud en el cuerpo
+    guardar_data = await request.json()
+    id_usuario = guardar_data.get("id_usuario")
+    id_receta = guardar_data.get("id_receta")
+
+    # Obtener el usuario de la base de datos por id
+    user = db.query(Usuario).filter(Usuario.id_usuario == id_usuario).first()
+    
+    # Si el usuario no existe
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+    # Añadir id_receta a recetas_guardadas_usuario
+    if user.recetas_guardadas_usuario:
+        user.recetas_guardadas_usuario += f";{id_receta}"
+    else:
+        # Si no hay recetas guardadas añadir el id_receta
+        user.recetas_guardadas_usuario = str(id_receta)
+
+    # Guardar los cambios en la base de datos
+    db.commit()
+
+    return {"message": "Receta guardada con éxito"}
 
 # MODIFICAR USUARIO
 

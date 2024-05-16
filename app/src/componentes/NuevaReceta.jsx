@@ -17,6 +17,7 @@ const NuevaReceta = () => {
     const [paises, setPaises] = useState([]);
     const [pasos, setPasos] = useState(['', '', '']);
     const [ingredientes, setIngredientes] = useState(['', '']);
+    const [selectedFile, setSelectedFile] = useState(null);
 
     useEffect(() => {
         fetch("/mostrar_continentes")
@@ -81,8 +82,6 @@ const NuevaReceta = () => {
                 )
                 .join(';');
 
-            console.log("Receta" + receta)
-
             // Hacer copia de Receta con los ingredientes y elaboración pasados a String
             const recetaString = {
                 ...receta,
@@ -90,15 +89,18 @@ const NuevaReceta = () => {
                 elaboracion_receta: elaboracionString
             };
             
-            console.log(recetaString);
-
-            // ENVIAR LA RECETA PASADA A STRING AL SERVIDOR
+            // Crear un objeto FormData y añadir los datos de la receta y el archivo de imagen
+            const formData = new FormData();
+            Object.keys(recetaString).forEach(key => formData.append(key, recetaString[key]));
+            formData.append('imagen_receta', selectedFile);  // Asegúrate de tener una referencia al archivo seleccionado
+            console.log(formData)
+            // Enviar la receta y la IMAGEN al servidor
             const response = await fetch("/insertar_receta", {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
                 },
-                body: JSON.stringify(recetaString)
+                body: formData
             });
             const data = await response.json();
             console.log(data);

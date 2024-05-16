@@ -126,14 +126,18 @@ async def ultima_receta(db: db_con):
 # POST
 
 @app.post("/insertar_receta")
-async def insertar_receta(insertar: receta.InsertarReceta):#, imagen_receta: UploadFile = File(...)):
+async def insertar_receta(insertar: receta.InsertarReceta, imagen_receta: UploadFile = File(...)):
     try:
         db: Session = SessionLocal()
         informacion_receta = insertar.dict()
+        
         informacion_receta['usuario_receta'] = 1 #Coger el id del usuario que esta ejecutando este post
-        # informacion_receta['imagen_receta'] = await imagen_receta.read()  # Leer los bytes de la imagen
+        
+        informacion_receta['imagen_receta'] = await imagen_receta.read()  # Leer los bytes de la imagen
+        print(informacion_receta)
         # Se podria usar **insertar.dict si no queremos modificar o añadir ningun campo a lo que hemos pedido al usuario para que inserte
         receta_insertar = receta.Receta(**informacion_receta)
+        print(receta_insertar)
         db.add(receta_insertar)
         db.commit()
         return {"mensaje": "El registro se completó con éxito"}

@@ -188,32 +188,85 @@ async def logout(token: str = Depends(oauth2_scheme), db: Session = Depends(get_
     return {"message": "Sesión cerrada correctamente"}
 
 
-# Guardar receta
-@app.post("/guardar_receta")
-async def guardar_receta(request: Request, db: Session = Depends(get_db)):
-    # Obtener los datos de la solicitud en el cuerpo
-    guardar_data = await request.json()
-    id_usuario = guardar_data.get("id_usuario")
-    id_receta = guardar_data.get("id_receta")
+# Comprobar si las recetas están guardadas o no por el usuario
 
+@app.post("/comprobar_receta")
+async def comprobar_receta(request: Request, db: Session = Depends(get_db), current_user: InfoUsuario = Depends(get_current_user)):
+    # Obtener los datos de la solicitud en el cuerpo
+    comprobar_data = await request.json()
+    receta_id = comprobar_data.get("receta_id")
+    
     # Obtener el usuario de la base de datos por id
-    user = db.query(Usuario).filter(Usuario.id_usuario == id_usuario).first()
+    usuario = db.query(Usuario).filter(Usuario.id_usuario == current_user.id_usuario).first()
     
     # Si el usuario no existe
-    if not user:
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+    # Comprobar si la receta está guardada
+    recetas_guardadas = str(receta_id) in (usuario.recetas_guardadas_usuario or "").split(";")
+
+    return {"isSaved": recetas_guardadas}
+
+
+# El usuario Guarda la receta
+
+@app.post("/guardar_receta")
+async def guardar_receta(request: Request, db: Session = Depends(get_db), current_user: InfoUsuario = Depends(get_current_user)):
+    # Obtener los datos de la solicitud en el cuerpo
+    guardar_data = await request.json()
+    receta_id = guardar_data.get("receta_id")
+
+    # Obtener el usuario de la base de datos por id
+    usuario = db.query(Usuario).filter(Usuario.id_usuario == current_user.id_usuario).first()
+    
+    # Si el usuario no existe
+    if not usuario:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
     # Añadir id_receta a recetas_guardadas_usuario
-    if user.recetas_guardadas_usuario:
-        user.recetas_guardadas_usuario += f";{id_receta}"
+    if usuario.recetas_guardadas_usuario:
+        usuario.recetas_guardadas_usuario += f";{receta_id}"
     else:
         # Si no hay recetas guardadas añadir el id_receta
-        user.recetas_guardadas_usuario = str(id_receta)
+        usuario.recetas_guardadas_usuario = str(receta_id)
 
     # Guardar los cambios en la base de datos
     db.commit()
 
     return {"message": "Receta guardada con éxito"}
+
+
+# El usuario quita la receta de Guardados
+
+@app.post("/desguardar_receta")
+async def desguardar_receta(request: Request, db: Session = Depends(get_db), current_user: InfoUsuario = Depends(get_current_user)):
+    # Obtener los datos de la solicitud en el cuerpo
+    desguardar_data = await request.json()
+    id_receta = desguardar_data.get("receta_id")
+    
+    # Obtener el usuario de la base de datos por id
+    user = db.query(Usuario).filter(Usuario.id_usuario == current_user.id_usuario).first()
+    
+    # Si el usuario no existe
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+    # Comprobar si la receta está guardada
+    if user.recetas_guardadas_usuario:
+        recetas_guardadas = user.recetas_guardadas_usuario.split(";")
+        if str(id_receta) in recetas_guardadas:
+            # Si la receta está guardada, eliminarla
+            recetas_guardadas.remove(str(id_receta))
+            user.recetas_guardadas_usuario = ";".join(recetas_guardadas)
+        else:
+            raise HTTPException(status_code=400, detail="La receta no está guardada")
+
+    # Guardar los cambios en la base de datos
+    db.commit()
+
+    return {"message": "Receta desguardada con éxito"}
+
 
 # MODIFICAR USUARIO
 

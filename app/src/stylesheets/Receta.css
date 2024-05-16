@@ -20,13 +20,19 @@
     .img-receta:hover {
         opacity: 0.7;
     }
-
+.nombre-receta {
+    transition: color 0.3s ease;
+}
+.nombre-receta:hover {
+    color: #43767c;
+}
 .me-gusta {
     position: absolute;
     width: 40px;
     top: 10px;
     right: 10px;
     transition: transform 0.5s ease;
+    cursor: pointer;
 }
 .me-gusta:hover {
     transform: scale(1.1);

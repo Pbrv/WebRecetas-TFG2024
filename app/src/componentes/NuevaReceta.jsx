@@ -26,7 +26,6 @@ const NuevaReceta = () => {
     }, []);
 
     useEffect(() => {
-        //Si se pone este condicional hay que poner por defecto un continente si no no se muestra ningun pais cuando carga por primera vez y no seleccionan otro continente
         if (continenteSeleccionado) {
             fetch(`/mostrar_paises/${continenteSeleccionado}`)
                 .then(response => response.json())
@@ -42,6 +41,10 @@ const NuevaReceta = () => {
         console.log(e.target.value)
         setReceta({...receta, [e.target.name]: e.target.value});
     }
+
+    const handleFileChange = (e) => {
+        setSelectedFile(e.target.files[0]);
+    };
 
     const handleIngredienteChange = (index, event) => {
         const values = [...ingredientes];
@@ -91,9 +94,14 @@ const NuevaReceta = () => {
             
             // Crear un objeto FormData y añadir los datos de la receta y el archivo de imagen
             const formData = new FormData();
-            Object.keys(recetaString).forEach(key => formData.append(key, recetaString[key]));
+            Object.keys(recetaString).forEach(key => {
+                if (key !== 'imagen_receta') {
+                    formData.append(key, recetaString[key]);
+                }
+            });
             formData.append('imagen_receta', selectedFile);  // Asegúrate de tener una referencia al archivo seleccionado
-            console.log(formData)
+            // console.log(recetaString)
+            console.log(Array.from(formData.entries()));
             // Enviar la receta y la IMAGEN al servidor
             const response = await fetch("/insertar_receta", {
                 method: 'POST',
@@ -207,7 +215,7 @@ const NuevaReceta = () => {
                                 type="file" 
                                 name="imagen_receta" 
                                 className="input_imagen"
-                                onChange={handleChange}
+                                onChange={handleFileChange}
                             />
                         
                         <div className="prueba">

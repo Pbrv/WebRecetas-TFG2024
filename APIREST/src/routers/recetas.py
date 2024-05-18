@@ -128,9 +128,11 @@ async def ultima_receta(db: db_con):
 @app.post("/insertar_receta")
 async def insertar_receta(insertar: receta.InsertarReceta, imagen_receta: UploadFile = File(...)):
     try:
+        print(insertar)
         db: Session = SessionLocal()
         informacion_receta = insertar.dict()
-        
+        print(informacion_receta)
+        print(imagen_receta)
         informacion_receta['usuario_receta'] = 1 #Coger el id del usuario que esta ejecutando este post
         
         informacion_receta['imagen_receta'] = await imagen_receta.read()  # Leer los bytes de la imagen
@@ -142,6 +144,7 @@ async def insertar_receta(insertar: receta.InsertarReceta, imagen_receta: Upload
         db.commit()
         return {"mensaje": "El registro se completó con éxito"}
     except ValidationError as ve:
+        print(ve)
         raise HTTPException(status_code=422, detail=f"Validación fallida: {ve}")
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")

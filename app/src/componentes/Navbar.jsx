@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 import "../stylesheets/Navbar.css"
 import LogoutButton from "./Logout";
 import jwtDecode from "jwt-decode";
@@ -34,9 +35,25 @@ function Navbar({ isLogged, setIsLogged }) {
     return (
         <nav>
             <ul>
-                <li><a href="/"><img src="logo1.jpeg" alt="Logo" id="logo" /></a></li>
-                <li><a href="/recetas" className="enlace-nav">Recetas</a></li>
-                <li><a href="/paises" className="enlace-nav">Países</a></li>
+                <li>
+                    {/* Solo carga lo necesario, no necesita recargar la pagina cuando accede a otro punto */}
+                    <Link to={`/`}>
+                        <img src="../logo1.jpeg" alt="Logo" id="logo" />
+                    </Link>
+                </li>
+                {/* <li><a href="/"><img src="../logo1.jpeg" alt="Logo" id="logo" /></a></li> */}
+                <li>
+                    <Link to={`/recetas`} className="enlace-nav">
+                        Recetas
+                    </Link>
+                </li>
+                {/* <li><a href="/recetas" className="enlace-nav">Recetas</a></li> */}
+                <li>
+                    <Link to={`/paises`} className="enlace-nav">
+                        Paises
+                    </Link>
+                </li>
+                {/* <li><a href="/paises" className="enlace-nav">Países</a></li> */}
             </ul>
             <div className="div-iconos" onMouseLeave={handleMouseLeave}>
                 {isSearchVisible && ( // Muestra la barra de búsqueda si isSearchVisible es true
@@ -45,15 +62,25 @@ function Navbar({ isLogged, setIsLogged }) {
                         <button onClick={handleSearchClose}>X</button> {/* Botón para cerrar la barra de búsqueda */}
                     </div>
                 )}
-                <a href="/buscar" onMouseEnter = {handleSearchMouseEnter}><img src="lupa.png" alt="Buscar" className="icono" id="lupa" /></a>
+                <Link to={`/buscar`} onMouseEnter={handleSearchMouseEnter}>
+                    <img src="../lupa.png" alt="Buscar" className="icono" id="lupa" />
+                </Link>
                 
                 <div className="icono-usuario">
-                    <a href="/login" onMouseEnter={handleMouseEnter} ><img src="usuario.png" alt="Login" className="icono"/></a>
+                    <Link to={`/login`} onMouseEnter={handleMouseEnter}>
+                        <img src="../usuario.png" alt="Login" className="icono"/>
+                    </Link>
                     {isDropdownVisible && (
                         <div className="dropdown">
-                            <a className="a-user" href="/mi-cuenta">Mi Cuenta</a>
-                            <a className="a-user" href="/nueva-receta">Subir Receta</a>
-                            <a className="a-user" href="/recetas-guardadas">Recetas Guardadas</a>
+                            <Link to={`/mi-cuenta`} className="a-user">
+                                Mi Cuenta
+                            </Link>
+                            <Link to={`/nueva-receta`} className="a-user">
+                                Subir Receta
+                            </Link>
+                            <Link to={`/recetas-guardadas`} className="a-user">
+                            Recetas Guardadas
+                            </Link>
                             <LogoutButton setIsLogged={setIsLogged} />
                         </div>
                     )}

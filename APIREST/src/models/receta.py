@@ -15,7 +15,7 @@ class Receta(Base):
     usuario_receta = Column(Integer)
     pais_receta = Column(Integer)
     tipo_receta = Column(String(30))
-    imagen_receta = Column(LargeBinary)
+    imagen_receta = Column(Text)
     
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
@@ -26,11 +26,9 @@ class InsertarReceta(BaseModel):
     ingredientes_receta: str
     elaboracion_receta: str
     dificultad_receta: int
-    # Poner pais_receta como string ya que cogemos en el front el pais como string
-    # Cuando vayamos a insertarlo hacemos una consulta y lo transformamos a int para insertarlo en la base de datos
     pais_receta: int
     tipo_receta: str
-    imagen_receta: bytes
+    # imagen_receta: bytes
         
 # Optional y None para poder modificar sólo ciertos campos
 class ActualizarReceta(BaseModel):
@@ -40,4 +38,4 @@ class ActualizarReceta(BaseModel):
     dificultad_receta: Optional[int] = None
     pais_receta: Optional[int] = None
     tipo_receta: Optional[str] = None
-    imagen_receta: Optional[bytes] = None
+    imagen_receta: Optional[str] = None

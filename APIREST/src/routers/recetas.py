@@ -108,17 +108,34 @@ async def mostrar_receta(filtro: str,db: db_con):
 
         if recetas is None:
             return {"error": "No hay recetas con ese filtro"}
+        # for receta in recetas:
+        #     if receta.imagen_receta is not None:
+        #         receta.imagen_receta = base64.b64encode(receta.imagen_receta).decode()
+
         return recetas
 
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
     
-@app.get("/ultima_receta")
-async def ultima_receta(db: db_con):
+@app.post("/insertar_imagen_receta")
+async def imagen_receta(db: db_con, imagen_receta: UploadFile = File(...)):
     try:
-        ultima_receta = db.query(receta.Receta).order_by(receta.Receta.id.desc()).first()
+        # Obtener la última receta
+        ultima_receta = db.query(receta.Receta).order_by(receta.Receta.id_receta.desc()).first()
         if ultima_receta is None:
             return {"error": "Error en la base de datos"}
+
+        # Leer los bytes de la imagen
+        imagen_bytes = await imagen_receta.read()
+
+        if imagen_bytes:
+            # Convertir los bytes de la imagen en una cadena de texto codificada en base64
+            imagen_base64 = base64.b64encode(imagen_bytes).decode()
+
+            # Actualizar el campo imagen_receta de la última receta
+            ultima_receta.imagen_receta = imagen_base64
+            db.commit()
+
         return ultima_receta
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
@@ -126,14 +143,13 @@ async def ultima_receta(db: db_con):
 # POST
 
 @app.post("/insertar_receta")
-async def insertar_receta(insertar: receta.InsertarReceta, imagen_receta: UploadFile = File(...)):
+async def insertar_receta(insertar: receta.InsertarReceta,db: db_con):#, imagen_receta: UploadFile = File(...)):
     try:
-        db: Session = SessionLocal()
         informacion_receta = insertar.dict()
         
         informacion_receta['usuario_receta'] = 1 #Coger el id del usuario que esta ejecutando este post
         
-        informacion_receta['imagen_receta'] = await imagen_receta.read()  # Leer los bytes de la imagen
+        # informacion_receta['imagen_receta'] = await imagen_receta(db)  # Leer los bytes de la imagen
         print(informacion_receta)
         # Se podria usar **insertar.dict si no queremos modificar o añadir ningun campo a lo que hemos pedido al usuario para que inserte
         receta_insertar = receta.Receta(**informacion_receta)

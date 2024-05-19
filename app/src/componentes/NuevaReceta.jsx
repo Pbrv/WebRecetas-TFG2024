@@ -9,7 +9,7 @@ const NuevaReceta = () => {
         dificultad_receta: 0,
         pais_receta: 0,
         tipo_receta: "",
-        imagen_receta: null
+        // imagen_receta: null
     });
 
     const [continentes, setContinentes] = useState([]);
@@ -41,6 +41,12 @@ const NuevaReceta = () => {
     const handleChange = (e) => {
         console.log(e.target.value)
         setReceta({...receta, [e.target.name]: e.target.value});
+    }
+
+    const handleFileChange = (e) => {
+        console.log(e.target.files[0])
+        setSelectedFile(e.target.files[0]);
+        setReceta({...receta, [e.target.name]: e.target.files[0]});
     }
 
     const handleIngredienteChange = (index, event) => {
@@ -92,18 +98,30 @@ const NuevaReceta = () => {
             // Crear un objeto FormData y añadir los datos de la receta y el archivo de imagen
             const formData = new FormData();
             Object.keys(recetaString).forEach(key => formData.append(key, recetaString[key]));
-            formData.append('imagen_receta', selectedFile);  // Asegúrate de tener una referencia al archivo seleccionado
+            // formData.append('imagen_receta', selectedFile);  // Asegúrate de tener una referencia al archivo seleccionado
             console.log(formData)
             // Enviar la receta y la IMAGEN al servidor
             const response = await fetch("/insertar_receta", {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                    'Content-Type': 'application/json'
                 },
-                body: formData
+                body: JSON.stringify(recetaString)
             });
             const data = await response.json();
-            console.log(data);
+            if(data){
+                const formData = new FormData();
+                formData.append('imagen_receta', selectedFile); // Asegúrate de tener una referencia al archivo seleccionado
+                const response = await fetch("/insertar_imagen_receta", {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    },
+                    body: formData
+                });
+                const data = await response.json();
+            }
         } catch (error) {
             console.error(error);
         }
@@ -207,7 +225,7 @@ const NuevaReceta = () => {
                                 type="file" 
                                 name="imagen_receta" 
                                 className="input_imagen"
-                                onChange={handleChange}
+                                onChange={handleFileChange}
                             />
                         
                         <div className="prueba">

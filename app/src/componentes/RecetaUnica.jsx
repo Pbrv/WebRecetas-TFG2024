@@ -14,7 +14,7 @@ function RecetaUnica() {
         id_receta_comentario: id,
         id_usuario_comentario: localStorage.getItem('token'),
         descripcion_comentario: "",
-        valoracion_comentario: null
+        valoracion_comentario: 0
     })
 
     useEffect(() => {
@@ -22,8 +22,8 @@ function RecetaUnica() {
             const response = await fetch(
                 `http://localhost:8000/mostrar_comentarios/${id}`
             );
-            const comentario = await response.json();
-            setComentarios(comentario);
+            const comentarios = await response.json();
+            setComentarios(comentarios);
             
             const responseReceta = await fetch (
                 `http://localhost:8000/mostrar_receta/${id}`
@@ -36,8 +36,8 @@ function RecetaUnica() {
 
     async function enviarComentario() {
         let coment = document.getElementById("comentario");
+        setComentario({...comentario, 'descripcion_comentario': coment.value})
         try {
-            setComentario({...comentario, "descripcion_comentario": coment.value})
             const response = await fetch("/insertar_comentario", {
                 method: 'POST',
                 headers: {
@@ -85,10 +85,11 @@ function RecetaUnica() {
                     <Comentario key={comentario.id_comentario} {...comentario} />
                 ))}
             </div>
+            <br />
             <div className="nuevoComentario">
                 <section>
                     <label>
-                        <textarea name="descripcion" id="comentario" placeholder="Introduce tu comentario..." rows={12} cols={52} />
+                        <textarea name="descripcion" id="comentario" placeholder="Introduce tu comentario..." rows={8} cols={60} />
                     </label>
                     <br />
                     <button onClick={enviarComentario}>Enviar comentario</button>

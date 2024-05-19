@@ -26,7 +26,6 @@ const NuevaReceta = () => {
     }, []);
 
     useEffect(() => {
-        //Si se pone este condicional hay que poner por defecto un continente si no no se muestra ningun pais cuando carga por primera vez y no seleccionan otro continente
         if (continenteSeleccionado) {
             fetch(`/mostrar_paises/${continenteSeleccionado}`)
                 .then(response => response.json())

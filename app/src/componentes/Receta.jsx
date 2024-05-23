@@ -52,7 +52,7 @@ function Receta(props) {
 
         // Si no hay un usuario logueado, redirige a la página de inicio de sesión
         if (!token) {
-            navigate('/login');  // Asegúrate de cambiar "/login" por la ruta correcta a tu página de inicio de sesión
+            navigate('/login');
             return;
         }
         try {

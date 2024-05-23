@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "../stylesheets/RecetaUnica.css";
 import Comentario from "./Comentario";
+import { useNavigate } from 'react-router-dom';
 
 function RecetaUnica() {
-
-    //Acceder al parametro que viene por url
+    const navigate = useNavigate();
     const {id} = useParams();
     
     const [comentarios, setComentarios] = useState([]);
@@ -32,11 +32,26 @@ function RecetaUnica() {
             setRecetas(receta);
         };
         obtenerDatos();
-    }, []);
+    }, [id]);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setComentario({ ...comentario, [name]: value });
+    };
 
     async function enviarComentario() {
-        let coment = document.getElementById("comentario");
-        setComentario({...comentario, 'descripcion_comentario': coment.value})
+        const token = localStorage.getItem("token");
+        // let coment = document.getElementById("comentario").value;
+        if (!token) {  // Si no hay un usuario logueado, redirige a la página de inicio de sesión
+            navigate('/login');
+            return;
+        }
+        if (comentario.descripcion_comentario.trim() === "") {
+            alert("Por favor, introduce un comentario válido.");
+            return;
+        }
+        // setComentario({...comentario, 'descripcion_comentario': coment})
+        // console.log('descripcion_comentario')
         try {
             const response = await fetch("/insertar_comentario", {
                 method: 'POST',
@@ -45,8 +60,20 @@ function RecetaUnica() {
                 },
                 body: JSON.stringify(comentario)
             });
-            const data = await response.json();
-            coment.value = '';
+            if (!response.ok) {
+                const data = await response.json();
+                if (data.detail === "Ya has comentado esta receta") { // Controla si el usuario ya ha comentado esa receta
+                    // Muestra un mensaje al usuario -- CAMBIAR ESTO
+                    alert("Ya has comentado esta receta");
+                } else {
+                    console.error(data.detail);
+                }
+            } else {
+                const nuevoComentario = await response.json();
+                // Se actualiza el comentario pero no aparece el nombre de usuario
+                setComentarios([...comentarios, nuevoComentario]);
+                setComentario({ ...comentario, descripcion_comentario: "", valoracion_comentario: 0 });
+            }
         } catch (error) {
             console.error(error);
         }
@@ -80,21 +107,33 @@ function RecetaUnica() {
                     </div>
                 </section>
             </div>
-            <div className="comentarios">
-                {comentarios.map((comentario) => (
-                    <Comentario key={comentario.id_comentario} {...comentario} />
-                ))}
-            </div>
-            <br />
             <div className="nuevoComentario">
-                <section>
+                <section className="section-nuevoComentario">
                     <label>
-                        <textarea name="descripcion" id="comentario" placeholder="Introduce tu comentario..." rows={8} cols={60} />
+                        <textarea 
+                            name="descripcion" 
+                            id="comentario" 
+                            placeholder="Introduce tu comentario..." 
+                            rows={8} cols={70} 
+                            value={comentario.descripcion_comentario} 
+                            onChange={handleInputChange} />
                     </label>
-                    <br />
                     <button onClick={enviarComentario}>Enviar comentario</button>
                 </section>
             </div>
+            {/* VALORACIONES OTROS USUARIOS */}
+            <div className="div-comentarios">
+                <div className="comentarios">
+                    <h2>Valoraciones</h2>
+                    <div className="">
+                        {comentarios.map((comentario) => (
+                            <Comentario key={comentario.id_comentario} {...comentario} />
+                        ))}
+                    </div>
+                </div>
+            </div>
+            <br />
+
         </main>
     );
 }

@@ -1,3 +1,21 @@
-.div-comentario {
-    border: 1px solid black;
+.div-valoraciones {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    padding: 1em 0 1em 0;
+}
+
+.cabecera-valoracion {
+    display: flex;
+}
+.cuerpo-valoracion {
+    display: flex;
+}
+
+.nombre-usuario-valoracion {
+    font-weight: bold;
+}
+
+.p-comentario {
+    text-align: justify;
 }

@@ -1,5 +1,7 @@
 import './stylesheets/App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useEffect, useState } from 'react';
 import Navbar from './componentes/Navbar';
 import Home from './componentes/Home';
@@ -31,7 +33,6 @@ function App() {
   return (
     <Router>
       <Navbar isLogged={isLogged} setIsLogged={setIsLogged} />
-      
       <Routes>
         <Route path="/" element={<Home recetas={recetas} />} />
         <Route path="/login" element={<LoginForm setIsLogged={setIsLogged} />} />
@@ -45,6 +46,7 @@ function App() {
       </Routes>
 
       <Footer />
+      {/* <ToastContainer /> */}
     </Router>
   );
 }

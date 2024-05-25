@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import "../stylesheets/NuevaReceta.css";
 
 const NuevaReceta = () => {
@@ -18,6 +20,8 @@ const NuevaReceta = () => {
     const [pasos, setPasos] = useState(['', '', '']);
     const [ingredientes, setIngredientes] = useState(['', '']);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [mensaje, setMensaje] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch("/mostrar_continentes")
@@ -120,6 +124,9 @@ const NuevaReceta = () => {
                     body: formData
                 });
                 const data = await response.json();
+                
+                toast('La receta se ha subido correctamente');
+                navigate('/');
             }
         } catch (error) {
             console.error(error);
@@ -227,7 +234,7 @@ const NuevaReceta = () => {
                                 onChange={handleFileChange}
                             />
                         
-                        <div className="prueba">
+                        <div className="div-boton-nueva-receta">
                             <input type="submit" className="boton-nueva-receta" value="Subir Receta" />
                         </div>
                     </div>

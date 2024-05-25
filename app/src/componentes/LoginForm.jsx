@@ -1,6 +1,6 @@
 import '../stylesheets/Form.css';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { validateLoginForm } from './validacion';
 
 function LoginForm({ setIsLogged }) {
@@ -19,8 +19,7 @@ function LoginForm({ setIsLogged }) {
 
         const formValido = validateLoginForm(username, password);
         
-        // validar que todos los campos estén rellenos --> SOLO ALERT
-        if (!formValido) {
+        if (!formValido) { // validar que todos los campos estén rellenos --> SOLO ALERT
             setErrorMessage("Debes completar todos los campos");
         }
 
@@ -94,7 +93,7 @@ function LoginForm({ setIsLogged }) {
 
                     <input type="submit" className="form-submit" value="Entrar" />
                     <p>¿Aún no tienes una cuenta? 
-                        <a href="/registro" className='enlace-registro'> Regístrate aquí</a></p>
+                        <Link to="/registro" className='enlace-registro'>Regístrate aquí</Link></p>
                 </div>
             </form>
         </div>

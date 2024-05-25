@@ -112,6 +112,9 @@ a {
     transform: scale(1);
 }
 
+.enlace-registro {
+    margin-left: 0.4em;
+}
 .enlace-registro:hover {
     text-decoration: underline;
     color: #2f4a4e;

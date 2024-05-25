@@ -1,6 +1,6 @@
 // import "../stylesheets/Registro.css"
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { validateEmail, validateUsername, validateRegistroForm } from './validacion';
 
 function Registro() {
@@ -108,7 +108,7 @@ function Registro() {
                     </div>
                     <input type="submit" className="form-submit" value="Crear cuenta" />
                     <p>¿Ya tienes una cuenta? 
-                        <a href="/login" className='enlace-registro'> Inicia sesión aquí</a></p>
+                        <Link to="/login" className='enlace-registro'> Inicia sesión aquí</Link></p>
                 </div>
             </form>
         </div>

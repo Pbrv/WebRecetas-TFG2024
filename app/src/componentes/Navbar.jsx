@@ -35,25 +35,10 @@ function Navbar({ isLogged, setIsLogged }) {
     return (
         <nav>
             <ul>
-                <li>
-                    {/* Solo carga lo necesario, no necesita recargar la pagina cuando accede a otro punto */}
-                    <Link to={`/`}>
-                        <img src="../logo1.jpeg" alt="Logo" id="logo" />
-                    </Link>
-                </li>
-                {/* <li><a href="/"><img src="../logo1.jpeg" alt="Logo" id="logo" /></a></li> */}
-                <li>
-                    <Link to={`/recetas`} className="enlace-nav">
-                        Recetas
-                    </Link>
-                </li>
-                {/* <li><a href="/recetas" className="enlace-nav">Recetas</a></li> */}
-                <li>
-                    <Link to={`/paises`} className="enlace-nav">
-                        Paises
-                    </Link>
-                </li>
-                {/* <li><a href="/paises" className="enlace-nav">Países</a></li> */}
+                {/* Solo carga lo necesario, no necesita recargar la pagina cuando accede a otro punto */}
+                <li><Link to={`/`}><img src="../logo1.jpeg" alt="Logo" id="logo" /></Link></li>
+                <li><Link to={`/recetas`} className="enlace-nav">Recetas</Link></li>
+                <li><Link to={`/paises`} className="enlace-nav">Paises</Link></li>
             </ul>
             <div className="div-iconos" onMouseLeave={handleMouseLeave}>
                 {isSearchVisible && ( // Muestra la barra de búsqueda si isSearchVisible es true

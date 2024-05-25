@@ -68,7 +68,7 @@ function MiCuenta() {
                     <h1 className="titulo-micuenta">Mi Cuenta</h1>
                     <div className="div-nombre-boton">
                         <p className="nombre-usuario-micuenta">Hola {userData.nombre_usuario}</p>
-                        <a href="/nueva-receta" className="nueva-receta-micuenta">Subir Receta</a>
+                        <Link to="/nueva-receta" className="nueva-receta-micuenta">Subir Receta</Link>
                     </div>
                 </div>
 
@@ -78,7 +78,7 @@ function MiCuenta() {
                     <div className="datos_usuario">
                         <div className="encabezado_datos">
                             <h2 className="titulo-h2">Mis Datos</h2>
-                            <a href="#" className="enlace_mod">Editar mis datos</a>
+                            <Link to="#" className="enlace_mod">Editar mis datos</Link>
                         </div>
                         <div className="cuerpo_datos_usuario">
                             <p className="titulos">Nombre</p>
@@ -94,7 +94,7 @@ function MiCuenta() {
                     <div className="datos_usuario">
                         <div className="encabezado_datos">
                             <h2 className="titulo-h2">Mis Recetas</h2>
-                            <a href="#" className="enlace_mod">Editar mis recetas</a>
+                            <Link to="#" className="enlace_mod">Editar mis recetas</Link>
                         </div>
                         <div className="cuerpo_datos_recetas">
                         {userData.recetas.map((receta, index) => (

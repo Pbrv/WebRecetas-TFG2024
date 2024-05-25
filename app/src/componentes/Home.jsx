@@ -1,5 +1,7 @@
 import Receta from './Receta';
-import "../stylesheets/Home.css"
+import "../stylesheets/Home.css";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function Home({ recetas }) {
     const recetasDestacadas = recetas.slice(0, 4); // por ahora sólo coge las 4 primeras 
     
@@ -9,6 +11,10 @@ function Home({ recetas }) {
                 <h1>¿Qué comemos hoy?</h1>
                 <input className="busqueda"></input>
             </div>
+            {/* <div>
+                <ToastContainer />
+                
+            </div> */}
             <div className="destacados">
                 <h2 className="titulo">Destacados</h2>
                 <div className="recetas-destacadas">

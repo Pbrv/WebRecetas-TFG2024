@@ -1,5 +1,6 @@
 import {React, useEffect,useState} from "react";
 import "../stylesheets/Home.css";
+import "../stylesheets/Recetas.css";
 import Receta from "./Receta";
 import Boton from "./Boton";
 
@@ -31,7 +32,7 @@ function Recetas (){
     }
 
     return(
-        <div>
+        <div className="contenedor-recetas">
             {/* ID puesto para saber que contiene */}
             <div id="filtros">
                 {filtrosDisponibles.map((filtro, index) => (
@@ -44,7 +45,6 @@ function Recetas (){
                     ))}
             </div>
         </div>
-        
     );
 }
 

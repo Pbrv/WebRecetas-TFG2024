@@ -7,6 +7,7 @@ import jwtDecode from "jwt-decode";
 function Navbar({ isLogged, setIsLogged }) {
     const [isDropdownVisible, setDropdownVisible] = useState(false); // Estado para la el desplegable de usuario
     const [isSearchVisible, setSearchVisible] = useState(false); // Estado para la barra de búsqueda 
+    const [menuAbierto, setMenuAbierto] = useState(false);
     // const [isLogged, setIsLogged] = useState(false);
 
     useEffect(() => {
@@ -34,8 +35,13 @@ function Navbar({ isLogged, setIsLogged }) {
 
     return (
         <nav>
+            <div>
+            <button className="hamburguesa" onClick={() => setMenuAbierto(!menuAbierto)}>
+                        <img src="../hamburguesa.png">
+                        </img>
+                    </button>
+            </div>
             <ul>
-                {/* Solo carga lo necesario, no necesita recargar la pagina cuando accede a otro punto */}
                 <li><Link to={`/`}><img src="../logo1.jpeg" alt="Logo" id="logo" /></Link></li>
                 <li><Link to={`/recetas`} className="enlace-nav">Recetas</Link></li>
                 <li><Link to={`/paises`} className="enlace-nav">Paises</Link></li>
@@ -57,15 +63,11 @@ function Navbar({ isLogged, setIsLogged }) {
                     </Link>
                     {isDropdownVisible && (
                         <div className="dropdown">
-                            <Link to={`/mi-cuenta`} className="a-user">
-                                Mi Cuenta
-                            </Link>
-                            <Link to={`/nueva-receta`} className="a-user">
-                                Subir Receta
-                            </Link>
-                            <Link to={`/recetas-guardadas`} className="a-user">
-                            Recetas Guardadas
-                            </Link>
+                            {/* <p className="nombre-usuario-nav">Hola</p> */}
+                            <br></br>
+                            <Link to={`/mi-cuenta`} className="a-user">Mi Cuenta</Link>
+                            <Link to={`/nueva-receta`} className="a-user">Subir Receta</Link>
+                            <Link to={`/recetas-guardadas`} className="a-user">Recetas Guardadas</Link>
                             <LogoutButton setIsLogged={setIsLogged} />
                         </div>
                     )}

@@ -39,8 +39,7 @@ function Paises() {
         }
     };
 
-    const handleContinentClick = (nombreContinente) => {
-        // Limpia los países actuales antes de cargar los nuevos
+    const handleContinentClick = (nombreContinente) => {  // Limpia los países actuales antes de cargar los nuevos
         if (continenteActivo !== nombreContinente) {
             setPaises({});
             setPaisActivo(null);
@@ -82,27 +81,31 @@ function Paises() {
 
     return (
         <div className="contenedor-paises">
-            <h1>Selecciona un país</h1>
+            <h2>{continenteActivo ? "Selecciona un país" : "Selecciona un continente"}</h2>
             <div className="contenedor-continentes">
                 {continentes.map((continente) => (
-                    <div key={continente.id_continente} className="continente" onClick={() => handleContinentClick(continente.nombre_continente)}>
-                        <img src={`./continentes/${continente.nombre_continente}.png`} alt={continente.nombre_continente} className="imagen-continente" />
-                        <div className="nombre-continente">{continente.nombre_continente}</div>
-                        {continenteActivo && (
-                            <div id="filtros">
-                                {paises[continenteActivo]?.map((pais) => (
-                                    <Boton key={pais.id_pais} onClick={(e) => cambiarPaises(pais.nombre_pais, e.target)} value={pais.nombre_pais} />
-                                ))}
-                            </div>
-                        )}
+                    <div 
+                        key={continente.id_continente} 
+                        className={`continente ${continenteActivo === continente.nombre_continente ? "continente-activo" : ""}`}  
+                        onClick={() => 
+                        handleContinentClick(continente.nombre_continente)}>
+                            <img src={`./continentes/${continente.nombre_continente}.png`} alt={continente.nombre_continente} className="imagen-continente" />
+                            <div className="nombre-continente">{continente.nombre_continente}</div>
+                            {continenteActivo === continente.nombre_continente && (
+                                <div id="filtros">
+                                    {paises[continenteActivo]?.map((pais) => (
+                                        <Boton 
+                                            id="boton-pais"
+                                            key={pais.id_pais}
+                                            onClick={(e) => 
+                                                cambiarPaises(pais.nombre_pais, e.target)} value={pais.nombre_pais} />
+                                    ))}
+                                </div>
+                                
+                            )}
                     </div>
                 ))}
             </div>
-            {/* <div id="filtros">
-                {Object.values(paises).flat().map((boton, index) => (
-                    <Boton key={index} onClick={(e) => cambiarPaises(boton.nombre_pais, e.target)} value={boton.nombre_pais} />
-                ))}
-            </div> */}
             <div className="recetas-destacadas">
                 {recetas.map((receta, index) => (
                     <Receta key={index} {...receta} />

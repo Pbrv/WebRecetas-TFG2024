@@ -31,9 +31,21 @@ a {
     color: black;
 }
 
+.hamburguesa {
+    display: none;
+    border: none;
+    background-color: transparent;
+    justify-self: flex-start;
+}
+.hamburguesa > img {
+    width: 30px;
+    margin-left: 3vw;
+    height: auto;
+}
+
 .enlace-nav {
     color: #172527;
-    font-size: 1.2em;
+    font-size: 1em;
     opacity: 0.7;
     transition: opacity 0.2s ease;
 }
@@ -58,7 +70,6 @@ a {
     display: flex;
     gap: .5vw;
 }
-    
     .div-barra-busqueda > button{
         border-radius: 4px;
         font-weight: bolder;
@@ -115,8 +126,48 @@ a {
     top: 60px;
 }
 
+.nombre-usuario-nav {
+    border-bottom: 1px solid grey;
+    padding-bottom: 10px; /* Añade un poco de espacio debajo del nombre del usuario */
+    margin-bottom: 10px; /* Añade un poco de espacio debajo de la línea gris */
+    font-weight: bold; /* Hace que el nombre del usuario sea negrita */
+}
+
 .icono-usuario:hover .dropdown {
     /* display: block; */
     /* display: flex;
     flex-direction: column; */
+}
+
+/* Estilos para pantallas MEDIANAS */
+@media (max-width: 1400px) {
+    .icono { /* lupa y usuario */
+        width: 18px;
+        height: auto;
+    }
+}
+
+/* Estilos para pantallas PEQUEÑAS */
+@media (max-width: 900px) {
+    .hamburguesa {
+        display: block;
+    }
+    .enlace-nav {
+        display: none;
+    }
+    nav ul {
+        margin: auto;
+    }
+    #logo {
+        justify-self: end;
+    }
+/* 
+    .div-iconos {
+        flex-direction: column;
+        margin-right: 0;
+    }
+
+    .dropdown {
+        width: 100%;
+    } */
 }

@@ -53,12 +53,12 @@ function Navbar({ isLogged, setIsLogged }) {
                         <button onClick={handleSearchClose}>X</button> {/* Botón para cerrar la barra de búsqueda */}
                     </div>
                 )}
-                <Link to={`/buscar`} onMouseEnter={handleSearchMouseEnter}>
+                <Link to={``} onClick={handleSearchMouseEnter}>
                     <img src="../lupa.png" alt="Buscar" className="icono" id="lupa" />
                 </Link>
                 
                 <div className="icono-usuario">
-                    <Link to={`/login`} onMouseEnter={handleMouseEnter}>
+                    <Link to={isLogged ? `/mi-cuenta` : `/login`} onMouseEnter={handleMouseEnter}>
                         <img src="../usuario.png" alt="Login" className="icono"/>
                     </Link>
                     {isDropdownVisible && (

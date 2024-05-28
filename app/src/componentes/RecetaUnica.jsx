@@ -81,9 +81,11 @@ function RecetaUnica() {
 
     return (
         <main>
-            {recetas && recetas.imagen_receta &&(
-                <div style={{backgroundImage: `url(${recetas.imagen_receta})`}} className="imagen-receta"></div>
-            )}    
+            <div>
+                {recetas && recetas.imagen_receta &&(
+                    <div style={{backgroundImage: `url(${recetas.imagen_receta})`}} className="imagen-receta"></div>
+                )}    
+                </div>
             <div className="nombre-recetaUnica">
                 <h1>{recetas.nombre_receta}</h1>
             </div>
@@ -122,16 +124,21 @@ function RecetaUnica() {
                 </section>
             </div>
             {/* VALORACIONES OTROS USUARIOS */}
-            <div className="div-comentarios">
-                <div className="comentarios">
-                    <h2>Valoraciones</h2>
-                    <div className="">
-                        {comentarios.map((comentario) => (
-                            <Comentario key={comentario.id_comentario} {...comentario} />
-                        ))}
+                <div className="div-comentarios">
+                    <div className="comentarios">
+                        <h2>Valoraciones</h2>
+                        <div className="">
+                        {comentarios.length > 0 ? (
+                            comentarios.map((comentario) => (
+                                <Comentario key={comentario.id_comentario} {...comentario} />
+                            ))
+                        ) : (
+                            <p>Esta receta no tiene valoraciones</p>
+                            
+                        )}
+                        </div>
                     </div>
                 </div>
-            </div>
             <br />
 
         </main>

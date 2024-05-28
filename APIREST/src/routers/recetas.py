@@ -8,6 +8,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, class_mapper, sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
 from pydantic import ValidationError
+from routers.usuarios import get_current_user
+from models.usuario import InfoUsuario
 import json, base64
 
 
@@ -143,12 +145,13 @@ async def imagen_receta(db: db_con, imagen_receta: UploadFile = File(...)):
 # POST
 
 @app.post("/insertar_receta")
-async def insertar_receta(insertar: receta.InsertarReceta,db: db_con):#, imagen_receta: UploadFile = File(...)):
+async def insertar_receta(insertar: receta.InsertarReceta, db: db_con, current_user:InfoUsuario=Depends(get_current_user)):#, imagen_receta: UploadFile = File(...)):
     try:
         informacion_receta = insertar.dict()
+        informacion_receta['usuario_receta'] = current_user.id_usuario
         print(informacion_receta)
         print(imagen_receta)
-        informacion_receta['usuario_receta'] = 1 #Coger el id del usuario que esta ejecutando este post
+        #informacion_receta['usuario_receta'] = 1 #Coger el id del usuario que esta ejecutando este post
         
         # informacion_receta['imagen_receta'] = await imagen_receta(db)  # Leer los bytes de la imagen
         print(informacion_receta)

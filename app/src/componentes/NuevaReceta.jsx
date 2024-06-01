@@ -47,7 +47,7 @@ const NuevaReceta = () => {
     }
 
     const handleFileChange = (e) => {
-        console.log(e.target.files[0])
+        console.log(e.target.files[0].name)
         setSelectedFile(e.target.files[0]);
         setReceta({...receta, [e.target.name]: e.target.files[0]});
     }
@@ -101,8 +101,6 @@ const NuevaReceta = () => {
             // Crear un objeto FormData y añadir los datos de la receta y el archivo de imagen
             const formData = new FormData();
             Object.keys(recetaString).forEach(key => formData.append(key, recetaString[key]));
-            // formData.append('imagen_receta', selectedFile);  // Asegúrate de tener una referencia al archivo seleccionado
-            console.log(formData)
             // Enviar la receta y la IMAGEN al servidor
             const response = await fetch("/insertar_receta", {
                 method: 'POST',

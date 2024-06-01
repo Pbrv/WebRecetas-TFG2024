@@ -90,7 +90,7 @@ function Paises() {
                         onClick={() => 
                         handleContinentClick(continente.nombre_continente)}>
                             <img src={`./continentes/${continente.nombre_continente}.png`} alt={continente.nombre_continente} className="imagen-continente" />
-                            <div className="nombre-continente">{continente.nombre_continente}</div>
+                            <p className="nombre-continente">{continente.nombre_continente}</p>
                             {continenteActivo === continente.nombre_continente && (
                                 <div id="filtros">
                                     {paises[continenteActivo]?.map((pais) => (

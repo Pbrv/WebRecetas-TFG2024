@@ -10,19 +10,21 @@
 }
 
 .contenedor-continentes {
-    width: 70vw;
+    width: 90vw;
     /* min-width: 200px; */
     height: auto;
     margin: auto;
-    padding: 3em 0 9em 0;
+    padding: 1em 0 5em 0;
     display: flex;
-    justify-content: space-between;
-    gap: 1.5em;
+    /* justify-content: space-between; */
+    justify-content: center;
+    gap: 0.4em;
     position: relative;
+    flex-wrap: wrap;
 }
 
 .continente {
-    width: 100vw;
+    width: 15vw;
     /* height: auto; */
     padding: 0.5em;
     border: 1px solid #c9dfcf;
@@ -30,7 +32,6 @@
     cursor: pointer;
     background-color: #f9f9f9;
     text-align: center;
-    cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -40,10 +41,10 @@
 }
 
 .imagen-continente {
-    width: 70%;
+    width: 80%;
     padding: 1em;
     height: auto;
-    object-fit: cover;
+    object-fit: fill;
 }
 .nombre-continente {
     display: block;
@@ -79,28 +80,13 @@
 }
 
 #filtros {
+    margin-top: 7vh;
+    /* width: 20vw; */
     animation: fadeIn 0.3s;
-}
-
-/* Media query para pantallas PEQUEÑAS */
-@media (max-width: 768px) {
-    .contenedor-continentes {
-        width: 100vw;
-    }
-    .continente {
-        width: 80%;
-    }
-    .contenedor-paises > h2 {
-        padding-top: 2em;
-        font-size: 1em;
-    }
-    .nombre-continente {
-        display: none;
-    }
-    .imagen-continente {
-        width: 80%;
-    }
-    /* Para hacer responsive los paises hay que tocar el componente Boton */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Media query para pantallas MEDIANAS */
@@ -111,11 +97,49 @@
         gap: 0.4em;
     }
     .continente {
-        width: 20%;
-        height: auto;
-        padding: 0;
+        width: 20vw;
+        /* height: auto; */
+    }
+    .boton {
+        width: 75px;
+        display: flex;
+        justify-content: center;
+    }
+
+    #filtros {
+        width: 100px;
+        /* margin-top: 10vh; */
+    }
+    /* .nombre-continente {
+        font-size: 0.5em;
+    } */
+}
+
+/* Media query para pantallas PEQUEÑAS */
+@media (max-width: 768px) {
+    .contenedor-continentes {
+        width: 100vw;
+    }
+    .continente {
+        width: 30vw;
+    }
+    .contenedor-paises > h2 {
+        padding-top: 2em;
+        font-size: 1em;
     }
     .nombre-continente {
-        font-size: 0.5em;
+        /* display: none; */
+        /* font-size: 0.5em; */
     }
+    .imagen-continente {
+        width: 80%;
+    }
+
+    .boton {
+        width: 65px;
+    }
+    #filtros {
+        width: 80px;
+    }
+    /* Para hacer responsive los paises hay que tocar el componente Boton */
 }

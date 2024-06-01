@@ -98,9 +98,8 @@ function Receta(props) {
             <Link to={`/receta/${props.id_receta}`}>
                 <img 
                 className="img-receta"
-                //Si hay imagen_receta se muestra si no por defecto
-                src={props.imagen_receta ? `data:image/jpeg;base64,${props.imagen_receta}` : require("../imgs/receta1.jpg")}
-                alt="Imagen receta" /> {/* Meto a pelo una imagen en la carpeta 'imgs' para hacer pruebas */}
+                src={"/imgs/" + props.imagen_receta }
+                alt="Imagen receta" />
                 
             </Link>
             <img src={isSaved ? "corazon-lleno.png" : "corazon-vacio.png"} onClick={handleHeartClick} className="me-gusta"/>

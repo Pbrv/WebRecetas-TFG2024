@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from 'react-router-dom';
 import "../stylesheets/Navbar.css"
 import LogoutButton from "./Logout";
@@ -9,10 +9,24 @@ function Navbar({ isLogged, setIsLogged }) {
     const [isSearchVisible, setSearchVisible] = useState(false); // Estado para la barra de búsqueda 
     const [menuAbierto, setMenuAbierto] = useState(false);
     // const [isLogged, setIsLogged] = useState(false);
+    const dropdownRef = useRef(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
         setIsLogged(!!token);
+    }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setDropdownVisible(false);
+            }
+        };
+
+        window.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            window.removeEventListener("mousedown", handleClickOutside);
+        };
     }, []);
 
     // DESPLEGABLE
@@ -20,9 +34,6 @@ function Navbar({ isLogged, setIsLogged }) {
         if (isLogged) {
             setDropdownVisible(true);
         }
-    };
-    const handleMouseLeave = () => { // Cerrar desplegable
-        setDropdownVisible(false);
     };
 
     // LUPA
@@ -46,7 +57,7 @@ function Navbar({ isLogged, setIsLogged }) {
                 <li><Link to={`/recetas`} className="enlace-nav">Recetas</Link></li>
                 <li><Link to={`/paises`} className="enlace-nav">Paises</Link></li>
             </ul>
-            <div className="div-iconos" onMouseLeave={handleMouseLeave}>
+            <div className="div-iconos">
                 {isSearchVisible && ( // Muestra la barra de búsqueda si isSearchVisible es true
                     <div className="div-barra-busqueda">
                         <input type="text" placeholder="Buscar..."  className="barra-busqueda" />
@@ -62,9 +73,8 @@ function Navbar({ isLogged, setIsLogged }) {
                         <img src="../usuario.png" alt="Login" className="icono"/>
                     </Link>
                     {isDropdownVisible && (
-                        <div className="dropdown">
+                        <div className="dropdown" ref={dropdownRef}>
                             {/* <p className="nombre-usuario-nav">Hola</p> */}
-                            <br></br>
                             <Link to={`/mi-cuenta`} className="a-user">Mi Cuenta</Link>
                             <Link to={`/nueva-receta`} className="a-user">Subir Receta</Link>
                             <Link to={`/recetas-guardadas`} className="a-user">Recetas Guardadas</Link>

@@ -1,4 +1,5 @@
-from sqlalchemy import String, Integer, Column, Text, LargeBinary
+from datetime import datetime
+from sqlalchemy import String, Integer, Column, Text, LargeBinary, DateTime
 from pydantic import BaseModel
 from typing import Optional
 from database.database import Base
@@ -16,6 +17,8 @@ class Receta(Base):
     pais_receta = Column(Integer)
     tipo_receta = Column(String(30))
     imagen_receta = Column(Text)
+    # fecha_creacion = Column(DateTime, default=datetime.utcnow)
+    # imagen_modificacion = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
@@ -28,7 +31,7 @@ class InsertarReceta(BaseModel):
     dificultad_receta: int
     pais_receta: int
     tipo_receta: str
-    # imagen_receta: bytes
+    # imagen_receta: str
         
 # Optional y None para poder modificar sólo ciertos campos
 class ActualizarReceta(BaseModel):

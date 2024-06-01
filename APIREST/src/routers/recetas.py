@@ -116,7 +116,7 @@ async def imagen_receta(db: db_con, imagen_receta: UploadFile = File(...)):
         ultima_receta.imagen_receta = imagen_receta.filename
         db.commit()
         
-        with open(os.path.join("../../app/src/imgs", imagen_receta.filename), "wb") as buffer:
+        with open(os.path.join("../../app/public/imgs", imagen_receta.filename), "wb") as buffer:
             shutil.copyfileobj(imagen_receta.file, buffer)
         return {"Imagen subida con exito"}
     except SQLAlchemyError as se:

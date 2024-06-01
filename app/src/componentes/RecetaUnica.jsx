@@ -89,6 +89,9 @@ function RecetaUnica() {
                 {/* {recetas && recetas.imagen_receta &&(
                     <div style={{backgroundImage: `url(/imgs/${recetas.imagen_receta})`}} className="imagen-receta"></div>
                 )}     */}
+                <div>
+                    <h1>Hola</h1>
+                </div>
             </div>
             <div className="nombre-recetaUnica">
                 <h1>{recetas.nombre_receta}</h1>

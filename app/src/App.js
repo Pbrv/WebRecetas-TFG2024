@@ -13,6 +13,7 @@ import Paises from './componentes/Paises';
 import NuevaReceta from './componentes/NuevaReceta';
 import RecetaUnica from './componentes/RecetaUnica';
 import RecetasGuardadas from './componentes/RecetasGuardadas';
+import ModificarReceta from './componentes/ModificarReceta';
 import Footer from './componentes/Footer';
 
 function App() {
@@ -43,6 +44,9 @@ function App() {
         <Route path="/mi-cuenta" element={<MiCuenta />} />
         <Route path="/nueva-receta" element={<NuevaReceta />} />
         <Route path="/recetas-guardadas" element={<RecetasGuardadas />} />
+        <Route path="/modificar-receta/:id" element={<ModificarReceta />}>
+            {props => <ModificarReceta id={props.params.id} />}
+        </Route>
       </Routes>
 
       <Footer />

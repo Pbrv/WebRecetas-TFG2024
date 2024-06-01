@@ -59,8 +59,6 @@ function MiCuenta() {
 
     return (
         <div className="contenedor-micuenta">
-            
-
             {/* Controla si los datos de usuario son nulos */}
             {userData ? (
             <>
@@ -102,7 +100,9 @@ function MiCuenta() {
                                 <Link to={`/receta/${receta.id_receta}`}>
                                     <p className="enlaces-resumen-recetas">{receta.nombre_receta}</p>
                                 </Link>
-                                <p>Valoración: {receta.valoracion_receta}</p>
+                                <Link to={`/modificar-receta/${receta.id_receta}`}>
+                                    <p>Editar</p>
+                                </Link>
                             </div>
                         ))}
                         </div>

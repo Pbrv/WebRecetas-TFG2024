@@ -1,7 +1,7 @@
 from fastapi import APIRouter,Depends,HTTPException, status
 from fastapi.responses import JSONResponse
 from typing import Annotated, Optional
-from models import pais,continente
+from models import pais,continente,receta
 from database.database import SessionLocal
 from sqlalchemy.orm import Session, class_mapper
 from sqlalchemy.exc import SQLAlchemyError
@@ -32,21 +32,30 @@ async def mostrar_receta(nom_continente: str, db: db_con):
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
     
-    
-    
-# PRUEBA (ESTO DEBE IR EN UNA RUTA DE CONTINENTES)
 
-@app.get("/mostrar_continentes") # mostrar continentes
-async def mostrar_receta(db: db_con):
+@app.get("/mostrar_paises/{id_continente}") # mostrar paises pasando ID del continente
+async def mostrar_paises(id_continente: int, db: db_con):
     try:
-        continentes = db.query(continente.Continente).all()
-        # nom_pais = db.query(pais.Pais).join(continente.Continente).filter(continente.Continente.nombre_continente == nom_continente).all()
-        if continentes is None:
-            return {"error": "Continente no valido"}
-        return continentes
+        paises = db.query(pais.Pais)\
+            .filter(pais.Pais.continente_pais == id_continente).all()
+        if not paises:
+            raise HTTPException(status_code=404, detail="No se encontraron países para este continente")
+        return paises
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
+
+@app.get("/mostrar_pais/{id_receta}") # mostrar país pasando id de la receta
+async def mostrar_pais(id_receta: int, db: db_con):
+    try:
+        receta_pais = db.query(pais.Pais)\
+            .join(receta.Receta, pais.Pais.id_pais == receta.Receta.pais_receta)\
+            .filter(receta.Receta.id_receta == id_receta).first()
+        if receta_pais is None:
+            return {"error": "Receta no válida o no tiene un país asociado"}
+        return receta_pais
+    except SQLAlchemyError as se:
+        raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
 
 @app.post("/insertar_pais")

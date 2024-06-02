@@ -6,63 +6,78 @@ import "../stylesheets/NuevaReceta.css";
 function ModificarReceta() {
     const { id } = useParams();
     const [receta, setReceta] = useState(null);
-    const [continente, setContinente] = useState([]);
+    const [continentes, setContinentes] = useState([]);
     const [continenteSeleccionado, setContinenteSeleccionado] = useState('');
-    const [pais, setPais] = useState([]);
+    const [paisSeleccionado, setPaisSeleccionado] = useState({});
+    const [paises, setPaises] = useState([]);
     const [pasos, setPasos] = useState(['', '', '']);
-    const [ingredientes, setIngredientes] = useState(['', '']);
+    const [ingredientes, setIngredientes] = useState([]);
+    const [elaboracion, setElaboracion] = useState([]);
     const [selectedFile, setSelectedFile] = useState(null);
     const [mensaje, setMensaje] = useState(null);
-    const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     fetch("/mostrar_continentes")
-    //         .then(response => response.json())
-    //         .then(data => setContinentes(data));
-    // }, []);
-
-    // useEffect(() => {
-    //     if (continenteSeleccionado) {
-    //         fetch(`/mostrar_paises/${continenteSeleccionado}`)
-    //             .then(response => response.json())
-    //             .then(data => setPaises(data));
-    //     }
-    // }, [continenteSeleccionado]);
+    const tiposReceta = ["comida", "cena", "postre", "desayuno", "bebida"];
 
     useEffect(() => {
         const obtenerDatos = async () => {
-            // Obtén la receta actual del servidor
             const responseReceta = await fetch(`http://localhost:8000/mostrar_receta/${id}`);
             const receta = await responseReceta.json();
             setReceta(receta);
+            console.log(receta.imagen_receta)
     
-            // Obtén el país de la receta
-            const responsePais = await fetch(`http://localhost:8000/mostrar_pais/${receta.pais_receta}`);
-            const pais = await responsePais.json();
+            const responsePais = await fetch(`http://localhost:8000/mostrar_pais/${receta.id_receta}`);
+            const paisSeleccionado = await responsePais.json();
+            setPaisSeleccionado(paisSeleccionado);
+            // console.log(paisSeleccionado)
     
-            // Obtén el continente del país
-            const responseContinente = await fetch(`http://localhost:8000/mostrar_continente/${pais.continente}`);
-            const continente = await responseContinente.json();
-    
-            // Actualiza el estado con los datos obtenidos
-            setPais(pais);
-            setContinente(continente);
+            const responseContinente = await fetch(`http://localhost:8000/mostrar_continente/${paisSeleccionado.continente_pais}`);
+            const continenteSeleccionado = await responseContinente.json();
+            setContinenteSeleccionado(continenteSeleccionado);
+            console.log(continenteSeleccionado)
+            
+            const responsePaises = await fetch(`http://localhost:8000/mostrar_paises/${continenteSeleccionado.nombre_continente}`);
+            const paises = await responsePaises.json();
+            setPaises(paises);
+
+            const responseContinentes = await fetch(`http://localhost:8000/mostrar_continentes`);
+            const continentes = await responseContinentes.json();
+            setContinentes(continentes);
+
+
+            const ingredientes = (receta.ingredientes_receta).split(';');
+            setIngredientes(ingredientes);
+
+            const elaboracion = (receta.elaboracion_receta).split(';');
+            setElaboracion(elaboracion);
         };
         obtenerDatos();
     }, [id]);
 
+    const primeraLetraMayuscula = (string) => {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     const handleContinenteChange = (event) => {
+        console.log(event.target.value)
         setContinenteSeleccionado(event.target.value);
+        console.log(continenteSeleccionado)
+        // console.log(event.target.value)
+        // console.log(continenteSeleccionado.nombre_continente)
     };
 
     const handleChange = (e) => {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         setReceta({...receta, [e.target.name]: e.target.value});
+        console.log(e.target.value)
+
     }
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setReceta({ ...receta, [name]: value });
+        console.log(`Cambio en ${name}:`, value);
+        console.log(receta.dificultad_receta)
+        console.log("Nuevo estado de la receta:", receta);
     };
 
     const handleFileChange = (e) => {
@@ -72,15 +87,29 @@ function ModificarReceta() {
     }
 
     const handleIngredienteChange = (index, event) => {
-        const values = [...ingredientes];
-        values[index] = event.target.value;
-        setIngredientes(values);
-        setReceta({...receta, ingredientes_receta: values.join(';')});
+        const newIngredientes = [...receta.ingredientes];
+        newIngredientes[index] = event.target.value;
+        setReceta({
+            ...receta,
+            ingredientes: newIngredientes
+        });
     };
 
     const handleAddIngredient = () => {
-        setIngredientes([...ingredientes, '']);
-    };    
+        setReceta({
+            ...receta,
+            ingredientes: [...receta.ingredientes, ""]
+        });
+    };   
+
+    const handleRemoveIngredient = (index) => {
+        const newIngredientes = [...receta.ingredientes];
+        newIngredientes.splice(index, 1);
+        setReceta({
+            ...receta,
+            ingredientes: newIngredientes
+        });
+    };
 
     const handlePasoChange = (index, event) => {
         const values = [...pasos];
@@ -120,6 +149,10 @@ function ModificarReceta() {
         }
     };
 
+    if (!receta || continentes.length === 0) {
+        return <div>Cargando...</div>;
+    }
+
     return (
         receta && (
             <div className="contenedor-nueva-receta">
@@ -150,69 +183,110 @@ function ModificarReceta() {
                                 </select>
                             
                             <label className="label-nueva-receta">Continente:</label>
-                                <select name="continente" value={receta.continente} onChange={handleContinenteChange} className="input-nueva-receta" required>
-                                    <option value="">Selecciona el continente</option>
-                                    {/* {continentes.map(continente => (
-                                        <option key={continente.id} value={continente.id}>
-                                            {continente.nombre_continente}
+                                <select 
+                                    name="continente_receta" 
+                                    value={continenteSeleccionado} 
+                                    onChange={handleContinenteChange} 
+                                    className="input-nueva-receta" required>
+                                        <option value={continenteSeleccionado}>
+                                            {continenteSeleccionado.nombre_continente}
                                         </option>
-                                    ))} */}
+                                        {continentes.filter(continente => continente.id_continente !== continenteSeleccionado.id_continente).map(continente => (
+                                            <option key={continente.id_continente} value={continente.id_continente}>
+                                                {continente.nombre_continente}
+                                            </option>
+                                        ))}
                                 </select>
 
                             <label className="label-nueva-receta">País:</label>
                             <select 
                                 onChange={handleInputChange} 
                                 name="pais_receta" 
-                                value={receta.pais_receta} 
+                                value={paisSeleccionado.nombre_pais} 
                                 className="input-nueva-receta" required>
-                                <option value="">Selecciona el país</option>
-                                {/* {paises.map((pais, index) => 
+                                <option value="">
+                                    {paisSeleccionado.nombre_pais}
+                                </option>
+                                {paises.filter(pais => pais.id_pais !== paisSeleccionado.id_pais).map(pais => (
                                     <option key={pais.id_pais} value={pais.id_pais}>
                                         {pais.nombre_pais}
                                     </option>
-                                )}  */}
+                                ))}
                             </select>
                             
                             <label className="label-nueva-receta">Tipo de receta:</label>
-                                <select name="tipo_receta" value={receta.tipo_receta} onChange={handleInputChange} className="input-nueva-receta" required>
-                                    <option value="">Selecciona el tipo de receta</option>
-                                    /*....*/
+                                <select 
+                                    name="tipo_receta" 
+                                    value={receta.tipo_receta} 
+                                    onChange={handleInputChange} 
+                                    className="input-nueva-receta" required>
+                                    <option value="">{primeraLetraMayuscula(receta.tipo_receta)}</option>
+                                    {tiposReceta.filter(tipo => tipo !== receta.tipo_receta).map(tipo => (
+                                        <option key={tipo} value={tipo}>
+                                            {primeraLetraMayuscula(tipo)}
+                                        </option>
+                                    ))}
                                 </select>
 
                             <label className="label-nueva-receta">Ingredientes:</label>
-                            {/* {receta.ingredientes.map((ingrediente, index) => (
-                                <div key={index} className="div-añadir">
-                                    <input
-                                        type="text" 
-                                        value={ingrediente}
-                                        className="input-ingredientes"
-                                        onChange={event => handleIngredienteChange(index, event)}
-                                        required={index === 0} // Solo el primer input es obligatorio
-                                    />
-                                    {index === receta.ingredientes.length - 1 && (
-                                        <a href="#" onClick={(event) => {event.preventDefault(); handleAddIngredient();}}>
-                                            <img src="mas.png" alt="Añadir ingrediente" className="icono-añadir"/>
-                                        </a>
-                                    )}
-                                </div>
-                            ))} */}
+                                {ingredientes.map((ingrediente, index) => (
+                                    <div key={index} className="div-añadir">
+                                        <input
+                                            type="text" 
+                                            value={ingrediente}
+                                            className="input-ingredientes"
+                                            onChange={event => handleIngredienteChange(index, event)}
+                                            required={index === 0} // Solo el primer input es obligatorio
+                                        />
+                                        {index === ingredientes.length - 1 && (
+                                            <a href="#" onClick={(event) => {event.preventDefault(); handleAddIngredient(); }}>
+                                                <img src="/mas.png" alt="Añadir ingrediente" className="icono-añadir"/>
+                                            </a>
+                                        )}
+                                    </div>
+                                ))}
+                        </div>
+                        {/* 2ª COLUMNA */}
+                        <div className="columna">
+                            <label className="label-nueva-receta">Elaboración:</label>
+                                {elaboracion.map((paso, index) => (
+                                    <div key={index} className="div-añadir">
+                                        <label className="label-pasos">Paso {index + 1}:</label>
+                                        <textarea
+                                            rows={4}
+                                            value={paso}
+                                            className="input-elaboracion"
+                                            onChange={event => handlePasoChange(index, event)}
+                                            required={index === 0} // Solo el primer textarea es obligatorio
+                                        />
+                                        {index === elaboracion.length - 1 && (
+                                            <a href="#" onClick={(event) => {event.preventDefault(); handleAddPaso();}}>
+                                                <img src="/mas.png" alt="Añadir paso" className="icono-añadir"/>
+                                            </a>
+                                        )}
+                                    </div>
+                                ))}
+                            <label className="label-nueva-receta">Imagen:</label>
+                                <img 
+                                    src={"/imgs/" + receta.imagen_receta } 
+                                    alt="" 
+                                    className="imagen_modificar_receta"
+                                />
+                                <input
+                                    type="file" 
+                                    name="imagen_receta" 
+                                    className="input_imagen"
+                                    onChange={handleFileChange}
+                                />
+                            
+                            <div className="div-boton-nueva-receta">
+                                <input type="submit" className="boton-nueva-receta" value="Modificar Receta" />
+                            </div>
                         </div>
                     </div>
-                    <button type="submit">Guardar cambios</button>
                 </form>
             </div>
         )
-
-        // receta && (
-            
-        //     <form onSubmit={handleSubmit}>
-        //         <label>
-        //             Nombre de la receta:
-        //             <input type="text" name="nombre_receta" value={receta.nombre_receta} onChange={handleInputChange} />
-        //         </label>
-        //         {/* Resto del formulario... */}
-        //     </form>
-        // )
     );
 }
 

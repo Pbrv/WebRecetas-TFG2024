@@ -50,10 +50,11 @@
 .div-boton-nueva-receta {
     display: flex;
     justify-content: center;
+    margin-top: 1em;
 }
 
 .boton-nueva-receta {
-    width: 35%;
+    width: 37%;
     padding: .8em 0;
     border: none;
     border-radius: .2em;
@@ -121,6 +122,10 @@
     width: 25px;
     height: auto;
     margin-left: 10px;
+}
+
+.imagen_modificar_receta {
+    width: 100%;
 }
 
 @media (max-width: 1400px) {  /* Pantallas medianas */

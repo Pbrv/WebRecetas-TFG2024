@@ -130,7 +130,7 @@ async def insertar_receta(insertar: receta.InsertarReceta, db: db_con, current_u
     try:
         informacion_receta = insertar.dict()
         informacion_receta['usuario_receta'] = current_user.id_usuario
-        # informacion_receta['fecha_creacion'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        informacion_receta['fecha_creacion'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         # informacion_receta['fecha_modificacion'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(informacion_receta)
         print(imagen_receta)
@@ -149,6 +149,7 @@ async def insertar_receta(insertar: receta.InsertarReceta, db: db_con, current_u
     finally:
         db.close()
 
+
 # PUT
 
 @app.put("/modificar_receta/{id_receta}")
@@ -162,13 +163,15 @@ async def modificar_receta(id_receta: int, actualizar: dict, db: db_con):
         # exclude_unset = True -> excluye los campos no incluidos en la solicitud PUT
         for key, value in datos_modificados.items():
             setattr(receta_existente, key, value)
-        
+            
+        receta_existente.fecha_modificacion = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         db.commit()
         return receta_existente
     except ValidationError as ve:
         raise HTTPException(status_code=422, detail=f"Validación fallida: {ve}")
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+
 
 # DELETE
 

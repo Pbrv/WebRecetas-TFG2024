@@ -70,7 +70,7 @@ function Paises() {
     };
 
     const comprobarBotonSeleccionado = (e) => {
-        const divBotones = document.querySelector("#filtros");
+        const divBotones = document.querySelector("#filtros_paises");
         divBotones.childNodes.forEach((boton) => {
             if (boton.classList.contains("boton-selected") && boton.textContent !== e.textContent) {
                 boton.classList.remove("boton-selected");
@@ -92,7 +92,7 @@ function Paises() {
                             <img src={`./continentes/${continente.nombre_continente}.png`} alt={continente.nombre_continente} className="imagen-continente" />
                             <p className="nombre-continente">{continente.nombre_continente}</p>
                             {continenteActivo === continente.nombre_continente && (
-                                <div id="filtros">
+                                <div id="filtros_paises">
                                     {paises[continenteActivo]?.map((pais) => (
                                         <Boton 
                                             id="boton-pais"

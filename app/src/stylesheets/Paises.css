@@ -62,7 +62,7 @@
     border-radius: 0;
 }
 
-#filtros {
+#filtros_paises {
     position: absolute;
     top: 14vw;
     left: 50%;
@@ -72,16 +72,7 @@
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     padding: 0.15em;
     z-index: 10;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-#filtros {
     margin-top: 7vh;
-    /* width: 20vw; */
     animation: fadeIn 0.3s;
     display: flex;
     flex-direction: column;
@@ -89,6 +80,10 @@
     align-items: center;
 }
 
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
 /* Media query para pantallas MEDIANAS */
 @media (max-width: 1400px) {
     .contenedor-continentes {
@@ -106,13 +101,10 @@
         justify-content: center;
     }
 
-    #filtros {
+    #filtros_paises {
         width: 100px;
         /* margin-top: 10vh; */
     }
-    /* .nombre-continente {
-        font-size: 0.5em;
-    } */
 }
 
 /* Media query para pantallas PEQUEÑAS */
@@ -138,7 +130,7 @@
     .boton {
         width: 65px;
     }
-    #filtros {
+    #filtros_paises {
         width: 80px;
     }
     /* Para hacer responsive los paises hay que tocar el componente Boton */

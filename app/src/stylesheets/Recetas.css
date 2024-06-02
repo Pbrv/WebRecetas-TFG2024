@@ -8,6 +8,23 @@
     border-bottom: 1px solid #A7CAB1;
 } */
 
-.contenedor-recetas {
-    min-height: 50vh;
+.main-recetas {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 4em;
+}
+
+.div-recetas-filtros {
+    display: flex;
+}
+
+#filtros_recetas {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+.div-paginacion {
+    margin: auto;
 }

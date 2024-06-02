@@ -38,22 +38,27 @@ function Recetas (){
     }
 
     return(
-        <div className="contenedor-recetas">
-            {/* ID puesto para saber que contiene */}
-            <div id="filtros">
-                {filtrosDisponibles.map((filtro, index) => (
-                    <Boton key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={filtro} />
-                ))}
-            </div>
-            <div className="recetas-destacadas">
+        <main className="main-recetas">
+            <div className="div-recetas-filtros">
+                {/* ID puesto para saber que contiene */}
+                <div id="filtros_recetas">
+                    {filtrosDisponibles.map((filtro, index) => (
+                        <Boton key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={filtro} />
+                    ))}
+                </div>
+                <div className="recetas-destacadas">
                     {recetas.map((receta) => (
                         <Receta key={receta.id_receta} {...receta} />
                     ))}
+                </div>
             </div>
-            <Boton key={2} onClick={() => setPagina(pagina > 1 ? pagina - 1 : 1)} value={'Página anterior'} />
-            <Boton key={1} onClick={() => setPagina(pagina + 1)} value={'Siguiente página'} />
-            <span className="mensaje-error" style={{display:'none'}}>Máximo de recetas</span>
-        </div>
+                
+            <div className="div-paginacion">
+                <Boton key={2} onClick={() => setPagina(pagina > 1 ? pagina - 1 : 1)} value={'Página anterior'} />
+                <Boton key={1} onClick={() => setPagina(pagina + 1)} value={'Siguiente página'} />
+                <span className="mensaje-error" style={{display:'none'}}>Máximo de recetas</span>
+            </div>
+        </main>
     );
 }
 

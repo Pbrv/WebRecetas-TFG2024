@@ -18,6 +18,7 @@ class Receta(Base):
     tipo_receta = Column(String(30))
     imagen_receta = Column(Text)
     fecha_creacion = Column(DateTime, default=datetime.utcnow)
+    fecha_modificacion = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     # imagen_modificacion = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     def to_dict(self):

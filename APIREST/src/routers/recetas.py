@@ -5,9 +5,9 @@ from fastapi import APIRouter,Depends,HTTPException, status, UploadFile, File
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from typing import Annotated, Optional
-from models import receta,pais
+from models import receta,pais,usuario
 from database.database import SessionLocal
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, or_
 from sqlalchemy.orm import Session, class_mapper, sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
 from pydantic import ValidationError
@@ -181,6 +181,16 @@ async def eliminar_receta(id_receta: int, db: db_con):
         receta_encontrada = db.query(receta.Receta).filter(receta.Receta.id_receta == id_receta).first()
         if receta_encontrada is None:
             raise HTTPException(status_code=404, detail="Receta no encontrada")
+        
+        # Buscar los usuarios que han guardado la receta
+        usuarios = db.query(usuario.Usuario).filter(or_(usuario.Usuario.recetas_guardadas_usuario.like(f"{id_receta};%"),
+                                                        usuario.Usuario.recetas_guardadas_usuario.like(f"%;{id_receta};%"),
+                                                        usuario.Usuario.recetas_guardadas_usuario.like(f"%;{id_receta}"))).all()
+        
+        # Eliminar el id de la receta de la lista de recetas guardadas de cada usuario
+        for user in usuarios:
+            user.recetas_guardadas_usuario = user.recetas_guardadas_usuario.replace(f"{id_receta};", "").replace(f";{id_receta}", "")
+        
         db.delete(receta_encontrada)
         db.commit()
         return {"mensaje": "Receta eliminada correctamente"}

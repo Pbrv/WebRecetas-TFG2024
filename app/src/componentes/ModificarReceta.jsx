@@ -57,12 +57,23 @@ function ModificarReceta() {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    const handleContinenteChange = (event) => {
-        console.log(event.target.value)
-        setContinenteSeleccionado(event.target.value);
-        console.log(continenteSeleccionado)
-        // console.log(event.target.value)
-        // console.log(continenteSeleccionado.nombre_continente)
+    // const handleContinenteChange = (event) => {
+    //     console.log(event.target.value)
+    //     setContinenteSeleccionado(event.target.value);
+    //     console.log(continenteSeleccionado)
+    // };
+    
+    const handleContinenteChange = async (event) => {
+        const continenteModificado = event.target.value;
+        setContinenteSeleccionado(continenteModificado);
+    
+        try {
+            const response = await fetch(`http://localhost:8000/mostrar_paises/${continenteModificado}`);
+            const data = await response.json();
+            setPaises(data); // Actualizar la lista de países en el estado
+        } catch (error) {
+            console.error('Error al obtener los países:', error);
+        }
     };
 
     const handleChange = (e) => {

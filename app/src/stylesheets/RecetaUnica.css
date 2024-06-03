@@ -1,21 +1,15 @@
-main {
-    /* display: grid; */
-     /* Esto crea dos columnas de igual tamaño */
-}
-.nombre-recetaUnica {
-    /* grid-column: 1 / 3; */
+.main-recetaUnica {
     display: flex;
-    justify-content: center;
-    margin: auto;
-    padding: 2vw;
+    flex-direction: column;
+    /* margin-top: 2em; */
 }
 .contenedor-recetaUnica {
-    /* grid-column: 1 / 3; */
+    padding-top: 1em;
     display: flex;
     justify-content: center;
     align-items: baseline;
     gap: 2vw;
-    border: 1px solid red;
+    /* border: 1px solid red; */
     margin: 5px;
 }
 
@@ -26,11 +20,9 @@ main {
     border-bottom: 1px solid black;
 }
 .section-ingredientes {
-    border: 1px solid black;
+    background-color: #f5efe1;
     padding: 10px;
-    border-radius: 15px;
     width: 20vw;
-    
 }
 .ingredientes {
     padding: 1vw 2vw;
@@ -39,22 +31,63 @@ main {
     list-style-type: circle;
     margin-bottom: 0.5vw;
 }
-
-.imagen-background {
-    /* object-fit: fill; */
-    overflow: hidden;
-    height: 80vh;
-    width: 80vw;
-    top: -100px;
+.img-recetaUnica {
+    width: 70%;
+    position: relative;
+    max-height: 100%;
+    min-width: 200px;
+    align-self: self-start;
 }
-img {
+.meGusta-recetaUnica {
+    position: absolute;
+    width: 40px;
+    top: 20px;
+    right: 20px;
+    transition: transform 0.5s ease;
+    cursor: pointer;
+    z-index: 100;
+}
+.header-recetaUnica {
+    /* border: 1px solid red; */
+    display: flex;
+    align-items: center;
+    object-fit: cover;
+    overflow: hidden;
+    max-height: 80vh;
     width: 100vw;
 }
+.nombre-recetaUnica {
+    min-width: 370px;
+    max-width: 390px;
+    background-color: #f1bbb3;
+    padding: 3em;
+    display: flex;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: 0.7em;
+}
+    .nombre-recetaUnica > h2 {
+        font-size: 2em;
+    }
 
+.imagen-prueba {
+    height: auto;
+    width: 100%;
+}
+.div-estrellas-recetaUnica {
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+}
+.div-dificultad-recetaUnica {
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
+}
 .section-elaboracion {
-    border: 1px solid black;
     padding: 10px;
-    border-radius: 15px;
     width: 50vw;
 }
     .elaboracion {
@@ -124,13 +157,19 @@ textarea {
     resize: none;
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1440px) {
+    .main-recetaUnica {
+        font-size: 0.8em;
+    }
     .contenedor-recetaUnica {
         flex-direction: row;
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+    .header-recetaUnica {
+        flex-direction: column;
+    }
     .contenedor-recetaUnica {
         flex-direction: column;
         align-items: center;

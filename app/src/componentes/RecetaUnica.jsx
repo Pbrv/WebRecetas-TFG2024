@@ -5,10 +5,14 @@ import Comentario from "./Comentario";
 import { useNavigate } from 'react-router-dom';
 
 function RecetaUnica() {
+    const estrellas = new Array(5).fill(null);
+    const gorritos = new Array(4).fill(null);
+    const [isSaved, setIsSaved] = useState(false); // estado para saber si el usuario ya se ha guardado esa receta
     const navigate = useNavigate();
     const {id} = useParams();
     
     const [comentarios, setComentarios] = useState([]);
+    const [valoracion, setValoracion] = useState(0);
     const [recetas, setRecetas] = useState([]);
     const [comentario, setComentario] = useState({
         id_receta_comentario: id,
@@ -16,6 +20,117 @@ function RecetaUnica() {
         descripcion_comentario: "",
         valoracion_comentario: 0
     })
+
+    // Cuando se carga la receta comprueba si están GUARDADAS por el usuario o no
+    useEffect(() => {
+        const checkIfRecipeIsSaved = async () => {
+            const token = localStorage.getItem("token");
+
+            // Si no hay usuario logueado no hay recetas guardadas
+            if (!token) {
+                setIsSaved(false);
+                return;
+            }
+            try {
+                const response = await fetch('http://localhost:8000/comprobar_receta', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    },
+                    body: JSON.stringify({
+                        receta_id: recetas.id_receta // Asegúrate de tener el ID de la receta
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('No se pudo comprobar si la receta está guardada');
+                }
+
+                const data = await response.json();
+                
+                setIsSaved(data.isSaved); // Establece el estado en función de la respuesta
+            } catch (error) {
+                console.error('Error al comprobar si la receta está guardada', error);
+            }
+        };
+        checkIfRecipeIsSaved();
+    }, [recetas.id_receta]);
+
+    // Si el usuario pulsa el "Me Gusta"
+    const handleHeartClick = async () => {
+        const token = localStorage.getItem("token");
+
+        // Si no hay un usuario logueado, redirige a la página de inicio de sesión
+        if (!token) {
+            navigate('/login');
+            return;
+        }
+        try {
+            let response;
+            if (isSaved) {
+                // Si la receta ya está guardada, la elimina
+                response = await fetch('http://localhost:8000/desguardar_receta', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    },
+                    body: JSON.stringify({
+                        // userId: userData.id_usuario, // Asegúrate de tener el ID del usuario
+                        receta_id: recetas.id_receta // Asegúrate de tener el ID de la receta
+                    })
+                });
+            } else {
+                // Si la receta no está guardada, la guarda
+                response = await fetch('http://localhost:8000/guardar_receta', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    },
+                    body: JSON.stringify({
+                        receta_id: recetas.id_receta // Asegúrate de tener el ID de la receta
+                    })
+                });
+            }
+            if (!response.ok) {
+                throw new Error('No se pudo guardar la receta');
+            }
+            const data = await response.json();
+            setIsSaved(!isSaved);
+        } catch (error) {
+            console.error('Error al guardar la receta', error);
+        }
+    };
+
+    // VALORACION - ESTRELLAS
+    const handleStarClick = async (index) => {
+        const nuevaValoracion = index + 1;
+        setValoracion(nuevaValoracion);
+    
+        try {
+            const respuesta = await fetch(`http://localhost:8000/valorar_receta/${recetas.id_receta}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ valoracion: nuevaValoracion }),
+            });
+    
+            // Comprobar si la solicitud fue exitosa
+            if (!respuesta.ok) {
+                throw new Error('Error al valorar la receta');
+            }
+    
+            // Procesar la respuesta (si es necesario)
+            const datosRespuesta = await respuesta.json();
+            console.log(datosRespuesta);
+        } catch (error) {
+            console.error('Error al valorar la receta:', error);
+        }
+    };
 
     useEffect(() => {
         const obtenerDatos = async () => {
@@ -80,21 +195,42 @@ function RecetaUnica() {
     }
 
     return (
-        <main>
-            <div className="imagen-background">
-                <img 
-                    src={"/imgs/" + recetas.imagen_receta } 
-                    alt="" 
-                />
-                {/* {recetas && recetas.imagen_receta &&(
-                    <div style={{backgroundImage: `url(/imgs/${recetas.imagen_receta})`}} className="imagen-receta"></div>
-                )}     */}
-                <div>
-                    <h1>Hola</h1>
+        <main className="main-recetaUnica">
+            <div className="header-recetaUnica">
+                <div className="img-recetaUnica">
+                    <img 
+                        src={"/imgs/" + recetas.imagen_receta } 
+                        alt="" 
+                        className="imagen-prueba"
+                    />
+                    <img src={isSaved ? "/corazon-lleno.png" : "/corazon-vacio.png"} onClick={handleHeartClick} className="meGusta-recetaUnica"/>
                 </div>
-            </div>
-            <div className="nombre-recetaUnica">
-                <h1>{recetas.nombre_receta}</h1>
+                <div className="nombre-recetaUnica">
+                    <h2>{recetas.nombre_receta}</h2>
+                    <div className="div-estrellas-recetaUnica">
+                        {estrellas.map((_, index) => (
+                            <img 
+                                key={index}
+                                src={recetas.valoracion_receta > index ? "/estrella-llena.png" : "/estrella-vacia.png"} 
+                                alt="Estrella de valoración" 
+                                className="estrella"
+                                onClick={() => handleStarClick(index)}
+                            />
+                        ))}
+                        <p>{recetas.valoracion_receta} votos</p>
+                    </div>
+                    <div className="div-dificultad-recetaUnica">
+                        <p className="">Dificultad</p>
+                        {gorritos.map((_, index) => (
+                            <img 
+                                key={index}
+                                src={recetas.dificultad_receta > index ? "/gorrito-lleno.png" : "/gorrito-vacio.png"} 
+                                alt="Dificultad" 
+                                className="gorrito"
+                            />
+                        ))}
+                    </div>
+                </div>
             </div>
             <div className="contenedor-recetaUnica">
                 <section className="section-ingredientes">

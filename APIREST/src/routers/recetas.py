@@ -5,9 +5,9 @@ from fastapi import APIRouter,Depends,HTTPException, status, UploadFile, File
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from typing import Annotated, Optional
-from models import receta,pais,usuario
+from models import receta,pais,usuario,comentario
 from database.database import SessionLocal
-from sqlalchemy import create_engine, or_
+from sqlalchemy import create_engine, or_, func
 from sqlalchemy.orm import Session, class_mapper, sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
 from pydantic import ValidationError
@@ -106,7 +106,10 @@ async def mostrar_receta(filtro: str, db: db_con, pagina: int = 1, items_por_pag
 
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
-    
+
+
+# POST
+
 @app.post("/insertar_imagen_receta")
 async def imagen_receta(db: db_con, imagen_receta: UploadFile = File(...)):
     #Guarda imagen en local
@@ -122,8 +125,6 @@ async def imagen_receta(db: db_con, imagen_receta: UploadFile = File(...)):
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
     
-
-# POST
 
 @app.post("/insertar_receta")
 async def insertar_receta(insertar: receta.InsertarReceta, db: db_con, current_user:InfoUsuario=Depends(get_current_user)):
@@ -149,6 +150,27 @@ async def insertar_receta(insertar: receta.InsertarReceta, db: db_con, current_u
     finally:
         db.close()
 
+@app.post("/valorar_receta/{id_receta}")
+async def valorar_receta(id_receta: int, valoracion: int, db: db_con, current_user:InfoUsuario=Depends(get_current_user)):
+    try:
+        print(id_receta)
+        print(valoracion)
+        # Calcular la valoración media de la receta
+        valoracion_media = db.query(func.avg(receta.Receta.valoracion_receta)).filter(receta.Receta.id_receta_comentario == id_receta).scalar()
+        
+        # Redondear la valoracion media
+        valoracion_redondeada = round(valoracion_media)
+        
+        # Actualizar la valoración de la receta
+        receta_existente = db.query(receta.Receta).filter(receta.Receta.id_receta == id_receta).first()
+        receta_existente.valoracion_receta = valoracion_redondeada
+        
+        db.commit()
+        return {"mensaje": "Valoración guardada correctamente"}
+    except ValidationError as ve:
+        raise HTTPException(status_code=422, detail=f"Validación fallida: {ve}")
+    except SQLAlchemyError as se:
+        raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
 # PUT
 

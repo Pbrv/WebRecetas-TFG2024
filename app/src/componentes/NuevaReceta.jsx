@@ -182,6 +182,7 @@ const NuevaReceta = () => {
                                 <option value="Cena">Cena</option>
                                 <option value="Postre">Postre</option>
                                 <option value="Desayuno">Desayuno</option>
+                                <option value="Salsa">Salsa</option>
                                 <option value="Bebida">Bebida</option>
                             </select>
 

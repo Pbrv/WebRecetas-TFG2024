@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 
-function Receta(props) {
+function Receta(receta) {
     const estrellas = new Array(5).fill(null);
     const gorritos = new Array(4).fill(null);
+    const [valoracion, setValoracion] = useState(0);
+    const [valoraciones, setValoraciones] = useState(0);
     const [isSaved, setIsSaved] = useState(false); // estado para saber si el usuario ya se ha guardado esa receta
     const navigate = useNavigate();
 
@@ -19,6 +21,13 @@ function Receta(props) {
                 setIsSaved(false);
                 return;
             }
+            // Obtiene valoraciones de las recetas
+            const responseValoraciones = await fetch(
+                `http://localhost:8000/numero_valoraciones/${receta.id_receta}`
+            );
+            const valoraciones = await responseValoraciones.json();
+            setValoraciones(valoraciones.numero_valoraciones);
+            console.log(valoraciones);
             try {
                 const response = await fetch('http://localhost:8000/comprobar_receta', {
                     method: 'POST',
@@ -27,7 +36,7 @@ function Receta(props) {
                         'Authorization': 'Bearer ' + localStorage.getItem("token")
                     },
                     body: JSON.stringify({
-                        receta_id: props.id_receta // Asegúrate de tener el ID de la receta
+                        receta_id: receta.id_receta // Asegúrate de tener el ID de la receta
                     })
                 });
 
@@ -44,17 +53,17 @@ function Receta(props) {
         };
 
         checkIfRecipeIsSaved();
-    }, [props.id_receta]); // Ejecuta el efecto cuando se monta el componente y cuando cambia props.id_receta
+    }, [receta.id_receta]); // Ejecuta el efecto cuando se monta el componente y cuando cambia receta.id_receta
 
     // Si el usuario pulsa el "Me Gusta"
     const handleHeartClick = async () => {
         const token = localStorage.getItem("token");
-
         // Si no hay un usuario logueado, redirige a la página de inicio de sesión
         if (!token) {
             navigate('/login');
             return;
         }
+
         try {
             let response;
             if (isSaved) {
@@ -67,7 +76,7 @@ function Receta(props) {
                     },
                     body: JSON.stringify({
                         // userId: userData.id_usuario, // Asegúrate de tener el ID del usuario
-                        receta_id: props.id_receta // Asegúrate de tener el ID de la receta
+                        receta_id: receta.id_receta // Asegúrate de tener el ID de la receta
                     })
                 });
             } else {
@@ -79,7 +88,7 @@ function Receta(props) {
                         'Authorization': 'Bearer ' + localStorage.getItem("token")
                     },
                     body: JSON.stringify({
-                        receta_id: props.id_receta // Asegúrate de tener el ID de la receta
+                        receta_id: receta.id_receta // Asegúrate de tener el ID de la receta
                     })
                 });
             }
@@ -93,12 +102,47 @@ function Receta(props) {
         }
     };
 
+    // VALORACION - ESTRELLAS
+    const handleStarClick = async (index) => {
+        const token = localStorage.getItem("token");
+        if (!token) {  // Si no hay un usuario logueado, redirige a la página de inicio de sesión
+            navigate('/login');
+            return;
+        }
+        const nuevaValoracion = index + 1;
+        setValoracion(nuevaValoracion);
+        let idReceta = receta.id_receta;
+    
+        try {
+            const respuesta = await fetch(`http://localhost:8000/valorar_receta/${idReceta}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem("token")
+                },
+                body: JSON.stringify({ valoracion_receta: nuevaValoracion }),
+            });
+    
+            // Comprobar si la solicitud fue exitosa
+            if (!respuesta.ok) {
+                throw new Error('Error al valorar la receta');
+            }
+            console.log(receta.valoracion_receta)
+            // Procesar la respuesta (si es necesario)
+            const datosRespuesta = await respuesta.json();
+
+            setValoraciones(valoraciones + 1);  // Actualizar el número de valoraciones
+        } catch (error) {
+            console.error('Error al valorar la receta:', error);
+        }
+    };
+
     return (
         <div className="contenedor-receta">
-            <Link to={`/receta/${props.id_receta}`}>
+            <Link to={`/receta/${receta.id_receta}`}>
                 <img 
                 className="img-receta"
-                src={"/imgs/" + props.imagen_receta }
+                src={"/imgs/" + receta.imagen_receta }
                 alt="Imagen receta" />
                 
             </Link>
@@ -110,17 +154,17 @@ function Receta(props) {
                         {estrellas.map((_, index) => (
                             <img 
                                 key={index}
-                                src={props.valoracion_receta > index ? "estrella-llena.png" : "estrella-vacia.png"} 
+                                src={receta.valoracion_receta > index ? "estrella-llena.png" : "estrella-vacia.png"} 
                                 alt="Estrella de valoración" 
                                 className="estrella"
+                                onClick={() => handleStarClick(index)}
                             />
                         ))}
                     </div>
-                    <p className="info">X votos</p>
+                    <p>{valoraciones} {valoraciones === 1 ? 'voto' : 'votos'}</p>
                 </div>
-                {/* <h3 className="nombre-receta">{props.nombre_receta}</h3> */}
-                <Link to={`/receta/${props.id_receta}`}>
-                    <h3 className="nombre-receta">{props.nombre_receta}</h3>
+                <Link to={`/receta/${receta.id_receta}`}>
+                    <h3 className="nombre-receta">{receta.nombre_receta}</h3>
                 </Link>
                 {/* DIFICULTAD */}
                 <div className="div-info">
@@ -128,7 +172,7 @@ function Receta(props) {
                     {gorritos.map((_, index) => (
                         <img 
                             key={index}
-                            src={props.dificultad_receta > index ? "gorrito-lleno.png" : "gorrito-vacio.png"} 
+                            src={receta.dificultad_receta > index ? "gorrito-lleno.png" : "gorrito-vacio.png"} 
                             alt="Dificultad" 
                             className="gorrito"
                         />

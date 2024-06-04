@@ -12,13 +12,15 @@ function RecetaUnica() {
     const {id} = useParams();
     
     const [comentarios, setComentarios] = useState([]);
-    const [valoracion, setValoracion] = useState(0);
     const [recetas, setRecetas] = useState([]);
+    const [valoracion, setValoracion] = useState(0);
+    const [valoraciones, setValoraciones] = useState(0);
+    const [valoracionMedia, setValoracionMedia] = useState(0);
     const [comentario, setComentario] = useState({
         id_receta_comentario: id,
         id_usuario_comentario: localStorage.getItem('token'),
         descripcion_comentario: "",
-        valoracion_comentario: 0
+        // valoracion_comentario: 0
     })
 
     // Cuando se carga la receta comprueba si están GUARDADAS por el usuario o no
@@ -60,9 +62,8 @@ function RecetaUnica() {
     // Si el usuario pulsa el "Me Gusta"
     const handleHeartClick = async () => {
         const token = localStorage.getItem("token");
-
-        // Si no hay un usuario logueado, redirige a la página de inicio de sesión
-        if (!token) {
+        
+        if (!token) {  // Si no hay un usuario logueado, redirige a la página de inicio de sesión
             navigate('/login');
             return;
         }
@@ -106,27 +107,33 @@ function RecetaUnica() {
 
     // VALORACION - ESTRELLAS
     const handleStarClick = async (index) => {
+        const token = localStorage.getItem("token");
+        
+        if (!token) {  // Si no hay un usuario logueado, redirige a la página de inicio de sesión
+            navigate('/login');
+            return;
+        }
         const nuevaValoracion = index + 1;
         setValoracion(nuevaValoracion);
+        let idReceta = recetas.id_receta;
     
         try {
-            const respuesta = await fetch(`http://localhost:8000/valorar_receta/${recetas.id_receta}`, {
+            const respuesta = await fetch(`http://localhost:8000/valorar_receta/${idReceta}`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ valoracion: nuevaValoracion }),
+                body: JSON.stringify({ valoracion_receta: nuevaValoracion }),
             });
     
-            // Comprobar si la solicitud fue exitosa
             if (!respuesta.ok) {
                 throw new Error('Error al valorar la receta');
             }
-    
-            // Procesar la respuesta (si es necesario)
             const datosRespuesta = await respuesta.json();
-            console.log(datosRespuesta);
+            
+            setValoraciones(valoraciones + 1);  // Actualizar el número de valoraciones
+            setValoracionMedia((valoracionMedia * valoraciones + nuevaValoracion) / (valoraciones + 1));
+            // console.log(valoracionMedia)
         } catch (error) {
             console.error('Error al valorar la receta:', error);
         }
@@ -145,6 +152,19 @@ function RecetaUnica() {
             );
             const receta = await responseReceta.json();
             setRecetas(receta);
+
+            const responseValoraciones = await fetch(
+                `http://localhost:8000/numero_valoraciones/${id}`
+            );
+            const valoraciones = await responseValoraciones.json();
+            setValoraciones(valoraciones.numero_valoraciones);
+
+            const responseValoracionMedia = await fetch(
+                `http://localhost:8000/valoracion_media/${id}`
+            );
+            const dataValoracionMedia = await responseValoracionMedia.json();
+            setValoracionMedia(dataValoracionMedia.valoracion_media);
+            console.log(valoracionMedia)
         };
         obtenerDatos();
     }, [id]);
@@ -211,13 +231,14 @@ function RecetaUnica() {
                         {estrellas.map((_, index) => (
                             <img 
                                 key={index}
-                                src={recetas.valoracion_receta > index ? "/estrella-llena.png" : "/estrella-vacia.png"} 
+                                src={valoracionMedia > index ? "/estrella-llena.png" : "/estrella-vacia.png"} 
                                 alt="Estrella de valoración" 
                                 className="estrella"
                                 onClick={() => handleStarClick(index)}
                             />
                         ))}
-                        <p>{recetas.valoracion_receta} votos</p>
+                        <p>{valoraciones} {valoraciones === 1 ? 'voto' : 'votos'}</p>
+
                     </div>
                     <div className="div-dificultad-recetaUnica">
                         <p className="">Dificultad</p>

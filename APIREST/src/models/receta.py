@@ -12,6 +12,7 @@ class Receta(Base):
     ingredientes_receta = Column(Text)
     elaboracion_receta = Column(Text)
     dificultad_receta = Column(Integer)
+    valoraciones_receta = Column(Text)
     valoracion_receta = Column(Integer)
     usuario_receta = Column(Integer)
     pais_receta = Column(Integer)
@@ -43,3 +44,6 @@ class ActualizarReceta(BaseModel):
     pais_receta: Optional[int] = None
     tipo_receta: Optional[str] = None
     imagen_receta: Optional[str] = None
+
+class Valoracion(BaseModel):
+    valoracion_receta: int

@@ -14,6 +14,7 @@ from pydantic import ValidationError
 from routers.usuarios import get_current_user
 from models.usuario import InfoUsuario
 import json, base64
+from pydantic import BaseModel
 
 
 app = APIRouter()
@@ -68,6 +69,37 @@ async def mostrar_receta(id_usuario: int, db: db_con):
         return recetas
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+
+@app.get("/numero_valoraciones/{id_receta}") # Para mostrar los votos de cada receta
+async def numero_valoraciones(id_receta: int, db: db_con):
+    try:
+        # Obtener la receta existente
+        receta_existente = db.query(receta.Receta).filter(receta.Receta.id_receta == id_receta).first()
+        # Obtener la lista de valoraciones
+        valoraciones = receta_existente.valoraciones_receta.split(";") if receta_existente.valoraciones_receta else []
+        # Calcular el número de valoraciones
+        numero_valoraciones = len(valoraciones)
+        return {"numero_valoraciones": numero_valoraciones}
+    except ValidationError as ve:
+        raise HTTPException(status_code=422, detail=f"Validación fallida: {ve}")
+    except SQLAlchemyError as se:
+        raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+
+@app.get("/valoracion_media/{id_receta}")
+async def valoracion_media(id_receta: int, db: db_con):
+    try:
+        # Obtener la receta existente
+        receta_existente = db.query(receta.Receta).filter(receta.Receta.id_receta == id_receta).first()
+        # Obtener la lista de valoraciones
+        valoraciones = receta_existente.valoraciones_receta.split(";") if receta_existente.valoraciones_receta else []
+        # Calcular la valoración media
+        valoracion_media = sum(int(valoracion) for valoracion in valoraciones) / len(valoraciones) if valoraciones else 0
+        return {"valoracion_media": valoracion_media}
+    except ValidationError as ve:
+        raise HTTPException(status_code=422, detail=f"Validación fallida: {ve}")
+    except SQLAlchemyError as se:
+        raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+
     
     
 @app.get("/recetas_pais/{pais_nom}") # mostrar receta pasando nombre del pais
@@ -150,27 +182,34 @@ async def insertar_receta(insertar: receta.InsertarReceta, db: db_con, current_u
     finally:
         db.close()
 
+
 @app.post("/valorar_receta/{id_receta}")
-async def valorar_receta(id_receta: int, valoracion: int, db: db_con, current_user:InfoUsuario=Depends(get_current_user)):
+async def valorar_receta(valoracion_receta: receta.Valoracion, id_receta: int, db: db_con):
     try:
-        print(id_receta)
-        print(valoracion)
-        # Calcular la valoración media de la receta
-        valoracion_media = db.query(func.avg(receta.Receta.valoracion_receta)).filter(receta.Receta.id_receta_comentario == id_receta).scalar()
-        
-        # Redondear la valoracion media
-        valoracion_redondeada = round(valoracion_media)
-        
-        # Actualizar la valoración de la receta
+        # Obtener la receta existente
         receta_existente = db.query(receta.Receta).filter(receta.Receta.id_receta == id_receta).first()
+
+        # Añadir la nueva valoración a la lista de valoraciones existentes
+        valoraciones_existentes = receta_existente.valoraciones_receta.split(";") if receta_existente.valoraciones_receta else []
+        valoraciones_existentes.append(str(valoracion_receta.valoracion_receta))
+        # Añadir la valoracion nueva a la receta
+        receta_existente.valoraciones_receta = ";".join(valoraciones_existentes)
+
+        # Calcular la valoración media y redondearla
+        valoracion_media = sum(int(valoracion) for valoracion in valoraciones_existentes) / len(valoraciones_existentes)
+        print(valoracion_media)
+        valoracion_redondeada = round(valoracion_media)
+
+        # Actualizar la valoración media de la receta
         receta_existente.valoracion_receta = valoracion_redondeada
-        
+
         db.commit()
         return {"mensaje": "Valoración guardada correctamente"}
     except ValidationError as ve:
         raise HTTPException(status_code=422, detail=f"Validación fallida: {ve}")
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+
 
 # PUT
 

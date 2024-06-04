@@ -16,7 +16,7 @@ function ModificarReceta() {
     const [selectedFile, setSelectedFile] = useState(null);
     const [mensaje, setMensaje] = useState(null);
 
-    const tiposReceta = ["comida", "cena", "postre", "desayuno", "bebida"];
+    const tiposReceta = ["comida", "cena", "postre", "desayuno", "salsa", "bebida"];
 
     useEffect(() => {
         const obtenerDatos = async () => {

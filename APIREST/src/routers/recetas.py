@@ -115,7 +115,7 @@ async def mostrar_receta(pais_nom: str, db: db_con):
     
 
 @app.get("/recetas_filtros") # mostrar receta pasando un filtro de ingredientes
-async def mostrar_receta(filtro: str, db: db_con, pagina: int = 1, items_por_pagina: int = 10):
+async def mostrar_receta(filtro: str, db: db_con, pagina: int = 1, items_por_pagina: int = 12):
     try:
 
         # Inicia la consulta

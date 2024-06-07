@@ -1,5 +1,5 @@
-import { useEffect, useState, useRef } from "react";
-import { Link } from 'react-router-dom';
+import { useEffect, useState, useRef} from "react";
+import { Link , Navigate } from 'react-router-dom';
 import "../stylesheets/Navbar.css"
 import LogoutButton from "./Logout";
 import jwtDecode from "jwt-decode";
@@ -78,7 +78,7 @@ function Navbar({ isLogged, setIsLogged }) {
                             <Link to={`/mi-cuenta`} className="a-user">Mi Cuenta</Link>
                             <Link to={`/nueva-receta`} className="a-user">Subir Receta</Link>
                             <Link to={`/recetas-guardadas`} className="a-user">Recetas Guardadas</Link>
-                            <LogoutButton setIsLogged={setIsLogged} />
+                            <LogoutButton setIsLogged={setIsLogged}/>
                         </div>
                     )}
                 </div>

@@ -22,6 +22,29 @@ function RecetaUnica() {
         descripcion_comentario: "",
         // valoracion_comentario: 0
     })
+    // const [existeReceta, setExisteReceta] = useState(false);
+
+    // useEffect(() => {
+    //     const checkIdReceta = async () => {
+    //             const response = await fetch(
+    //                 `http://localhost:8000/obtener_id_recetas`
+    //             );
+    //             const ids = await response.json();
+
+    //             for(let i = 0; i<ids.length;i++){
+    //                 if(ids[i] == id){
+    //                     setExisteReceta(true);
+    //                     console.log('existe')
+    //                     return;
+    //                 }
+    //             }
+
+    //             if (!existeReceta) {
+    //                 return navigate('/');
+    //             }
+    //     };
+    //     checkIdReceta();
+    // },[])
 
     // Cuando se carga la receta comprueba si están GUARDADAS por el usuario o no
     useEffect(() => {
@@ -34,29 +57,29 @@ function RecetaUnica() {
                 return;
             }
             try {
-                const response = await fetch('http://localhost:8000/comprobar_receta', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem("token")
-                    },
-                    body: JSON.stringify({
-                        receta_id: recetas.id_receta // Asegúrate de tener el ID de la receta
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error('No se pudo comprobar si la receta está guardada');
+                    const response = await fetch('http://localhost:8000/comprobar_receta', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        },
+                        body: JSON.stringify({
+                            receta_id: recetas.id_receta // Asegúrate de tener el ID de la receta
+                        })
+                    });
+    
+                    if (!response.ok) {
+                        throw new Error('No se pudo comprobar si la receta está guardada');
+                    }
+    
+                    const data = await response.json();
+                    
+                    setIsSaved(data.isSaved); // Establece el estado en función de la respuesta
+                } catch (error) {
+                    console.error('Error al comprobar si la receta está guardada', error);
                 }
-
-                const data = await response.json();
-                
-                setIsSaved(data.isSaved); // Establece el estado en función de la respuesta
-            } catch (error) {
-                console.error('Error al comprobar si la receta está guardada', error);
-            }
-        };
-        checkIfRecipeIsSaved();
+            };
+            checkIfRecipeIsSaved();
     }, [recetas.id_receta]);
 
     // Si el usuario pulsa el "Me Gusta"
@@ -164,7 +187,6 @@ function RecetaUnica() {
             );
             const dataValoracionMedia = await responseValoracionMedia.json();
             setValoracionMedia(dataValoracionMedia.valoracion_media);
-            console.log(valoracionMedia)
         };
         obtenerDatos();
     }, [id]);

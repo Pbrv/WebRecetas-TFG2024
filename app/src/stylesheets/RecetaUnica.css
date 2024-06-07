@@ -182,6 +182,9 @@ textarea {
     .section-nuevoComentario button{
         margin: 7px;
     }
+    .section-nuevoComentario textarea{
+        width: 100%;
+    }
     .section-ingredientes {
         width: 30vw;
     }

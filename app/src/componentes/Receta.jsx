@@ -16,18 +16,19 @@ function Receta(receta) {
         const checkIfRecipeIsSaved = async () => {
             const token = localStorage.getItem("token");
 
-            // Si no hay usuario logueado no hay recetas guardadas
-            if (!token) {
-                setIsSaved(false);
-                return;
-            }
             // Obtiene valoraciones de las recetas
             const responseValoraciones = await fetch(
                 `http://localhost:8000/numero_valoraciones/${receta.id_receta}`
             );
             const valoraciones = await responseValoraciones.json();
             setValoraciones(valoraciones.numero_valoraciones);
-            console.log(valoraciones);
+
+            // Si no hay usuario logueado no hay recetas guardadas
+            if (!token) {
+                setIsSaved(false);
+                return;
+            }
+
             try {
                 const response = await fetch('http://localhost:8000/comprobar_receta', {
                     method: 'POST',

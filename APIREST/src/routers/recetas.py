@@ -1,4 +1,5 @@
 from datetime import datetime
+import urllib.parse
 import os
 import shutil
 from fastapi import APIRouter,Depends,HTTPException, status, UploadFile, File
@@ -39,6 +40,26 @@ async def mostrar_recetas(db:db_con):
         # recetas = db.query(receta.Receta).where(receta.Receta.dificultad_receta == 1).all()
         return [r.to_dict() for r in recetas]
         # return recetas
+    except SQLAlchemyError as se:
+        raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+
+@app.get("/comprobar_id_receta/{id}") # mostrar todas las recetas
+async def mostrar_recetas(id: int, db:db_con):
+    try:
+        receta_valida = db.query(receta.Receta).filter(receta.Receta.id_receta == id).first()
+        if receta_valida is None:
+            return False
+        return True
+    except SQLAlchemyError as se:
+        raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+    
+@app.get("/obtener_id_recetas") # obtener todos los ids de las recetas
+async def mostrar_recetas(db:db_con):
+    try:
+        id_recetas = db.query(receta.Receta.id_receta).all()
+        if id_recetas is None:
+            return {'No hay recetas almacenadas'}
+        return [r[0] for r in id_recetas]
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
@@ -105,6 +126,9 @@ async def valoracion_media(id_receta: int, db: db_con):
 @app.get("/recetas_pais/{pais_nom}") # mostrar receta pasando nombre del pais
 async def mostrar_receta(pais_nom: str, db: db_con):
     try:
+        #Reestablece la 'ñ' ya que al llegar como url encoded tiene caracteres raros
+        pais_nom = urllib.parse.unquote(pais_nom)
+        
         idPais = db.query(pais.Pais.id_pais).filter(pais.Pais.nombre_pais == pais_nom).first()
         if idPais is None:
             return {"error": "Pais no encontrado"}

@@ -6,6 +6,8 @@ nav {
     padding: 0 2vw;
     box-sizing: border-box;
     border-bottom: 1px solid #F4ECD6;
+    position: sticky;
+    top: 0;
     
     /* Estilo para fijar nav arriba, da problemas */
     /* background-color: #ffffff; */

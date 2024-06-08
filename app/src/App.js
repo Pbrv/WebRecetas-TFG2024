@@ -43,10 +43,10 @@ function App() {
         <Route path="/paises" element={<Paises/>}/>
 
         {/* Si no ha iniciado sesion no puede acceder a estas rutas y se le redirige al login */}
-        <Route path="/mi-cuenta" element={isLogged ? <MiCuenta /> : <Navigate to="/login" />} />
-        <Route path="/nueva-receta" element={isLogged ? <NuevaReceta /> : <Navigate to="/login" />} />
-        <Route path="/recetas-guardadas" element={isLogged ? <RecetasGuardadas /> : <Navigate to="/login" />} />
-        <Route path="/modificar-receta/:id" element={isLogged ? <ModificarReceta /> : <Navigate to="/login" />}>
+        <Route path="/mi-cuenta" element={localStorage.getItem("token") != null ? <MiCuenta /> : <Navigate to="/login" />} />
+        <Route path="/nueva-receta" element={localStorage.getItem("token") != null ? <NuevaReceta /> : <Navigate to="/login" />} />
+        <Route path="/recetas-guardadas" element={localStorage.getItem("token") != null ? <RecetasGuardadas /> : <Navigate to="/login" />} />
+        <Route path="/modificar-receta/:id" element={localStorage.getItem("token") != null ? <ModificarReceta /> : <Navigate to="/login" />}>
             {props => <ModificarReceta id={props.params.id} />}
         </Route>
 

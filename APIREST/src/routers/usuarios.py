@@ -90,7 +90,7 @@ async def recetas_mostrar(usuario_nombre:str, db:db_con):
             raise HTTPException(status_code=404, detail="El usuario no tiene recetas guardadas")
         
         # Devuelve todos los datos de esa columna(ids de las recetas)
-        return recetas_id
+        return [r for r in recetas_id]
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
     

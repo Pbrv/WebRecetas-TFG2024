@@ -1,8 +1,12 @@
 import Receta from './Receta';
+import {useState} from "react";
+import { Link } from 'react-router-dom';
 import "../stylesheets/Home.css";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 function Home({ recetas, isLogged }) {
+
+    const [recetasFiltradas, setRecetasFiltradas] = useState();
 
     //Ordenadr de mayor a menor
     recetas.sort((a, b) => b.valoracion_receta - a.valoracion_receta);
@@ -33,17 +37,33 @@ function Home({ recetas, isLogged }) {
             }
         fetchDatosUsuario();
     }
-    
+
+    //Guardar recetas que contengan en el nombre lo que el usuario busca
+    function mostrarFiltradas(valorBusqueda) {
+        if(valorBusqueda !== ''){
+            const nuevasRecetasFiltradas = recetas.filter(receta =>
+                receta.nombre_receta.toLowerCase().includes(valorBusqueda.toLowerCase())
+            );
+            setRecetasFiltradas(nuevasRecetasFiltradas);
+            document.querySelector('.recetas-filtradas').style.display = 'block';
+        } else {
+            setRecetasFiltradas();
+            document.querySelector('.recetas-filtradas').style.display = 'none';
+        }
+    }
+
     return (
         <div>
             <div className="contenedor-home">
                 <h1>¿Qué comemos hoy?</h1>
-                <input className="busqueda"></input>
+                <input className="busqueda" onChange={(e) => mostrarFiltradas(e.target.value)}></input>
+                <div className='recetas-filtradas' style={{display:'none'}}>
+                {recetasFiltradas && recetasFiltradas.map((receta) => (
+                    <div className='receta-filtro'><Link to={`/receta/${receta.id_receta}`}>{receta.nombre_receta}</Link></div>
+                ))}
+                </div>
             </div>
-            {/* <div>
-                <ToastContainer />
-                
-            </div> */}
+
             <div className="destacados">
                 <h2 className="titulo">Destacados</h2>
                 <div className="recetas-destacadas">

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import "../stylesheets/MiCuenta.css";
 
 function MiCuenta() {
@@ -57,6 +57,12 @@ function MiCuenta() {
     fetchDatosUsuario();
     }, []);
 
+    const navigate = useNavigate();
+
+    const handleNavigate = (username) => {
+        navigate('/recetas-guardadas', { state: { nombre_usuario: username } });
+    };
+
     return (
         <div className="contenedor-micuenta">
             {/* Controla si los datos de usuario son nulos */}
@@ -66,7 +72,10 @@ function MiCuenta() {
                     <h1 className="titulo-micuenta">Mi Cuenta</h1>
                     <div className="div-nombre-boton">
                         <p className="nombre-usuario-micuenta">Hola {userData.nombre_usuario}</p>
-                        <Link to="/nueva-receta" className="nueva-receta-micuenta">Subir Receta</Link>
+                        <div className="botones-link">
+                            <Link to="/nueva-receta" className="nueva-receta-micuenta">Subir Receta</Link>
+                            <button onClick={() => handleNavigate(userData.nombre_usuario)} className="nueva-receta-micuenta">Recetas Guardadas</button>
+                        </div>
                     </div>
                 </div>
 
@@ -107,7 +116,6 @@ function MiCuenta() {
                         ))}
                         </div>
                     </div>
-
                 </div>
                 </>
                 ) : (

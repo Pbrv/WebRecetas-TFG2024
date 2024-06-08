@@ -4,6 +4,11 @@
     align-items: start; */
     margin: 0 10vw;
 }
+
+.botones-link {
+    display: flex;
+    gap: 10px;
+}
     .titulo-micuenta {
         padding: 3vw 0;
         color: #3B6064;

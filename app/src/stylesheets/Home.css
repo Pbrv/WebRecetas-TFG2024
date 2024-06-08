@@ -34,6 +34,33 @@
     transition: transform 0.3s ease;
 }
 
+.recetas-filtradas {
+    width: 40vw;
+    height: max-content;
+    padding: 10px;
+    border-radius: 4px;
+    outline: none;
+    overflow-y: auto;
+    background-color: #f0f0f0;
+}
+
+.receta-filtro{
+    padding: 10px 0px;
+    border-radius: 4px;
+    /* border: 1px solid black; */
+    margin-bottom: 5px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.receta-filtro a{
+    text-shadow: none;
+}
+
+.receta-filtro:hover{
+    box-shadow: 0 0 7px rgba(0, 0, 0, 0.5);
+}
+
 .busqueda:focus {
     margin: 5px 0;
     /* border: 1px solid #474747; */

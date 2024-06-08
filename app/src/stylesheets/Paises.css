@@ -96,9 +96,9 @@
         /* height: auto; */
     }
     .boton {
-        width: 75px;
+        /* width: 75px;
         display: flex;
-        justify-content: center;
+        justify-content: center; */
     }
 
     #filtros_paises {

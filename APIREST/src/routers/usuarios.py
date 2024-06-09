@@ -270,16 +270,28 @@ async def desguardar_receta(request: Request, db: Session = Depends(get_db), cur
 
 # MODIFICAR USUARIO
 
+# @app.put("/modificar_suscripcion_usuario/{usuario_nombre}")
+# async def recetas_mostrar(usuario_nombre:str, actualizar: dict, db:db_con):
+#     try:
+#         usuario_existente = db.query(Usuario.recetas_guardadas_usuario).filter(Usuario.nombre_usuario == usuario_nombre).first()
+#         if usuario_existente is None:
+#             raise HTTPException(status_code=404, detail=f"Usuario con nombre {usuario_nombre} no encontrado")
+#         datos_modificados = Usuario.ModificarSuscripcion.parse_obj(actualizar).dict(exclude_unset=True)
+#         # exclude_unset = True -> excluye los campos no incluidos en la solicitud PUT
+#         for key, value in datos_modificados.items():
+#             setattr(usuario_existente, key, value)
+#         db.commit()
+#         return "Suscripcion modificada"
+#     except SQLAlchemyError as se:
+#         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+
 @app.put("/modificar_suscripcion_usuario/{usuario_nombre}")
-async def recetas_mostrar(usuario_nombre:str, actualizar: dict, db:db_con):
+async def recetas_mostrar(usuario_nombre:str, suscripcion: int, db:db_con):
     try:
-        usuario_existente = db.query(Usuario.recetas_guardadas_usuario).filter(Usuario.nombre_usuario == usuario_nombre).first()
-        if usuario_existente is None:
+        usuario = db.query(Usuario).filter(Usuario.nombre_usuario == usuario_nombre).first()
+        if usuario is None:
             raise HTTPException(status_code=404, detail=f"Usuario con nombre {usuario_nombre} no encontrado")
-        datos_modificados = Usuario.ModificarSuscripcion.parse_obj(actualizar).dict(exclude_unset=True)
-        # exclude_unset = True -> excluye los campos no incluidos en la solicitud PUT
-        for key, value in datos_modificados.items():
-            setattr(usuario_existente, key, value)
+        usuario.suscripcion_usuario = suscripcion
         db.commit()
         return "Suscripcion modificada"
     except SQLAlchemyError as se:

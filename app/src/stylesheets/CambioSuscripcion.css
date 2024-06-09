@@ -1,0 +1,66 @@
+.opciones-suscripcion {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100vh;
+}
+
+.opcion-suscripcion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 25vw;
+    height: 60vh;
+    gap: 10px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    background-color: #F4ECD6;
+}
+.opcion-suscripcion > .boton {
+    width: 65%;
+    height: 55px;
+    border-radius: 10px;
+}
+
+.precio {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+@media (max-width:768px) {
+    .precio {
+        font-size: 25px;
+    }
+    .opcion-suscripcion {
+        width: 70vw;
+        margin: 10px 30px;
+        padding: 10px;
+    }
+    .contenedor-suscripcion > button {
+        top: 5px;
+        right: 15px;
+    }
+    .opciones-suscripcion {
+        flex-direction: column;
+        overflow-y: scroll;
+    }
+    .opcion-suscripcion > .boton {
+        width: 50%;
+        height: 55px;
+        border-radius: 10px;
+    }
+}
+
+@media (max-width: 940px) {
+    .precio {
+        font-size: 35px;
+    }
+}
+
+@media (max-width:1400px) {
+    .opcion-suscripcion > .boton {
+        align-items: center;
+        justify-content: center;
+    }
+}

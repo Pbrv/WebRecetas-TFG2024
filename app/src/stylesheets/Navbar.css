@@ -8,6 +8,7 @@ nav {
     border-bottom: 1px solid #F4ECD6;
     position: sticky;
     top: 0;
+    z-index: 2;
     
     /* Estilo para fijar nav arriba, da problemas */
     /* background-color: #ffffff; */
@@ -120,8 +121,8 @@ a {
     height: 230px;
     /* min-width: 160px; */
     /* padding: 0px 0px; */
-    z-index: 1;
     right: 0;
+    text-align: center;
     top: 99px;
 }
 

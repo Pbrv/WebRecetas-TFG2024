@@ -181,8 +181,9 @@ function ModificarReceta() {
                                     onChange={handleInputChange} required
                                 />
                             
-                            <label className="label-nueva-receta">Dificultad:</label>
+                            <label className="label-nueva-receta" for="dificultad_receta">Dificultad:</label>
                                 <select 
+                                    id='dificultad_receta'
                                     name="dificultad_receta" 
                                     value={receta.dificultad_receta} 
                                     onChange={handleInputChange} 
@@ -193,8 +194,9 @@ function ModificarReceta() {
                                     <option value="4">Dificultad 4</option>
                                 </select>
                             
-                            <label className="label-nueva-receta">Continente:</label>
+                            <label className="label-nueva-receta" for="continente_receta">Continente:</label>
                                 <select 
+                                    id='continente_receta'
                                     name="continente_receta" 
                                     value={continenteSeleccionado} 
                                     onChange={handleContinenteChange} 
@@ -209,8 +211,9 @@ function ModificarReceta() {
                                         ))}
                                 </select>
 
-                            <label className="label-nueva-receta">País:</label>
+                            <label className="label-nueva-receta" for="pais_receta">País:</label>
                             <select 
+                                id='pais_receta'
                                 onChange={handleInputChange} 
                                 name="pais_receta" 
                                 value={paisSeleccionado.nombre_pais} 
@@ -225,8 +228,9 @@ function ModificarReceta() {
                                 ))}
                             </select>
                             
-                            <label className="label-nueva-receta">Tipo de receta:</label>
+                            <label className="label-nueva-receta" for="tipo_receta">Tipo de receta:</label>
                                 <select 
+                                    id='tipo_receta'
                                     name="tipo_receta" 
                                     value={receta.tipo_receta} 
                                     onChange={handleInputChange} 
@@ -280,7 +284,7 @@ function ModificarReceta() {
                             <label className="label-nueva-receta">Imagen:</label>
                                 <img 
                                     src={"/imgs/" + receta.imagen_receta } 
-                                    alt="" 
+                                    alt="imagen receta" 
                                     className="imagen_modificar_receta"
                                 />
                                 <input

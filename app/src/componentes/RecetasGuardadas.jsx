@@ -3,18 +3,36 @@ import { useLocation } from 'react-router-dom';
 import Receta from "./Receta";
 function RecetasGuardadas (){
 
-    const location = useLocation();
-    const { state } = location;
-
     const [recetasGuardadas, setRecetasGuardadas] = useState([]);
     const [recetas, setRecetas] = useState([]);
-
-    console.log(location)
+    const [datos, setDatos] = useState();
 
     useEffect(() => {
         const fetchDatosUsuario = async () => {
             try {
-                const recetasGuardadas = await fetch(`http://localhost:8000/recetas_guardadas_usuario/${state.nombre_usuario}`, {
+                const datosUsuario = await fetch("http://localhost:8000/mi_cuenta", {
+                method: 'GET',    
+                headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    }
+                });
+                if (!datosUsuario.ok) {
+                    throw new Error("No se obtuvieron los datos del usuario");
+                }
+                let DatosUsuario = await datosUsuario.json();
+                setDatos(DatosUsuario);
+
+            } catch (error) {
+                console.error("Error al hacer fetch", error);
+            }
+        };
+        fetchDatosUsuario();
+    }, []);
+
+    useEffect(() => {
+        const fetchRecetas = async () => {
+            try {
+                const recetasGuardadas = await fetch(`http://localhost:8000/recetas_guardadas_usuario/${datos.nombre_usuario}`, {
                     method: 'GET',    
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem("token")
@@ -30,9 +48,9 @@ function RecetasGuardadas (){
                 console.error("Error al hacer fetch", error);
             }
         }
-        fetchDatosUsuario();
+        fetchRecetas();
 
-    }, [])
+    }, [datos])
 
     useEffect(() => {
         const fetchDatosRecetas = async (id_receta) => {
@@ -44,7 +62,7 @@ function RecetasGuardadas (){
                     }
                 });
                 if (!recetasData.ok) {
-                    throw new Error("No se obtuvieron los datos del usuario");
+                    throw new Error("No se obtuvieron los datos de la receta");
                 }
                 const DatosRecetasGuardadas = await recetasData.json();
 

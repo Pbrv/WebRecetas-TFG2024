@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Suscripcion from "./CambioSuscripcion";
 import "../stylesheets/MiCuenta.css";
 
 function MiCuenta() {
@@ -57,14 +58,25 @@ function MiCuenta() {
     fetchDatosUsuario();
     }, []);
 
-    const navigate = useNavigate();
+    function divSuscripciones() {
+        
+        document.querySelector('.contenedor-suscripcion').style.display === 'none'
+        ? document.querySelector('.contenedor-suscripcion').style.display = 'block'
+        : document.querySelector('.contenedor-suscripcion').style.display = 'none'
 
-    const handleNavigate = (username) => {
-        navigate('/recetas-guardadas', { state: { nombre_usuario: username } });
-    };
+        document.body.classList.toggle('no-scroll');
+    }
+
 
     return (
         <div className="contenedor-micuenta">
+            
+            {/* Modificar suscripcion div */}
+            <div className='contenedor-suscripcion' style={{display:'none'}}>
+                <button style={{color:'red'}} onClick={() => divSuscripciones()}>X</button>
+                <Suscripcion/>
+            </div>
+
             {/* Controla si los datos de usuario son nulos */}
             {userData ? (
             <>
@@ -74,7 +86,7 @@ function MiCuenta() {
                         <p className="nombre-usuario-micuenta">Hola {userData.nombre_usuario}</p>
                         <div className="botones-link">
                             <Link to="/nueva-receta" className="nueva-receta-micuenta">Subir Receta</Link>
-                            <button onClick={() => handleNavigate(userData.nombre_usuario)} className="nueva-receta-micuenta">Recetas Guardadas</button>
+                            <Link to="/recetas-guardadas" className="nueva-receta-micuenta">Recetas Guardadas</Link>
                         </div>
                     </div>
                 </div>
@@ -85,7 +97,7 @@ function MiCuenta() {
                     <div className="datos_usuario">
                         <div className="encabezado_datos">
                             <h2 className="titulo-h2">Mis Datos</h2>
-                            <Link to="#" className="enlace_mod">Editar mis datos</Link>
+                            <a className="enlace_mod" onClick={() => divSuscripciones()}>Modificar suscripcion</a>
                         </div>
                         <div className="cuerpo_datos_usuario">
                             <p className="titulos">Nombre</p>
@@ -108,8 +120,8 @@ function MiCuenta() {
                             <div key={index} className="resumen-recetas">
                                 <Link to={`/receta/${receta.id_receta}`}>
                                     <p className="enlaces-resumen-recetas">{receta.nombre_receta}</p>
-                                </Link>
-                                <Link to={`/modificar-receta/${receta.id_receta}`}>
+                                </Link>                                
+                                <Link to={`/modificar-receta/${receta.id_receta}`} state={{receta:receta}}>
                                     <p>Editar</p>
                                 </Link>
                             </div>

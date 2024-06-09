@@ -43,12 +43,17 @@ function Navbar({ isLogged, setIsLogged }) {
     const handleSearchClose = () => { // Cerrar barra de búsqueda con click
         setSearchVisible(false);
     };
+    const handleMouseLeave = () => { // Esconder desplegable
+        if (isLogged && isDropdownVisible) {
+            setDropdownVisible(false);
+        }
+    };
 
     return (
         <nav>
             <div>
             <button className="hamburguesa" onClick={() => setMenuAbierto(!menuAbierto)}>
-                        <img src="../hamburguesa.png">
+                        <img src="../hamburguesa.png" alt="imagen nav hamburguesa">
                         </img>
                     </button>
             </div>
@@ -64,16 +69,16 @@ function Navbar({ isLogged, setIsLogged }) {
                         <button onClick={handleSearchClose}>X</button> {/* Botón para cerrar la barra de búsqueda */}
                     </div>
                 )}
-                <Link to={``} onClick={handleSearchMouseEnter}>
+                <Link onClick={handleSearchMouseEnter}>
                     <img src="../lupa.png" alt="Buscar" className="icono" id="lupa" />
                 </Link>
                 
-                <div className="icono-usuario">
-                    <Link to={isLogged ? `/mi-cuenta` : `/login`} onMouseEnter={handleMouseEnter}>
+                <div className="icono-usuario" onMouseEnter={handleMouseEnter}>
+                    <Link to={isLogged ? `/mi-cuenta` : `/login`} >
                         <img src="../usuario.png" alt="Login" className="icono"/>
                     </Link>
                     {isDropdownVisible && (
-                        <div className="dropdown" ref={dropdownRef}>
+                        <div className="dropdown" ref={dropdownRef} onMouseLeave={handleMouseLeave}>
                             {/* <p className="nombre-usuario-nav">Hola</p> */}
                             <Link to={`/mi-cuenta`} className="a-user">Mi Cuenta</Link>
                             <Link to={`/nueva-receta`} className="a-user">Subir Receta</Link>

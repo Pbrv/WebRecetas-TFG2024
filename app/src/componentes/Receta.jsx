@@ -147,7 +147,7 @@ function Receta(receta) {
                 alt="Imagen receta" />
                 
             </Link>
-            <img src={isSaved ? "corazon-lleno.png" : "corazon-vacio.png"} onClick={handleHeartClick} className="me-gusta"/>
+            <img src={isSaved ? "corazon-lleno.png" : "corazon-vacio.png"} alt="imagen me gusta receta" onClick={handleHeartClick} className="me-gusta"/>
             <div className="contenedor-info-receta">
                 {/* VALORACION */}
                 <div className="div-info">

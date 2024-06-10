@@ -163,6 +163,36 @@ async def mostrar_receta(filtro: str, db: db_con, pagina: int = 1, items_por_pag
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
+# @app.get("/recetas_filtros") # mostrar receta pasando un filtro de ingredientes
+# async def mostrar_receta(filtro: str, dificultad: int = None, db: db_con, pagina: int = 1, items_por_pagina: int = 12):
+#     try:
+
+#         # Inicia la consulta
+#         query = db.query(receta.Receta)
+
+#         # Si hay algun filtro
+#         if(filtro != ''):
+#             # Divide los ingredientes por el caracter ';'
+#             ingredientes = filtro.split(';')
+#             for ingrediente in ingredientes:
+#                 query = query.filter(receta.Receta.ingredientes_receta.notlike(f'%{ingrediente}%'))
+
+#         # Si hay un filtro de dificultad
+#         if dificultad is not None:
+#             query = query.filter(receta.Receta.dificultad_receta == dificultad)
+
+#         # Devuelve 10 items en funcion de la pagina
+#         recetas = query.offset((pagina - 1) * items_por_pagina).limit(items_por_pagina).all()
+
+#         if recetas is None:
+#             return {"error": "No hay recetas con ese filtro"}
+
+#         return recetas
+
+#     except SQLAlchemyError as se:
+#         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+
+
 
 # POST
 

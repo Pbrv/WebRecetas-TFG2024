@@ -11,19 +11,89 @@
 .main-recetas {
     display: flex;
     flex-direction: column;
-    padding: 3em;
+    align-items: center;
+    padding-top: 3em;
 }
 
 .div-recetas-filtros {
     display: flex;
+    width: 87vw;
+    margin: auto;
 }
 
 #filtros_recetas {
+    /* text-align: center; */
+    color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: start;
+    align-items: center;
+    /* gap: 2em; */
+    height: 70vh;
+    border: 1px solid greenyellow;
+    min-width: 280px;
+    /* padding: 1em; */
+    background-color: rgb(233, 233, 233);
+}
+
+#filtros_recetas > h4 {
+    background-color: #3B6064;
+    padding: 1em 0 1em 0;
+    text-align: center;
+    width: 100%;
+}
+
+.div-botones-filtros {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .div-paginacion {
     margin: auto;
+}
+
+@media (max-width: 1800px) {
+    .div-recetas-filtros {
+        width: 97vw;
+    }
+}
+
+@media (max-width: 1615px) {
+    .div-recetas-filtros {
+        width: 80vw;
+    }
+}
+
+@media (max-width: 1433px) {
+    .div-recetas-filtros {
+        width: 95vw;
+    }
+}
+
+@media (max-width: 850px) {
+    .div-recetas-filtros {
+        display: flex;
+        flex-direction: column;
+        width: 87vw;
+        margin: auto;
+    }
+    .div-botones-filtros {
+        display: none;
+    }
+    #filtros_recetas {
+        height: 4vh;
+        width: 100%;
+    }
+    .main-recetas {
+        padding-top: 1em;
+    }
+}
+@media (max-width: 1433px) {
+    /* .div-recetas-filtros {
+        width: 95vw;
+    }
+    .div-botones-filtros {
+        width: 100%;
+    } */
 }

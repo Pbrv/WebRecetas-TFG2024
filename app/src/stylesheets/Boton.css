@@ -2,14 +2,13 @@
 /* ESTILOS DE PRUEBA */
 
 .boton {
-    border-radius: 3px;
-    width: 150px;
+    /* border-radius: 3px; */
+    /* width: 100%; */
     height: 40px;
-    padding: 0;
-    margin: 10px;
+    /* margin: 10px; */
     border: 1px solid #c4baba;
-    padding: 10px;
-    margin: 5px;
+    /* padding: 10px; */
+    /* margin: 5px; */
     background-color: #f8f8f8;
     /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); */
     transition: all 0.3s ease;
@@ -22,7 +21,7 @@
 }
 
 .boton-selected {
-    border-color: red;
+    border-color: rgb(0, 0, 0);
     opacity: 0.5;
 }
 

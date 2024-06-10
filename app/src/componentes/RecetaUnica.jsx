@@ -299,11 +299,10 @@ function RecetaUnica() {
                 <section className="section-nuevoComentario">
                     <label>
                         <textarea 
-                            name="descripcion" 
+                            name="descripcion_comentario" 
                             id="comentario" 
                             placeholder="Introduce tu comentario..." 
                             rows={8} cols={70} 
-                            value={comentario.descripcion_comentario} 
                             onChange={handleInputChange} />
                     </label>
                     <button onClick={enviarComentario}>Enviar comentario</button>

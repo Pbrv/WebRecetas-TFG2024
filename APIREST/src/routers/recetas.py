@@ -43,6 +43,17 @@ async def mostrar_recetas(db:db_con):
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
+
+@app.get("/menu_semanal") # mostrar recetas
+async def menu_semanal(db: db_con):
+    ids_recetas = [57,58,59,60,61,62,63]
+    resultados = []
+    for id_receta in ids_recetas:
+        resultado = await mostrar_receta_id(id_receta, db)
+        resultados.append(resultado)
+    return resultados
+
+
 @app.get("/comprobar_id_receta/{id}") # mostrar todas las recetas
 async def mostrar_recetas(id: int, db:db_con):
     try:

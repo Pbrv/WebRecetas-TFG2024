@@ -73,6 +73,7 @@ async def mostrar_comentarios_receta(id_receta: int,db:db_con):
 @app.post("/insertar_comentario") # Insertar comentario en una receta
 async def insertar_comentario(comentarioInsertado: comentario.InsertarComentario,db:db_con):
     try:
+        print("se mete")
         #Transformar el token del local storage en el id del usuario
         comentarioInsertado.id_usuario_comentario = int(decode_token(comentarioInsertado.id_usuario_comentario))
         

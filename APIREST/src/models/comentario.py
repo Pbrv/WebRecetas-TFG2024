@@ -16,4 +16,4 @@ class InsertarComentario(BaseModel):
     id_usuario_comentario: str
     id_receta_comentario: int
     descripcion_comentario: str
-    valoracion_comentario: Optional[int]
+    # valoracion_comentario: Optional[int]

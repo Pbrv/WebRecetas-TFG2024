@@ -198,6 +198,7 @@ function RecetaUnica() {
 
     async function enviarComentario() {
         const token = localStorage.getItem("token");
+        console.log(comentario.descripcion_comentario)
         // let coment = document.getElementById("comentario").value;
         if (!token) {  // Si no hay un usuario logueado, redirige a la página de inicio de sesión
             navigate('/login');

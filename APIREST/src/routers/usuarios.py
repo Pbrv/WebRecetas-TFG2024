@@ -81,6 +81,21 @@ async def mi_cuenta(current_user: InfoUsuario = Depends(get_current_user)):
     return current_user
 
 
+# @app.get("/recetas_guardadas_usuario/{usuario_nombre}")
+# async def recetas_mostrar(usuario_nombre:str, db:db_con):
+#     try:
+#         recetas_id = db.query(Usuario.recetas_guardadas_usuario).filter(Usuario.nombre_usuario == usuario_nombre).first()
+#         print(recetas_id)
+#         if recetas_id is None:
+#             raise HTTPException(status_code=404, detail="El usuario no tiene recetas guardadas")
+        
+#         # Devuelve todos los datos de esa columna(ids de las recetas)
+#         print(recetas_id)
+#         return [r for r in recetas_id]
+#     except SQLAlchemyError as se:
+#         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+    
+
 @app.get("/recetas_guardadas_usuario/{usuario_nombre}")
 async def recetas_mostrar(usuario_nombre:str, db:db_con):
     try:
@@ -89,12 +104,22 @@ async def recetas_mostrar(usuario_nombre:str, db:db_con):
         if recetas_id is None:
             raise HTTPException(status_code=404, detail="El usuario no tiene recetas guardadas")
         
+        # Divide los ids de las recetas en una lista
+        ids_recetas = recetas_id[0].split(';')
+
+        # Comprueba la existencia de cada receta
+        recetas_existentes = []
+        for id_receta in ids_recetas:
+            receta = db.query(Receta).filter(Receta.id_receta == id_receta).first()
+            if receta is not None:
+                recetas_existentes.append(id_receta)
+
         # Devuelve todos los datos de esa columna(ids de las recetas)
-        return [r for r in recetas_id]
+        return [';'.join(recetas_existentes)]  # Devuelve los ids de las recetas como una cadena separada por ;
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
-    
-    
+
+
 # Obtener recetas CREADAS por el usuario
 
 @app.get("/usuario/{id_usuario}/recetas")

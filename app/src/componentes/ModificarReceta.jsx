@@ -57,38 +57,40 @@ function ModificarReceta() {
     const primeraLetraMayuscula = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
-
-    // const handleContinenteChange = (event) => {
-    //     console.log(event.target.value)
-    //     setContinenteSeleccionado(event.target.value);
-    //     console.log(continenteSeleccionado)
-    // };
     
     const handleContinenteChange = async (event) => {
         const continenteModificado = event.target.value;
         setContinenteSeleccionado(continenteModificado);
     
         try {
-            const response = await fetch(`http://localhost:8000/mostrar_paises/${continenteModificado}`);
+            const response = await fetch(`http://localhost:8000/mostrar_paisess/${continenteModificado}`);
             const data = await response.json();
             setPaises(data); // Actualizar la lista de países en el estado
+            console.log(data)
+            setPaisSeleccionado({}); // Resetear la selección de país cuando se cambia el continente
         } catch (error) {
             console.error('Error al obtener los países:', error);
         }
     };
 
-    const handleChange = (e) => {
-        // console.log(e.target.value)
-        setReceta({...receta, [e.target.name]: e.target.value});
-        console.log(e.target.value)
+    const handlePaisChange = (event) => {
+        const idPaisSeleccionado = Number(event.target.value);
+        const paisSeleccionado = paises.find(pais => pais.id_pais === idPaisSeleccionado);
+        setPaisSeleccionado(paisSeleccionado);
+        console.log(paisSeleccionado)
+    };
 
-    }
+    // const handleChange = (e) => {
+    //     // console.log(e.target.value)
+    //     setReceta({...receta, [e.target.name]: e.target.value});
+    //     console.log(e.target.value)
+    // }
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setReceta({ ...receta, [name]: value });
         console.log(`Cambio en ${name}:`, value);
-        console.log(receta.dificultad_receta)
+        console.log(receta.ingredientes_receta)
         console.log("Nuevo estado de la receta:", receta);
     };
 
@@ -99,13 +101,14 @@ function ModificarReceta() {
     }
 
     const handleIngredienteChange = (index, event) => {
-        const newIngredientes = [...receta.ingredientes];
+        const newIngredientes = [...ingredientes];
         newIngredientes[index] = event.target.value;
-        setReceta({
-            ...receta,
-            ingredientes: newIngredientes
-        });
+        setIngredientes(newIngredientes);
+        console.log(newIngredientes)
+        setReceta({ ...receta, ingredientes_receta: newIngredientes.join(';') });
+        console.log(receta.ingredientes_receta)
     };
+    
 
     const handleAddIngredient = () => {
         setReceta({
@@ -124,10 +127,11 @@ function ModificarReceta() {
     };
 
     const handlePasoChange = (index, event) => {
-        const values = [...pasos];
-        values[index] = event.target.value;
-        setPasos(values);
-        setReceta({...receta, elaboracion_receta: values.join(';')});
+        const newPasos = [...elaboracion];
+        newPasos[index] = event.target.value;
+        setElaboracion(newPasos);
+        setReceta({ ...receta, elaboracion_receta: newPasos.join(';') });
+        console.log(receta.elaboracion_receta)
     };
 
     const handleAddPaso = () => {
@@ -214,37 +218,34 @@ function ModificarReceta() {
                                 </select>
                             
                             <label className="label-nueva-receta" for="continente_receta">Continente:</label>
-                                <select 
-                                    id='continente_receta'
-                                    name="continente_receta" 
-                                    value={continenteSeleccionado} 
-                                    onChange={handleContinenteChange} 
-                                    className="input-nueva-receta" required>
-                                        <option value={continenteSeleccionado}>
-                                            {continenteSeleccionado.nombre_continente}
+                            <select 
+                                id='continente_receta'
+                                name="continente_receta" 
+                                value={continenteSeleccionado.id_continente} 
+                                onChange={handleContinenteChange} 
+                                className="input-nueva-receta" required>
+                                    <option value={continenteSeleccionado}>
+                                        {continenteSeleccionado.nombre_continente}
+                                    </option>
+                                    {continentes.filter(continente => continente.id_continente !== continenteSeleccionado.id_continente).map(continente => (
+                                        <option key={continente.id_continente} value={continente.id_continente}>
+                                            {continente.nombre_continente}
                                         </option>
-                                        {continentes.filter(continente => continente.id_continente !== continenteSeleccionado.id_continente).map(continente => (
-                                            <option key={continente.id_continente} value={continente.id_continente}>
-                                                {continente.nombre_continente}
-                                            </option>
-                                        ))}
-                                </select>
+                                    ))}
+                            </select>
 
                             <label className="label-nueva-receta" for="pais_receta">País:</label>
                             <select 
                                 id='pais_receta'
-                                onChange={handleInputChange} 
                                 name="pais_receta" 
-                                value={paisSeleccionado.nombre_pais} 
+                                value={paisSeleccionado ? paisSeleccionado.id_pais : ''} 
+                                onChange={handlePaisChange} 
                                 className="input-nueva-receta" required>
-                                <option value="">
-                                    {paisSeleccionado.nombre_pais}
-                                </option>
-                                {paises.filter(pais => pais.id_pais !== paisSeleccionado.id_pais).map(pais => (
-                                    <option key={pais.id_pais} value={pais.id_pais}>
-                                        {pais.nombre_pais}
-                                    </option>
-                                ))}
+                                    {paises.map(pais => (
+                                        <option key={pais.id_pais} value={pais.id_pais}>
+                                            {pais.nombre_pais}
+                                        </option>
+                                    ))}
                             </select>
                             
                             <label className="label-nueva-receta" for="tipo_receta">Tipo de receta:</label>
@@ -253,9 +254,9 @@ function ModificarReceta() {
                                     name="tipo_receta" 
                                     value={receta.tipo_receta} 
                                     onChange={handleInputChange} 
-                                    className="input-nueva-receta" required>
+                                    className="input-nueva-receta">
                                     <option value="">{primeraLetraMayuscula(receta.tipo_receta)}</option>
-                                    {tiposReceta.filter(tipo => tipo !== receta.tipo_receta).map(tipo => (
+                                    {tiposReceta.map(tipo => (
                                         <option key={tipo} value={tipo}>
                                             {primeraLetraMayuscula(tipo)}
                                         </option>

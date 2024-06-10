@@ -161,7 +161,7 @@ async def mostrar_receta(filtro: str, db: db_con, pagina: int = 1, items_por_pag
             # Divide los ingredientes por el caracter ';'
             ingredientes = filtro.split(';')
             for ingrediente in ingredientes:
-                query = query.filter(receta.Receta.ingredientes_receta.notlike(f'%{ingrediente}%'))
+                query = query.filter(receta.Receta.ingredientes_receta.like(f'%{ingrediente}%'))
 
         # Devuelve 10 items en funcion de la pagina
         recetas = query.offset((pagina - 1) * items_por_pagina).limit(items_por_pagina).all()
@@ -287,6 +287,7 @@ async def modificar_receta(id_receta: int, actualizar: dict, db: db_con):
             raise HTTPException(status_code=404, detail=f"Receta con id {id_receta} no encontrada")
     
         datos_modificados = receta.ActualizarReceta.parse_obj(actualizar).dict(exclude_unset=True)
+        print(datos_modificados)
         # exclude_unset = True -> excluye los campos no incluidos en la solicitud PUT
         for key, value in datos_modificados.items():
             setattr(receta_existente, key, value)
@@ -298,6 +299,24 @@ async def modificar_receta(id_receta: int, actualizar: dict, db: db_con):
         raise HTTPException(status_code=422, detail=f"Validación fallida: {ve}")
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+
+# @app.put("/modificar_receta/{id_receta}")
+# async def modificar_receta(id_receta: int, receta: receta.ActualizarReceta, db: db_con):
+#     try:
+#         receta_existente = db.query(receta).filter(receta.id_receta == id_receta).first()
+#         if receta_existente is None:
+#             raise HTTPException(status_code=404, detail=f"Receta con id {id_receta} no encontrada")
+        
+#         receta_dict = receta.dict(exclude_unset=True)
+#         for key, value in receta_dict.items():
+#             setattr(receta_existente, key, value)
+            
+#         # receta_existente.fecha_modificacion = datetime.utcnow()
+#         db.commit()
+#         return receta_existente
+#     except SQLAlchemyError as se:
+#         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+
 
 
 # DELETE

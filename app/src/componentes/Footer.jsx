@@ -11,13 +11,13 @@ function Footer() {
                     <li><Link to="/sobre-nosotros">Sobre Nosotros</Link></li>
                 </div>
                 <div className="links-columnas">
-                    <li><Link to="/contacto">Contacto</Link></li>
-                    <li><Link to="/blog">Blog</Link></li>
-                    <li><Link to="/faq">FAQ</Link></li>
+                    <li><Link to="/footer-links">Contacto</Link></li>
+                    <li><Link to="/footer-links">Blog</Link></li>
+                    <li><Link to="/footer-links">FAQ</Link></li>
                 </div>
                 <div className="links-columnas">
-                    <li><Link to="/terminos">Términos y Condiciones</Link></li>
-                    <li><Link to="/privacidad">Política de Privacidad</Link></li>
+                    <li><Link to="/footer-links">Términos y Condiciones</Link></li>
+                    <li><Link to="/footer-links">Política de Privacidad</Link></li>
                 </div>
             </div>
             <div className="footer-bio">

@@ -33,9 +33,10 @@ async def mostrar_receta(nom_continente: str, db: db_con):
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
     
 
-@app.get("/mostrar_paises/{id_continente}") # mostrar paises pasando ID del continente
-async def mostrar_paises(id_continente: int, db: db_con):
+@app.get("/mostrar_paisess/{id_continente}") # mostrar paises pasando ID del continente
+async def mostrar_paisess(id_continente: int, db: db_con):
     try:
+        print(id_continente)
         paises = db.query(pais.Pais)\
             .filter(pais.Pais.continente_pais == id_continente).all()
         if not paises:

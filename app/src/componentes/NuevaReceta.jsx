@@ -20,7 +20,7 @@ const NuevaReceta = () => {
     const [pasos, setPasos] = useState(['', '', '']);
     const [ingredientes, setIngredientes] = useState(['', '']);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [mensaje, setMensaje] = useState(null);
+    const [mensaje, setMensaje] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -123,8 +123,9 @@ const NuevaReceta = () => {
                 });
                 const data = await response.json();
                 
-                toast('La receta se ha subido correctamente');
-                navigate('/');
+                setMensaje('¡Receta subida con éxito!');
+                // toast('La receta se ha subido correctamente');
+                // navigate('/');
             }
         } catch (error) {
             console.error(error);
@@ -134,6 +135,9 @@ const NuevaReceta = () => {
     return (
         <div className="contenedor-nueva-receta">
             <h2 className="titulo-nueva-receta">Nueva Receta</h2>
+            <div>
+                {mensaje && <p>{mensaje}</p>}
+            </div>
             <form className="form-nueva-receta" onSubmit={handleSubmit}>
                 <div className="contenedor-form-nueva-receta">
                     {/* 1ª COLUMNA */}

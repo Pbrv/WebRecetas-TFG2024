@@ -91,7 +91,8 @@ async def insertar_comentario(comentarioInsertado: comentario.InsertarComentario
         #Insertar comentario
         db.add(comentario_insertar)
         db.commit()
-        return "Comentario subido" # Return de prueba no tiene que retornar nada
+        # return "Comentario subido" # Return de prueba no tiene que retornar nada
+        return comentario_insertar  # Devuelve los datos del comentario
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
     

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 function RecetaUnica() {
     const estrellas = new Array(5).fill(null);
     const gorritos = new Array(4).fill(null);
+    const [error, setError] = useState("");
     const [isSaved, setIsSaved] = useState(false); // estado para saber si el usuario ya se ha guardado esa receta
     const navigate = useNavigate();
     const {id} = useParams();
@@ -194,22 +195,20 @@ function RecetaUnica() {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setComentario({ ...comentario, [name]: value });
+        setError("");  // Limpia el mensaje de error cuando el usuario comienza a escribir
     };
 
     async function enviarComentario() {
         const token = localStorage.getItem("token");
         console.log(comentario.descripcion_comentario)
-        // let coment = document.getElementById("comentario").value;
         if (!token) {  // Si no hay un usuario logueado, redirige a la página de inicio de sesión
             navigate('/login');
             return;
         }
         if (comentario.descripcion_comentario.trim() === "") {
-            alert("Por favor, introduce un comentario válido.");
+            setError("Por favor, introduce un comentario válido.");
             return;
         }
-        // setComentario({...comentario, 'descripcion_comentario': coment})
-        // console.log('descripcion_comentario')
         try {
             const response = await fetch("/insertar_comentario", {
                 method: 'POST',
@@ -221,21 +220,23 @@ function RecetaUnica() {
             if (!response.ok) {
                 const data = await response.json();
                 if (data.detail === "Ya has comentado esta receta") { // Controla si el usuario ya ha comentado esa receta
-                    // Muestra un mensaje al usuario -- CAMBIAR ESTO
-                    alert("Ya has comentado esta receta");
+                    setError("Ya has comentado esta receta");
                 } else {
                     console.error(data.detail);
                 }
             } else {
                 const nuevoComentario = await response.json();
-                // Se actualiza el comentario pero no aparece el nombre de usuario
-                setComentarios([...comentarios, nuevoComentario]);
-                setComentario({ ...comentario, descripcion_comentario: "", valoracion_comentario: 0 });
+                // Se actualiza el comentario y se muestra el nombre de usuario
+                // setComentarios([...comentarios, nuevoComentario]);
+                // console.log(comentarios)
+                // setComentario({ ...comentario, descripcion_comentario: "", valoracion_comentario: 0 });
+                // console.log(comentario)
             }
         } catch (error) {
             console.error(error);
         }
     }
+    
 
     return (
         <main className="main-recetaUnica">
@@ -307,6 +308,9 @@ function RecetaUnica() {
                             onChange={handleInputChange} />
                     </label>
                     <button onClick={enviarComentario}>Enviar comentario</button>
+                    <div className="aviso-error">
+                        {error && <p className="error">{error}</p>}
+                    </div>
                 </section>
             </div>
             {/* VALORACIONES OTROS USUARIOS */}
@@ -320,7 +324,6 @@ function RecetaUnica() {
                             ))
                         ) : (
                             <p>Esta receta no tiene valoraciones</p>
-                            
                         )}
                         </div>
                     </div>

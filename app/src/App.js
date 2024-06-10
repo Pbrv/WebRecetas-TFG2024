@@ -15,6 +15,7 @@ import RecetaUnica from './componentes/RecetaUnica';
 import RecetasGuardadas from './componentes/RecetasGuardadas';
 import ModificarReceta from './componentes/ModificarReceta';
 import Footer from './componentes/Footer';
+import FooterLink from './componentes/FooterLink';
 
 function App() {
   // HOOKS
@@ -41,6 +42,7 @@ function App() {
         <Route path="/recetas" element={<Recetas/>} />
         <Route path="/receta/:id" element={<RecetaUnica/>} />
         <Route path="/paises" element={<Paises/>}/>
+        <Route path="/footer-links" element={<FooterLink/>}/>
 
         {/* Si no ha iniciado sesion no puede acceder a estas rutas y se le redirige al login */}
         <Route path="/mi-cuenta" element={localStorage.getItem("token") != null ? <MiCuenta /> : <Navigate to="/login" />} />

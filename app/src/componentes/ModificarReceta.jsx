@@ -13,6 +13,7 @@ function ModificarReceta() {
     const [pasos, setPasos] = useState(['', '', '']);
     const [ingredientes, setIngredientes] = useState([]);
     const [elaboracion, setElaboracion] = useState([]);
+    const navigate = useNavigate();
     const [selectedFile, setSelectedFile] = useState(null);
     const [mensaje, setMensaje] = useState(null);
 
@@ -133,6 +134,22 @@ function ModificarReceta() {
         setPasos([...pasos, '']);
     };
 
+    const handleDelete = async () => {
+        try {
+            const response = await fetch(`/eliminar_receta/${receta.id_receta}`, {
+                method: 'DELETE',
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.mensaje);
+            }
+            navigate("/mi-cuenta");
+        } catch (error) {
+            console.error('Hubo un problema al eliminar la receta:', error);
+        }
+    };
+    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -161,7 +178,9 @@ function ModificarReceta() {
     };
 
     if (!receta || continentes.length === 0) {
-        return <div>Cargando...</div>;
+        return <div className="contenedor-nueva-receta">
+            <p className="cargando-datos">Cargando datos de la receta ...</p>
+        </div>;
     }
 
     return (
@@ -296,6 +315,7 @@ function ModificarReceta() {
                             
                             <div className="div-boton-nueva-receta">
                                 <input type="submit" className="boton-nueva-receta" value="Modificar Receta" />
+                                <button type="button" className="boton-eliminar-receta" onClick={handleDelete}>Eliminar Receta</button>
                             </div>
                         </div>
                     </div>

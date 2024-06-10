@@ -1,3 +1,10 @@
+.contenedor-micuenta {
+    min-height: 60vh;
+}
+    .cargando-datos {
+        padding-top: 8em;
+    }
+
 .div-titulo-micuenta {
     /* display: flex;
     flex-direction: column;

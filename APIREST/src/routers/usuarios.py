@@ -297,6 +297,29 @@ async def recetas_mostrar(usuario_nombre:str, suscripcion: int, db:db_con):
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
+# Endpoint para hacer pruebas con recetas_guardadas_usuario
+@app.put("/usuario/{id_usuario}/eliminar_receta_guardada")
+async def eliminar_receta_guardada(id_usuario: int, db: db_con):
+    try:
+        # Buscar el usuario
+        usuario = db.query(Usuario).filter(Usuario.id_usuario == id_usuario).first()
+        if usuario is None:
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+        # Eliminar el id de la receta de la lista de recetas guardadas
+        # usuario.recetas_guardadas_usuario = usuario.recetas_guardadas_usuario.replace(f"{id_receta};", "").replace(f";{id_receta}", "")
+
+        # Vaciar la lista de recetas guardadas
+        usuario.recetas_guardadas_usuario = ""
+        
+        db.commit()
+        return {"mensaje": "Receta eliminada correctamente de las recetas guardadas"}
+    except SQLAlchemyError as se:
+        raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+    finally:
+        db.close()
+
+
 # ELIMINAR USUARIO
 
 @app.delete("/eliminar_usuario/{usuario_id}")

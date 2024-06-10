@@ -131,7 +131,7 @@ function MiCuenta() {
                 </div>
                 </>
                 ) : (
-                <p>Cargando datos del usuario...</p>
+                <p className="cargando-datos">Cargando datos del usuario...</p>
             )}
         </div>
     );

@@ -227,7 +227,8 @@ async def insertar_receta(insertar: receta.InsertarReceta, db: db_con, current_u
         print(receta_insertar)
         db.add(receta_insertar)
         db.commit()
-        return {"mensaje": "El registro se completó con éxito"}
+        return {"mensaje": "El registro se completó con éxito", "id_receta": receta_insertar.id_receta}
+        # El return devuelve el id_receta para que 
     except ValidationError as ve:
         print(ve)
         raise HTTPException(status_code=422, detail=f"Validación fallida: {ve}")

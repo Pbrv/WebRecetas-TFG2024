@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 4vw;
+    min-height: 100vh;
 }
 
 .titulo-nueva-receta{
@@ -49,7 +50,7 @@
 
 .div-boton-nueva-receta {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     margin-top: 1em;
 }
 
@@ -59,10 +60,24 @@
     border: none;
     border-radius: .2em;
     font-size: .9em;
-    background: #3B6064;
+    background: #A7CAB1;
     color: #fff;
 }
     .boton-nueva-receta:hover {
+        background: #768f7d;
+        cursor: pointer;
+    }
+
+.boton-eliminar-receta {
+    width: 37%;
+    padding: .8em 0;
+    border: none;
+    border-radius: .2em;
+    font-size: .9em;
+    background: #3B6064;
+    color: #fff;
+}
+    .boton-eliminar-receta:hover {
         background: #2f4a4e;
         cursor: pointer;
     }

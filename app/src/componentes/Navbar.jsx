@@ -5,9 +5,10 @@ import LogoutButton from "./Logout";
 import jwtDecode from "jwt-decode";
 
 function Navbar({ isLogged, setIsLogged }) {
-    const [isDropdownVisible, setDropdownVisible] = useState(false); // Estado para la el desplegable de usuario
-    const [isSearchVisible, setSearchVisible] = useState(false); // Estado para la barra de búsqueda 
+    const [desplegableVisible, setDesplegableVisible] = useState(false); // Estado para la el desplegable de usuario
+    const [searchVisible, setSearchVisible] = useState(false); // Estado para la barra de búsqueda 
     const [menuAbierto, setMenuAbierto] = useState(false);
+    const [nombreUsuario, setNombreUsuario] = useState('');
     // const [isLogged, setIsLogged] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -16,13 +17,26 @@ function Navbar({ isLogged, setIsLogged }) {
         setIsLogged(!!token);
     }, []);
 
+    // para obtener el nombre del usuario
+    useEffect(() => {
+        const obtenerDatosUsuario = async () => {
+            const response = await fetch('/mi_cuenta', {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                },
+            });
+            const usuario = await response.json();
+            setNombreUsuario(usuario.nombre_usuario);
+            console.log(usuario.nombre_usuario)
+        };
+        obtenerDatosUsuario();
+    }, []);
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setDropdownVisible(false);
+                setDesplegableVisible(false);
             }
         };
-
         window.addEventListener("mousedown", handleClickOutside);
         return () => {
             window.removeEventListener("mousedown", handleClickOutside);
@@ -32,21 +46,17 @@ function Navbar({ isLogged, setIsLogged }) {
     // DESPLEGABLE
     const handleMouseEnter = () => { // Abrir desplegable
         if (isLogged) {
-            setDropdownVisible(true);
+            setDesplegableVisible(true);
         }
     };
-
     // LUPA
-    const handleSearchMouseEnter = () => { // Abrir barra de búsqueda con hover
-        setSearchVisible(true);
-    };
-    const handleSearchClose = () => { // Cerrar barra de búsqueda con click
-        setSearchVisible(false);
-    };
     const handleMouseLeave = () => { // Esconder desplegable
-        if (isLogged && isDropdownVisible) {
-            setDropdownVisible(false);
+        if (isLogged && desplegableVisible) {
+            setDesplegableVisible(false);
         }
+    };
+    const handleSearchToggle = () => {
+        setSearchVisible(!searchVisible);
     };
 
     return (
@@ -63,13 +73,13 @@ function Navbar({ isLogged, setIsLogged }) {
                 <li><Link to={`/paises`} className="enlace-nav">Paises</Link></li>
             </ul>
             <div className="div-iconos">
-                {isSearchVisible && ( // Muestra la barra de búsqueda si isSearchVisible es true
+                {searchVisible && ( // Muestra la barra de búsqueda si searchVisible es true
                     <div className="div-barra-busqueda">
                         <input type="text" placeholder="Buscar..."  className="barra-busqueda" />
-                        <button onClick={handleSearchClose}>X</button> {/* Botón para cerrar la barra de búsqueda */}
+                        {/* <button onClick={handleSearchClose}>X</button> */}
                     </div>
                 )}
-                <Link onClick={handleSearchMouseEnter}>
+                <Link onClick={handleSearchToggle}>
                     <img src="../lupa.png" alt="Buscar" className="icono" id="lupa" />
                 </Link>
                 
@@ -77,9 +87,9 @@ function Navbar({ isLogged, setIsLogged }) {
                     <Link to={isLogged ? `/mi-cuenta` : `/login`} >
                         <img src="../usuario.png" alt="Login" className="icono"/>
                     </Link>
-                    {isDropdownVisible && (
+                    {desplegableVisible && (
                         <div className="dropdown" ref={dropdownRef} onMouseLeave={handleMouseLeave}>
-                            {/* <p className="nombre-usuario-nav">Hola</p> */}
+                            <p className="nombre-usuario-nav">Hola {nombreUsuario}</p>
                             <Link to={`/mi-cuenta`} className="a-user">Mi Cuenta</Link>
                             <Link to={`/nueva-receta`} className="a-user">Subir Receta</Link>
                             <Link to={`/recetas-guardadas`} className="a-user">Recetas Guardadas</Link>

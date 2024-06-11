@@ -230,12 +230,12 @@ const NuevaReceta = () => {
                         ))}
                         
                         <label className="label-nueva-receta">Imagen:</label>
-                            <input
-                                type="file" 
-                                name="imagen_receta" 
-                                className="input_imagen"
-                                onChange={handleFileChange}
-                            />
+                        <input
+                            type="file" 
+                            name="imagen_receta" 
+                            className="input_imagen"
+                            onChange={handleFileChange}
+                        />
                         
                         <div className="div-boton-nueva-receta">
                             <input type="submit" className="boton-nueva-receta" value="Subir Receta" />

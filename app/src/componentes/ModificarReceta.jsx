@@ -14,7 +14,7 @@ function ModificarReceta() {
     const [ingredientes, setIngredientes] = useState([]);
     const [elaboracion, setElaboracion] = useState([]);
     const navigate = useNavigate();
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
     const [mensaje, setMensaje] = useState(null);
 
     const tiposReceta = ["comida", "cena", "postre", "desayuno", "salsa", "bebida"];
@@ -58,35 +58,29 @@ function ModificarReceta() {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
     
-    const handleContinenteChange = async (event) => {
+    const handleCambioContinente = async (event) => {
         const continenteModificado = event.target.value;
         setContinenteSeleccionado(continenteModificado);
     
         try {
             const response = await fetch(`http://localhost:8000/mostrar_paisess/${continenteModificado}`);
             const data = await response.json();
-            setPaises(data); // Actualizar la lista de países en el estado
+            setPaises(data);
             console.log(data)
-            setPaisSeleccionado({}); // Resetear la selección de país cuando se cambia el continente
+            setPaisSeleccionado({});
         } catch (error) {
             console.error('Error al obtener los países:', error);
         }
     };
-
-    const handlePaisChange = (event) => {
+    const handleCambioPais = (event) => {
+        console.log("semete")
         const idPaisSeleccionado = Number(event.target.value);
         const paisSeleccionado = paises.find(pais => pais.id_pais === idPaisSeleccionado);
         setPaisSeleccionado(paisSeleccionado);
         console.log(paisSeleccionado)
     };
 
-    // const handleChange = (e) => {
-    //     // console.log(e.target.value)
-    //     setReceta({...receta, [e.target.name]: e.target.value});
-    //     console.log(e.target.value)
-    // }
-
-    const handleInputChange = (event) => {
+    const handleCambioInput = (event) => {
         const { name, value } = event.target;
         setReceta({ ...receta, [name]: value });
         console.log(`Cambio en ${name}:`, value);
@@ -94,47 +88,48 @@ function ModificarReceta() {
         console.log("Nuevo estado de la receta:", receta);
     };
 
-    const handleFileChange = (e) => {
-        console.log(e.target.files[0])
-        setSelectedFile(e.target.files[0]);
+    const handleCambioImagen= (e) => {
+        setArchivoSeleccionado(e.target.files[0]);
         setReceta({...receta, [e.target.name]: e.target.files[0]});
     }
-
-    const handleIngredienteChange = (index, event) => {
-        const newIngredientes = [...ingredientes];
-        newIngredientes[index] = event.target.value;
-        setIngredientes(newIngredientes);
-        console.log(newIngredientes)
-        setReceta({ ...receta, ingredientes_receta: newIngredientes.join(';') });
-        console.log(receta.ingredientes_receta)
-    };
-    
 
     const handleAñadirIngrediente = () => {
         setIngredientes([...ingredientes, '']);
     };   
-
     const handleBorrarIngrediente = (index) => {
         const newIngredientes = [...ingredientes];
         newIngredientes.splice(index, 1);
         setIngredientes(newIngredientes);
+        setReceta({ ...receta, ingredientes_receta: newIngredientes.join(';') });
+        console.log(receta.ingredientes_receta)
+        console.log("Nuevo estado de la receta:", receta);
+    };
+    const handleCambioIngrediente = (index, event) => {
+        const newIngredientes = [...ingredientes];
+        newIngredientes[index] = event.target.value;
+        setIngredientes(newIngredientes);
+        // console.log(newIngredientes)
+        setReceta({ ...receta, ingredientes_receta: newIngredientes.join(';') });
+        // console.log(receta.ingredientes_receta)
     };
 
-    const handlePasoChange = (index, event) => {
-        const newPasos = [...elaboracion];
-        newPasos[index] = event.target.value;
-        setElaboracion(newPasos);
-        setReceta({ ...receta, elaboracion_receta: newPasos.join(';') });
-        console.log(receta.elaboracion_receta)
+    const handleAñadirPaso = () => {
+        setElaboracion([...elaboracion, '']);
+    };
+    const handleEliminarPaso = (index) => {
+        const pasosNuevos = [...elaboracion];
+        pasosNuevos.splice(index, 1);
+        setElaboracion(pasosNuevos);
+        setReceta({ ...receta, elaboracion_receta: pasosNuevos.join(';') });
+    };
+    const handleModificarPaso = (index, event) => {
+        const pasosNuevos = [...elaboracion];
+        pasosNuevos[index] = event.target.value;
+        setElaboracion(pasosNuevos);
+        setReceta({ ...receta, elaboracion_receta: pasosNuevos.join(';') });
     };
 
-    const handleAddPaso = () => {
-        console.log("se mete")
-        setPasos([...pasos, '']);
-        console.log(pasos)
-    };
-
-    const handleDelete = async () => {
+    const handleEliminar = async () => {
         try {
             const response = await fetch(`/eliminar_receta/${receta.id_receta}`, {
                 method: 'DELETE',
@@ -156,7 +151,7 @@ function ModificarReceta() {
             // Crear un objeto FormData y añadir los datos de la receta y el archivo de imagen
             const formData = new FormData();
             Object.keys(receta).forEach(key => formData.append(key, receta[key]));
-            // formData.append('imagen_receta', selectedFile);  // Asegúrate de tener una referencia al archivo seleccionado
+            // formData.append('imagen_receta', archivoSeleccionado);  // Asegúrate de tener una referencia al archivo seleccionado
             console.log(formData)
             // Enviar la receta y la IMAGEN al servidor
             const response = await fetch(`/modificar_receta/${id}`, {
@@ -168,8 +163,17 @@ function ModificarReceta() {
                 body: JSON.stringify(receta)
             });
             if (response.ok) {
-                setMensaje('Receta actualizada con éxito');
-                navigate("/mi-cuenta");
+                const formData = new FormData();
+                formData.append('imagen_receta', archivoSeleccionado);
+                const imageResponse = await fetch(`/modificar_imagen_receta/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    },
+                    body: formData
+                });
+                // setMensaje('Receta actualizada con éxito');
+                // navigate("/mi-cuenta");
             } else {
                 setMensaje('Error al actualizar la receta');
             }
@@ -198,7 +202,7 @@ function ModificarReceta() {
                                     type="text" 
                                     name="nombre_receta" 
                                     value={receta.nombre_receta}
-                                    onChange={handleInputChange} required
+                                    onChange={handleCambioInput} required
                                 />
                             
                             <label className="label-nueva-receta" for="dificultad_receta">Dificultad:</label>
@@ -206,7 +210,7 @@ function ModificarReceta() {
                                     id='dificultad_receta'
                                     name="dificultad_receta" 
                                     value={receta.dificultad_receta} 
-                                    onChange={handleInputChange} 
+                                    onChange={handleCambioInput} 
                                     className="input-nueva-receta" required>
                                     <option value="1">Dificultad 1</option>
                                     <option value="2">Dificultad 2</option>
@@ -219,7 +223,7 @@ function ModificarReceta() {
                                 id='continente_receta'
                                 name="continente_receta" 
                                 value={continenteSeleccionado.id_continente} 
-                                onChange={handleContinenteChange} 
+                                onChange={handleCambioContinente} 
                                 className="input-nueva-receta" required>
                                     <option value={continenteSeleccionado}>
                                         {continenteSeleccionado.nombre_continente}
@@ -236,7 +240,7 @@ function ModificarReceta() {
                                 id='pais_receta'
                                 name="pais_receta" 
                                 value={paisSeleccionado ? paisSeleccionado.id_pais : ''} 
-                                onChange={handlePaisChange} 
+                                onChange={handleCambioPais} 
                                 className="input-nueva-receta" required>
                                     {paises.map(pais => (
                                         <option key={pais.id_pais} value={pais.id_pais}>
@@ -250,7 +254,7 @@ function ModificarReceta() {
                                     id='tipo_receta'
                                     name="tipo_receta" 
                                     value={receta.tipo_receta} 
-                                    onChange={handleInputChange} 
+                                    onChange={handleCambioInput} 
                                     className="input-nueva-receta">
                                     <option value="">{primeraLetraMayuscula(receta.tipo_receta)}</option>
                                     {tiposReceta.map(tipo => (
@@ -267,7 +271,7 @@ function ModificarReceta() {
                                         type="text" 
                                         value={ingrediente}
                                         className="input-ingredientes"
-                                        onChange={event => handleIngredienteChange(index, event)}
+                                        onChange={event => handleCambioIngrediente(index, event)}
                                         required={index === 0} // Solo el primer input es obligatorio
                                     />
                                     {index === ingredientes.length - 1 && (
@@ -293,12 +297,17 @@ function ModificarReceta() {
                                         rows={7}
                                         value={paso}
                                         className="input-elaboracion"
-                                        onChange={event => handlePasoChange(index, event)}
+                                        onChange={event => handleModificarPaso(index, event)}
                                         required={index === 0} // Solo el primer textarea es obligatorio
                                     />
                                     {index === elaboracion.length - 1 && (
-                                        <a href="#" onClick={(event) => {event.preventDefault(); handleAddPaso();}}>
+                                        <a href="#" onClick={(event) => {event.preventDefault(); handleAñadirPaso();}}>
                                             <img src="/mas.png" alt="Añadir paso" className="icono-añadir"/>
+                                        </a>
+                                    )}
+                                    {index >= 0 && (
+                                        <a href="#" onClick={(event) => {event.preventDefault(); handleEliminarPaso(index); }}>
+                                            <img src="/borrar.png" alt="Eliminar paso" className="icono-añadir"/>
                                         </a>
                                     )}
                                 </div>
@@ -313,12 +322,12 @@ function ModificarReceta() {
                                     type="file" 
                                     name="imagen_receta" 
                                     className="input_imagen"
-                                    onChange={handleFileChange}
+                                    onChange={handleCambioImagen}
                                 />
                             
                             <div className="div-boton-nueva-receta">
                                 <input type="submit" className="boton-nueva-receta" value="Modificar Receta" />
-                                <button type="button" className="boton-eliminar-receta" onClick={handleDelete}>Eliminar Receta</button>
+                                <button type="button" className="boton-eliminar-receta" onClick={handleEliminar}>Eliminar Receta</button>
                             </div>
                         </div>
                     </div>

@@ -300,23 +300,25 @@ async def modificar_receta(id_receta: int, actualizar: dict, db: db_con):
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
-# @app.put("/modificar_receta/{id_receta}")
-# async def modificar_receta(id_receta: int, receta: receta.ActualizarReceta, db: db_con):
-#     try:
-#         receta_existente = db.query(receta).filter(receta.id_receta == id_receta).first()
-#         if receta_existente is None:
-#             raise HTTPException(status_code=404, detail=f"Receta con id {id_receta} no encontrada")
+@app.post("/modificar_imagen_receta/{id_receta}")
+async def modificar_imagen_receta(db: db_con, id_receta: int, imagen_receta: UploadFile = File(...)):
+    try:
+        # Buscar la receta existente
+        receta_existente = db.query(receta.Receta).filter(receta.Receta.id_receta == id_receta).first()
+        if receta_existente is None:
+            raise HTTPException(status_code=404, detail=f"Receta con id {id_receta} no encontrada")
         
-#         receta_dict = receta.dict(exclude_unset=True)
-#         for key, value in receta_dict.items():
-#             setattr(receta_existente, key, value)
-            
-#         # receta_existente.fecha_modificacion = datetime.utcnow()
-#         db.commit()
-#         return receta_existente
-#     except SQLAlchemyError as se:
-#         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
+        # Actualizar el nombre de la imagen en la base de datos
+        receta_existente.imagen_receta = imagen_receta.filename
+        db.commit()
 
+        # Guardar la nueva imagen en el lugar correcto
+        with open(os.path.join("../../app/public/imgs", imagen_receta.filename), "wb") as buffer:
+            shutil.copyfileobj(imagen_receta.file, buffer)
+
+        return {"mensaje": "Imagen actualizada con éxito"}
+    except SQLAlchemyError as se:
+        raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
 
 # DELETE

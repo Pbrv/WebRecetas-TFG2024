@@ -110,20 +110,14 @@ function ModificarReceta() {
     };
     
 
-    const handleAddIngredient = () => {
-        setReceta({
-            ...receta,
-            ingredientes: [...receta.ingredientes, ""]
-        });
+    const handleAñadirIngrediente = () => {
+        setIngredientes([...ingredientes, '']);
     };   
 
-    const handleRemoveIngredient = (index) => {
-        const newIngredientes = [...receta.ingredientes];
+    const handleBorrarIngrediente = (index) => {
+        const newIngredientes = [...ingredientes];
         newIngredientes.splice(index, 1);
-        setReceta({
-            ...receta,
-            ingredientes: newIngredientes
-        });
+        setIngredientes(newIngredientes);
     };
 
     const handlePasoChange = (index, event) => {
@@ -135,7 +129,9 @@ function ModificarReceta() {
     };
 
     const handleAddPaso = () => {
+        console.log("se mete")
         setPasos([...pasos, '']);
+        console.log(pasos)
     };
 
     const handleDelete = async () => {
@@ -173,6 +169,7 @@ function ModificarReceta() {
             });
             if (response.ok) {
                 setMensaje('Receta actualizada con éxito');
+                navigate("/mi-cuenta");
             } else {
                 setMensaje('Error al actualizar la receta');
             }
@@ -264,43 +261,48 @@ function ModificarReceta() {
                                 </select>
 
                             <label className="label-nueva-receta">Ingredientes:</label>
-                                {ingredientes.map((ingrediente, index) => (
-                                    <div key={index} className="div-añadir">
-                                        <input
-                                            type="text" 
-                                            value={ingrediente}
-                                            className="input-ingredientes"
-                                            onChange={event => handleIngredienteChange(index, event)}
-                                            required={index === 0} // Solo el primer input es obligatorio
-                                        />
-                                        {index === ingredientes.length - 1 && (
-                                            <a href="#" onClick={(event) => {event.preventDefault(); handleAddIngredient(); }}>
-                                                <img src="/mas.png" alt="Añadir ingrediente" className="icono-añadir"/>
-                                            </a>
-                                        )}
-                                    </div>
-                                ))}
+                            {ingredientes.map((ingrediente, index) => (
+                                <div key={index} className="div-añadir">
+                                    <input
+                                        type="text" 
+                                        value={ingrediente}
+                                        className="input-ingredientes"
+                                        onChange={event => handleIngredienteChange(index, event)}
+                                        required={index === 0} // Solo el primer input es obligatorio
+                                    />
+                                    {index === ingredientes.length - 1 && (
+                                        <a href="#" onClick={(event) => {event.preventDefault(); handleAñadirIngrediente(); }}>
+                                            <img src="/mas.png" alt="Añadir ingrediente" className="icono-añadir"/>
+                                        </a>
+                                    )}
+                                    {index >= 0 && (
+                                        <a href="#" onClick={(event) => {event.preventDefault(); handleBorrarIngrediente(index); }}>
+                                            <img src="/borrar.png" alt="Eliminar ingrediente" className="icono-añadir"/>
+                                        </a>
+                                    )}
+                                </div>
+                            ))}
                         </div>
                         {/* 2ª COLUMNA */}
                         <div className="columna">
                             <label className="label-nueva-receta">Elaboración:</label>
-                                {elaboracion.map((paso, index) => (
-                                    <div key={index} className="div-añadir">
-                                        <label className="label-pasos">Paso {index + 1}:</label>
-                                        <textarea
-                                            rows={4}
-                                            value={paso}
-                                            className="input-elaboracion"
-                                            onChange={event => handlePasoChange(index, event)}
-                                            required={index === 0} // Solo el primer textarea es obligatorio
-                                        />
-                                        {index === elaboracion.length - 1 && (
-                                            <a href="#" onClick={(event) => {event.preventDefault(); handleAddPaso();}}>
-                                                <img src="/mas.png" alt="Añadir paso" className="icono-añadir"/>
-                                            </a>
-                                        )}
-                                    </div>
-                                ))}
+                            {elaboracion.map((paso, index) => (
+                                <div key={index} className="div-añadir">
+                                    <label className="label-pasos">Paso {index + 1}:</label>
+                                    <textarea
+                                        rows={7}
+                                        value={paso}
+                                        className="input-elaboracion"
+                                        onChange={event => handlePasoChange(index, event)}
+                                        required={index === 0} // Solo el primer textarea es obligatorio
+                                    />
+                                    {index === elaboracion.length - 1 && (
+                                        <a href="#" onClick={(event) => {event.preventDefault(); handleAddPaso();}}>
+                                            <img src="/mas.png" alt="Añadir paso" className="icono-añadir"/>
+                                        </a>
+                                    )}
+                                </div>
+                            ))}
                             <label className="label-nueva-receta">Imagen:</label>
                                 <img 
                                     src={"/imgs/" + receta.imagen_receta } 

@@ -59,7 +59,7 @@ const NuevaReceta = () => {
         setReceta({...receta, ingredientes_receta: values});
     };
 
-    const handleAddIngredient = () => {
+    const handleAñadirIngrediente = () => {
         setIngredientes([...ingredientes, '']);
     };    
 
@@ -201,8 +201,8 @@ const NuevaReceta = () => {
                                     required={index === 0} // Solo el primer input es obligatorio
                                 />
                                 {index === ingredientes.length - 1 && (
-                                    <a href="#" onClick={(event) => {event.preventDefault(); handleAddIngredient();}}>
-                                        <img src="mas.png" alt="Añadir ingrediente" className="icono-añadir"/>
+                                    <a href="#" onClick={(event) => {event.preventDefault(); handleAñadirIngrediente();}}>
+                                        <img src="/mas.png" alt="Añadir ingrediente" className="icono-añadir"/>
                                     </a>
                                 )}
                             </div>
@@ -223,7 +223,7 @@ const NuevaReceta = () => {
                                 />
                                 {index === pasos.length - 1 && (
                                     <a href="#" onClick={(event) => {event.preventDefault(); handleAddPaso();}}>
-                                        <img src="mas.png" alt="Añadir paso" className="icono-añadir"/>
+                                        <img src="/mas.png" alt="Añadir paso" className="icono-añadir"/>
                                     </a>
                                 )}
                             </div>

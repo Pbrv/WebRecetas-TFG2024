@@ -2,13 +2,135 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { validateEmail, validateUsername, validateRegistroForm } from './validacion';
+import '../stylesheets/Registro.css';
 
+// function Registro() {
+//     const [username, setUsername] = useState('');
+//     const [email, setEmail] = useState('');
+//     const [password, setPassword] = useState('');
+//     const [showPassword, setShowPassword] = useState(false);
+//     const navigate = useNavigate();
+//     const togglePasswordVisibility = () => {
+//         setShowPassword(!showPassword);
+//     };
+
+//     const handleSubmit = async event => {
+//         event.preventDefault();
+
+//         const formValido = validateRegistroForm(username, password, email);
+
+//         // validar que todos los campos estén rellenos
+//         if (!formValido) {
+//             alert("Debes completar todos los campos");
+//         }
+
+//         // Validar con expresiones regulares
+//         if (!validateUsername(username)) {
+//             // document.querySelector('.user-error').classList.remove('form-line')
+//             // document.querySelector('.user-error').textContent = 'Usuario no válido'
+//             // document.querySelector('.user-error').style.color = 'red'
+//             // alert("No se ha validado el nombre")
+//             return;
+//         }
+
+//         // if (!validateEmail(email)) {
+//         //     // Mostrar un mensaje de error o tomar alguna acción si el correo electrónico no es válido
+//         //     // alert("No se ha validado el email")
+//         //     return;
+//         // }
+        
+        
+        
+        
+
+//         try {
+//             const response = await fetch("http://localhost:8000/registrar_usuario", {
+//                 method: "POST",
+//                 headers: {
+//                     "Content-Type": "application/json"
+//                 },
+//                 body: JSON.stringify({
+//                     correo_usuario: email,
+//                     nombre_usuario: username,
+//                     pass_usuario: password
+//                 })
+//             });
+
+//             const data = await response.json();
+//             if (response.ok) {
+//                 // Redirige al usuario a la página de inicio de sesión
+//                 navigate('/login');
+//             } else {
+//                 console.log('No se ha podido registrar', data);
+//             }
+//         } catch (error) {
+//             console.log('Error al enviar la solicitud', error);
+//         }
+//     };
+
+//     return (
+//         <div className='contenedor'>
+//             <h2 className='titulo-form'>Registrarse</h2>
+//             <form className="form" onSubmit={handleSubmit}>
+//                 <div className="contenedor-form">
+//                     <div className="form-group">
+//                         <input
+//                             className="form-input"
+//                             id="username"
+//                             type="text"
+//                             placeholder="  "
+//                             value={username}
+//                             onChange={e => setUsername(e.target.value)}
+//                         />
+//                         <label htmlFor="username" className="form-label">Nombre de usuario:</label>
+//                         <span className='mensaje-error'>Error</span>
+//                     </div>
+//                     <div className="form-group">
+//                         <input
+//                             className="form-input"
+//                             id="email"
+//                             type="email"
+//                             placeholder="  "
+//                             value={email}
+//                             onChange={e => setEmail(e.target.value)}
+//                         />
+//                         <label htmlFor="name" className="form-label">Correo electrónico:</label>
+//                         <span className='mensaje-error'>Error</span>
+//                     </div>
+//                     <div className="form-group">
+//                         <input
+//                             className="form-input"
+//                             id="password"
+//                             type={showPassword ? 'text' : 'password'}
+//                             placeholder="  "
+//                             value={password}
+//                             onChange={e => setPassword(e.target.value)}
+//                         />
+//                         <label htmlFor="password" className="form-label">Contraseña:</label>
+//                         <a className="enlace-mostrar-password" type={showPassword ? 'text' : 'password'}>
+//                             <img 
+//                             src={showPassword ? "esconder.png" : "ver.png"} alt="" 
+//                             className="mostrar-password" onClick={togglePasswordVisibility} />
+//                         </a>
+//                         <span className='mensaje-error'>Error</span>
+//                     </div>
+//                     <span className='mensaje-error'>Error</span>
+//                     <input type="submit" className="form-submit" value="Crear cuenta" />
+//                     <p>¿Ya tienes una cuenta? 
+//                         <Link to="/login" className='enlace-registro'> Inicia sesión aquí</Link></p>
+//                 </div>
+//             </form>
+//         </div>
+//     );
+// }
 function Registro() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [error, seterror] = useState({});
     const navigate = useNavigate();
+
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -16,22 +138,26 @@ function Registro() {
     const handleSubmit = async event => {
         event.preventDefault();
 
-        const formValido = validateRegistroForm(username, password, email);
-        
-        // validar que todos los campos estén rellenos
-        if (!formValido) {
-            alert("Debes completar todos los campos");
+        let validationerror = {};
+
+        if (!validateRegistroForm(username, password, email)) {
+            validationerror.general = "Debes completar todos los campos";
         }
-        
-        // Validar con expresiones regulares
+
         if (!validateUsername(username)) {
-            alert("No se ha validado el nombre")
-            return;
+            validationerror.username = "Usuario no válido";
         }
 
         if (!validateEmail(email)) {
-            // Mostrar un mensaje de error o tomar alguna acción si el correo electrónico no es válido
-            alert("No se ha validado el email")
+            validationerror.email = "Correo electrónico no válido";
+        }
+
+        if (!validateEmail(password)) {
+            validationerror.password = "Contraseña no válida";
+        }
+
+        if (Object.keys(validationerror).length > 0) {
+            seterror(validationerror);
             return;
         }
 
@@ -50,7 +176,6 @@ function Registro() {
 
             const data = await response.json();
             if (response.ok) {
-                // Redirige al usuario a la página de inicio de sesión
                 navigate('/login');
             } else {
                 console.log('No se ha podido registrar', data);
@@ -58,6 +183,16 @@ function Registro() {
         } catch (error) {
             console.log('Error al enviar la solicitud', error);
         }
+    };
+
+    const handleInputChange = (e, field) => {
+        const value = e.target.value;
+        if (field === 'username') setUsername(value);
+        if (field === 'email') setEmail(value);
+        if (field === 'password') setPassword(value);
+
+        seterror(preverror => ({ ...preverror, [field]: '' }));
+        seterror(preverror => ({ ...preverror, ['general']: '' }));
     };
 
     return (
@@ -72,10 +207,10 @@ function Registro() {
                             type="text"
                             placeholder="  "
                             value={username}
-                            onChange={e => setUsername(e.target.value)}
+                            onChange={e => handleInputChange(e, 'username')}
                         />
                         <label htmlFor="username" className="form-label">Nombre de usuario:</label>
-                        <span className="form-line"></span>
+                        {error.username && <span className='mensaje-error'>{error.username}</span>}
                     </div>
                     <div className="form-group">
                         <input
@@ -84,10 +219,10 @@ function Registro() {
                             type="email"
                             placeholder="  "
                             value={email}
-                            onChange={e => setEmail(e.target.value)}
+                            onChange={e => handleInputChange(e, 'email')}
                         />
-                        <label htmlFor="name" className="form-label">Correo electrónico:</label>
-                        <span className="form-line"></span>
+                        <label htmlFor="email" className="form-label">Correo electrónico:</label>
+                        {error.email && <span className='mensaje-error'>{error.email}</span>}
                     </div>
                     <div className="form-group">
                         <input
@@ -96,19 +231,23 @@ function Registro() {
                             type={showPassword ? 'text' : 'password'}
                             placeholder="  "
                             value={password}
-                            onChange={e => setPassword(e.target.value)}
+                            onChange={e => handleInputChange(e, 'password')}
                         />
                         <label htmlFor="password" className="form-label">Contraseña:</label>
-                        <a className="enlace-mostrar-password" type={showPassword ? 'text' : 'password'}>
+                        <a className="enlace-mostrar-password" onClick={togglePasswordVisibility}>
                             <img 
-                            src={showPassword ? "esconder.png" : "ver.png"} alt="" 
-                            className="mostrar-password" onClick={togglePasswordVisibility} />
+                                src={showPassword ? "esconder.png" : "ver.png"} 
+                                alt={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"} 
+                                className="mostrar-password" 
+                            />
                         </a>
-                        <span className="form-line"></span>
+                        {error.password && <span className='mensaje-error'>{error.password}</span>}
                     </div>
+                    {error.general && <span className='mensaje-error'>{error.general}</span>}
                     <input type="submit" className="form-submit" value="Crear cuenta" />
                     <p>¿Ya tienes una cuenta? 
-                        <Link to="/login" className='enlace-registro'> Inicia sesión aquí</Link></p>
+                        <Link to="/login" className='enlace-registro'> Inicia sesión aquí</Link>
+                    </p>
                 </div>
             </form>
         </div>

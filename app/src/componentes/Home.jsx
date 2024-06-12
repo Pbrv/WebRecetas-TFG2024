@@ -9,6 +9,7 @@ function Home({ recetas, isLogged }) {
 
     const [recetasFiltradas, setRecetasFiltradas] = useState();
     const [datosUsuario, setDatosUsuario] = useState({ suscripcion_usuario: 0 });
+    const [recetasSemanal, setRecetasSemanal] = useState([]);
 
     //Ordenadr de mayor a menor
     recetas.sort((a, b) => b.valoracion_receta - a.valoracion_receta);
@@ -39,6 +40,29 @@ function Home({ recetas, isLogged }) {
         }
     }, [isLogged]);
 
+    useEffect (() => {
+        if(datosUsuario.suscripcion_usuario > 1) {
+            const fetchRecetaSemanal = async () => {
+                try {
+                    const responseRecetas = await fetch("http://localhost:8000/menu_semanal", {
+                        method: 'GET',    
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem("token")
+                        }
+                    });
+                    if (!responseRecetas.ok) {
+                        throw new Error("No se obtuvieron las recetas semanales");
+                    }
+                    const datosReceta = await responseRecetas.json();
+                    setRecetasSemanal(datosReceta);
+                } catch (error) {
+                    console.error("Error al hacer fetch", error);
+                }
+            };
+            fetchRecetaSemanal();
+        }
+    }, [datosUsuario])
+
     //Guardar recetas que contengan en el nombre lo que el usuario busca
     function mostrarFiltradas(valorBusqueda) {
         if(valorBusqueda !== ''){
@@ -63,7 +87,7 @@ function Home({ recetas, isLogged }) {
     }
 
     return (
-        <div>
+        <main>
             <div className='contenedor-suscripcion' style={{display:'none'}}>
                 <button style={{color:'red'}} onClick={() => divSuscripciones()}>X</button>
                 <Suscripcion/>
@@ -93,7 +117,7 @@ function Home({ recetas, isLogged }) {
                 <div className="menu-semana">
                     <h2 className="titulo">Menú de la semana</h2>
                     <div className="recetas-menu ">
-                        {recetasDestacadas.map((receta) => (
+                        {recetasSemanal && recetasSemanal.map((receta) => (
                             <Receta key={receta.id_receta} {...receta}/>
                         ))}
                     </div>
@@ -105,7 +129,7 @@ function Home({ recetas, isLogged }) {
                     <button className="boton-menu-semanal" onClick={() => divSuscripciones()}>Desbloquéalo</button>
                 </div>
             )}
-        </div>
+        </main>
     );
 }
 

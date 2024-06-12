@@ -46,7 +46,7 @@ async def mostrar_recetas(db:db_con):
 
 @app.get("/menu_semanal") # mostrar recetas
 async def menu_semanal(db: db_con):
-    ids_recetas = [57,58,59,60,61,62,63]
+    ids_recetas = [58,59,60,61,62,63,64]
     resultados = []
     for id_receta in ids_recetas:
         resultado = await mostrar_receta_id(id_receta, db)

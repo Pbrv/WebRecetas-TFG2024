@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import "../stylesheets/NuevaReceta.css";
 
 const NuevaReceta = () => {
@@ -19,7 +18,7 @@ const NuevaReceta = () => {
     const [paises, setPaises] = useState([]);
     const [pasos, setPasos] = useState(['', '', '']);
     const [ingredientes, setIngredientes] = useState(['', '']);
-    const [selectedFile, setSelectedFile] = useState(null);
+    const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
     const [mensaje, setMensaje] = useState('');
     const navigate = useNavigate();
 
@@ -37,22 +36,22 @@ const NuevaReceta = () => {
         }
     }, [continenteSeleccionado]);
 
-    const handleContinenteChange = (event) => {
+    const handleCambioContinente = (event) => {
         setContinenteSeleccionado(event.target.value);
     };
 
-    const handleChange = (e) => {
+    const handleCambio = (e) => {
         console.log(e.target.value)
         setReceta({...receta, [e.target.name]: e.target.value});
     }
 
-    const handleFileChange = (e) => {
+    const handleCambioArchivo = (e) => {
         console.log(e.target.files[0].name)
-        setSelectedFile(e.target.files[0]);
+        setArchivoSeleccionado(e.target.files[0]);
         setReceta({...receta, [e.target.name]: e.target.files[0]});
     }
 
-    const handleIngredienteChange = (index, event) => {
+    const handleCambioIngrediente = (index, event) => {
         const values = [...ingredientes];
         values[index] = event.target.value;
         setIngredientes(values);
@@ -63,13 +62,13 @@ const NuevaReceta = () => {
         setIngredientes([...ingredientes, '']);
     };    
 
-    const handlePasoChange = (index, event) => {
+    const handleCambioPaso = (index, event) => {
         const values = [...pasos];
         values[index] = event.target.value;
         setPasos(values);
     };
 
-    const handleAddPaso = () => {
+    const handleAñadirPaso = () => {
         setPasos([...pasos, '']);
     };
 
@@ -101,8 +100,8 @@ const NuevaReceta = () => {
             // Crear un objeto FormData y añadir los datos de la receta y el archivo de imagen
             const formData = new FormData();
             Object.keys(recetaString).forEach(key => formData.append(key, recetaString[key]));
-            // Enviar la receta y la IMAGEN al servidor
-            const response = await fetch("/insertar_receta", {
+            
+            const response = await fetch("/insertar_receta", { // Enviar la receta y la IMAGEN al servidor
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem("token"),
@@ -113,7 +112,7 @@ const NuevaReceta = () => {
             const data = await response.json();
             if(data){
                 const formData = new FormData();
-                formData.append('imagen_receta', selectedFile); // Asegúrate de tener una referencia al archivo seleccionado
+                formData.append('imagen_receta', archivoSeleccionado);
                 const response = await fetch("/insertar_imagen_receta", {
                     method: 'POST',
                     headers: {
@@ -121,11 +120,11 @@ const NuevaReceta = () => {
                     },
                     body: formData
                 });
+
                 const data = await response.json();
                 
                 setMensaje('¡Receta subida con éxito!');
-                // toast('La receta se ha subido correctamente');
-                // navigate('/');
+                navigate('/'); // NO SE EJECUTA BIEN
             }
         } catch (error) {
             console.error(error);
@@ -143,34 +142,34 @@ const NuevaReceta = () => {
                     {/* 1ª COLUMNA */}
                     <div className="columna">
                         <label className="label-nueva-receta">Nombre: </label>
-                            <input
-                                className="input-nueva-receta"
-                                type="text" 
-                                name="nombre_receta" 
-                                onChange={handleChange} required
-                            />
+                        <input
+                            className="input-nueva-receta"
+                            type="text" 
+                            name="nombre_receta" 
+                            onChange={handleCambio} required
+                        />
                         
                         <label className="label-nueva-receta">Dificultad:</label>
-                            <select name="dificultad_receta" onChange={handleChange} className="input-nueva-receta" required>
-                                <option value="">Selecciona una dificultad</option>
-                                <option value="1">Dificultad 1</option>
-                                <option value="2">Dificultad 2</option>
-                                <option value="3">Dificultad 3</option>
-                                <option value="4">Dificultad 4</option>
-                            </select>
+                        <select name="dificultad_receta" onChange={handleCambio} className="input-nueva-receta" required>
+                            <option value="">Selecciona una dificultad</option>
+                            <option value="1">Dificultad 1</option>
+                            <option value="2">Dificultad 2</option>
+                            <option value="3">Dificultad 3</option>
+                            <option value="4">Dificultad 4</option>
+                        </select>
                         
                         <label className="label-nueva-receta">Continente:</label>
-                            <select name="continente" onChange={handleContinenteChange} className="input-nueva-receta" required>
-                                <option value="">Selecciona el continente</option>
-                                {continentes.map(continente => (
-                                    <option key={continente.id} value={continente.id}>
-                                        {continente.nombre_continente}
-                                    </option>
-                                ))}
-                            </select>
+                        <select name="continente" onChange={handleCambioContinente} className="input-nueva-receta" required>
+                            <option value="">Selecciona el continente</option>
+                            {continentes.map(continente => (
+                                <option key={continente.id} value={continente.id}>
+                                    {continente.nombre_continente}
+                                </option>
+                            ))}
+                        </select>
 
                         <label className="label-nueva-receta">País:</label>
-                        <select onChange={handleChange} name="pais_receta" className="input-nueva-receta" required>
+                        <select onChange={handleCambio} name="pais_receta" className="input-nueva-receta" required>
                             <option value="">Selecciona el país</option>
                             {paises.map((pais, index) => 
                                 <option key={pais.id_pais} value={pais.id_pais}>
@@ -180,15 +179,15 @@ const NuevaReceta = () => {
                         </select>
                         
                         <label className="label-nueva-receta">Tipo de receta:</label>
-                            <select name="tipo_receta" onChange={handleChange} className="input-nueva-receta" required>
-                                <option value="">Selecciona el tipo de receta</option>
-                                <option value="Comida">Comida</option>
-                                <option value="Cena">Cena</option>
-                                <option value="Postre">Postre</option>
-                                <option value="Desayuno">Desayuno</option>
-                                <option value="Salsa">Salsa</option>
-                                <option value="Bebida">Bebida</option>
-                            </select>
+                        <select name="tipo_receta" onChange={handleCambio} className="input-nueva-receta" required>
+                            <option value="">Selecciona el tipo de receta</option>
+                            <option value="Comida">Comida</option>
+                            <option value="Cena">Cena</option>
+                            <option value="Postre">Postre</option>
+                            <option value="Desayuno">Desayuno</option>
+                            <option value="Salsa">Salsa</option>
+                            <option value="Bebida">Bebida</option>
+                        </select>
 
                         <label className="label-nueva-receta">Ingredientes:</label>
                         {ingredientes.map((ingrediente, index) => (
@@ -197,7 +196,7 @@ const NuevaReceta = () => {
                                     type="text" 
                                     value={ingrediente}
                                     className="input-ingredientes"
-                                    onChange={event => handleIngredienteChange(index, event)}
+                                    onChange={event => handleCambioIngrediente(index, event)}
                                     required={index === 0} // Solo el primer input es obligatorio
                                 />
                                 {index === ingredientes.length - 1 && (
@@ -218,11 +217,11 @@ const NuevaReceta = () => {
                                     rows={4}
                                     value={paso}
                                     className="input-elaboracion"
-                                    onChange={event => handlePasoChange(index, event)}
+                                    onChange={event => handleCambioPaso(index, event)}
                                     required={index === 0} // Solo el primer textarea es obligatorio
                                 />
                                 {index === pasos.length - 1 && (
-                                    <a href="#" onClick={(event) => {event.preventDefault(); handleAddPaso();}}>
+                                    <a href="#" onClick={(event) => {event.preventDefault(); handleAñadirPaso();}}>
                                         <img src="/mas.png" alt="Añadir paso" className="icono-añadir"/>
                                     </a>
                                 )}
@@ -234,7 +233,7 @@ const NuevaReceta = () => {
                             type="file" 
                             name="imagen_receta" 
                             className="input_imagen"
-                            onChange={handleFileChange}
+                            onChange={handleCambioArchivo}
                         />
                         
                         <div className="div-boton-nueva-receta">

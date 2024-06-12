@@ -118,18 +118,18 @@ a {
     position: absolute;
     background-color: #ffffff;
     width: 15%;
-    height: 230px;
+    height: 350px;
     /* min-width: 160px; */
     /* padding: 0px 0px; */
     right: 0;
     text-align: center;
-    top: 99px;
+    top: 80px;
 }
 
 .nombre-usuario-nav {
-    border-bottom: 1px solid grey;
+    /* border-bottom: 1px solid grey; */
     padding-bottom: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 7px;
     font-weight: bold;
 }
 

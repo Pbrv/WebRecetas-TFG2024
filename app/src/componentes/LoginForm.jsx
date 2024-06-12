@@ -6,11 +6,11 @@ import { validateLoginForm } from './validacion';
 function LoginForm({ setIsLogged }) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [showPassword, setShowPassword] = useState(false);
-    const [errorMessage, setErrorMessage] = useState(null);
+    const [mostrarContraseña, setMostrarContraseña] = useState(false);
+    const [mensajeError, setMensajeError] = useState(null);
     const navigate = useNavigate();
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
+    const cambiarVisibilidad = () => {
+        setMostrarContraseña(!mostrarContraseña);
     };
 
     // INICIO SESIÓN
@@ -20,7 +20,7 @@ function LoginForm({ setIsLogged }) {
         const formValido = validateLoginForm(username, password);
         
         if (!formValido) { // validar que todos los campos estén rellenos --> SOLO ALERT
-            setErrorMessage("Debes completar todos los campos");
+            setMensajeError("Debes completar todos los campos");
         }
 
         try {
@@ -42,9 +42,9 @@ function LoginForm({ setIsLogged }) {
                 navigate('/'); // redirige al usuario a la página principal
             } else {
                 if (response.status === 404) {
-                    setErrorMessage('Usuario no encontrado');
+                    setMensajeError('Usuario no encontrado');
                 } else if (response.status === 401) {
-                    setErrorMessage('Contraseña incorrecta');
+                    setMensajeError('Contraseña incorrecta');
                 }
             }
         } catch (error) {
@@ -75,21 +75,21 @@ function LoginForm({ setIsLogged }) {
                         <input
                             className="form-input"
                             id="password"
-                            type={showPassword ? 'text' : 'password'}
+                            type={mostrarContraseña ? 'text' : 'password'}
                             placeholder="  "
                             value={password}
                             onChange={e => setPassword(e.target.value)}
                         />
                         <label htmlFor="password" className="form-label">Contraseña:</label>
-                        <a className="enlace-mostrar-password" type={showPassword ? 'text' : 'password'}>
+                        <a className="enlace-mostrar-password" type={mostrarContraseña ? 'text' : 'password'}>
                             <img 
-                            src={showPassword ? "esconder.png" : "ver.png"} alt="" 
-                            className="mostrar-password" onClick={togglePasswordVisibility} />
+                            src={mostrarContraseña ? "esconder.png" : "ver.png"} alt="" 
+                            className="mostrar-password" onClick={cambiarVisibilidad} />
                         </a>
                         <span className="form-line"></span>
                     </div>
                     {/* MENSAJE ERROR */}
-                    {errorMessage && <div className="mensaje-error"><p>{errorMessage}</p></div>}
+                    {mensajeError && <div className="mensaje-error"><p>{mensajeError}</p></div>}
 
                     <input type="submit" className="form-submit" value="Entrar" />
                     <p>¿Aún no tienes una cuenta? 

@@ -28,7 +28,7 @@
 
 .columna{
     /* border: 1px solid rgb(0, 255, 34); */
-    padding-left: 1vw;
+    /* padding-left: 1vw; */
     display: flex;
     flex-direction: column;
     justify-content: space-between;

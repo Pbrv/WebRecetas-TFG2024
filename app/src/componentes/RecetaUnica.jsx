@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 function RecetaUnica() {
     const estrellas = new Array(5).fill(null);
     const gorritos = new Array(4).fill(null);
+    const [nuevoComentario, setNuevoComentario] = useState(false);
+
     const [error, setError] = useState("");
     const [isSaved, setIsSaved] = useState(false); // estado para saber si el usuario ya se ha guardado esa receta
     const navigate = useNavigate();
@@ -190,7 +192,7 @@ function RecetaUnica() {
             setValoracionMedia(dataValoracionMedia.valoracion_media);
         };
         obtenerDatos();
-    }, [id]);
+    }, [id, nuevoComentario]);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -226,6 +228,10 @@ function RecetaUnica() {
                 }
             } else {
                 const nuevoComentario = await response.json();
+                if(response.ok){
+                    setNuevoComentario(true)
+                    document.querySelector('textarea').value = ''
+                }
                 // Se actualiza el comentario y se muestra el nombre de usuario
                 // setComentarios([...comentarios, nuevoComentario]);
                 // console.log(comentarios)

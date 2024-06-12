@@ -43,7 +43,7 @@ class ActualizarReceta(BaseModel):
     dificultad_receta: Optional[int] = None
     pais_receta: Optional[int] = None
     tipo_receta: Optional[str] = None
-    imagen_receta: Optional[str] = None
+    # imagen_receta: Optional[str] = None
 
 class Valoracion(BaseModel):
     valoracion_receta: int

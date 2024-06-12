@@ -30,7 +30,8 @@ function Navbar({ isLogged, setIsLogged }) {
             console.log(usuario.nombre_usuario)
         };
         obtenerDatosUsuario();
-    }, []);
+    }, [isLogged]);
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -87,7 +88,7 @@ function Navbar({ isLogged, setIsLogged }) {
                     <Link to={isLogged ? `/mi-cuenta` : `/login`} >
                         <img src="../usuario.png" alt="Login" className="icono"/>
                     </Link>
-                    {desplegableVisible && (
+                    {desplegableVisible && isLogged && (
                         <div className="dropdown" ref={dropdownRef} onMouseLeave={handleMouseLeave}>
                             <p className="nombre-usuario-nav">Hola {nombreUsuario}</p>
                             <Link to={`/mi-cuenta`} className="a-user">Mi Cuenta</Link>

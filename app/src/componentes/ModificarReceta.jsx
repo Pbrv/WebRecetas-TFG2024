@@ -52,7 +52,7 @@ function ModificarReceta() {
             setElaboracion(elaboracion);
         };
         obtenerDatos();
-    }, [id]);
+    }, []);
 
     const primeraLetraMayuscula = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -162,21 +162,26 @@ function ModificarReceta() {
                 },
                 body: JSON.stringify(receta)
             });
-            if (response.ok) {
+            if (!response.ok) {
+                throw new Error('Error al actualizar la receta');
+            }
+            if (archivoSeleccionado) {
                 const formData = new FormData();
                 formData.append('imagen_receta', archivoSeleccionado);
                 const imageResponse = await fetch(`/modificar_imagen_receta/${id}`, {
-                    method: 'POST',
+                    method: 'PUT',
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem("token")
                     },
                     body: formData
                 });
+                if (!imageResponse.ok) {
+                    throw new Error('Error al actualizar la imagen de la receta');
+                }
+
                 // setMensaje('Receta actualizada con éxito');
-                // navigate("/mi-cuenta");
-            } else {
-                setMensaje('Error al actualizar la receta');
             }
+            navigate("/mi-cuenta");
         } catch (error) {
             console.error(error);
         }
@@ -205,7 +210,7 @@ function ModificarReceta() {
                                     onChange={handleCambioInput} required
                                 />
                             
-                            <label className="label-nueva-receta" for="dificultad_receta">Dificultad:</label>
+                            <label className="label-nueva-receta" htmlFor="dificultad_receta">Dificultad:</label>
                                 <select 
                                     id='dificultad_receta'
                                     name="dificultad_receta" 
@@ -218,7 +223,7 @@ function ModificarReceta() {
                                     <option value="4">Dificultad 4</option>
                                 </select>
                             
-                            <label className="label-nueva-receta" for="continente_receta">Continente:</label>
+                            <label className="label-nueva-receta" htmlFor="continente_receta">Continente:</label>
                             <select 
                                 id='continente_receta'
                                 name="continente_receta" 
@@ -235,7 +240,7 @@ function ModificarReceta() {
                                     ))}
                             </select>
 
-                            <label className="label-nueva-receta" for="pais_receta">País:</label>
+                            <label className="label-nueva-receta" htmlFor="pais_receta">País:</label>
                             <select 
                                 id='pais_receta'
                                 name="pais_receta" 
@@ -249,7 +254,7 @@ function ModificarReceta() {
                                     ))}
                             </select>
                             
-                            <label className="label-nueva-receta" for="tipo_receta">Tipo de receta:</label>
+                            <label className="label-nueva-receta" htmlFor="tipo_receta">Tipo de receta:</label>
                                 <select 
                                     id='tipo_receta'
                                     name="tipo_receta" 
@@ -313,11 +318,11 @@ function ModificarReceta() {
                                 </div>
                             ))}
                             <label className="label-nueva-receta">Imagen:</label>
-                                <img 
+                                {!archivoSeleccionado && <img 
                                     src={"/imgs/" + receta.imagen_receta } 
                                     alt="imagen receta" 
                                     className="imagen_modificar_receta"
-                                />
+                                />}
                                 <input
                                     type="file" 
                                     name="imagen_receta" 

@@ -123,8 +123,8 @@ const NuevaReceta = () => {
 
                 const data = await response.json();
                 
+                navigate('/');
                 setMensaje('¡Receta subida con éxito!');
-                navigate('/'); // NO SE EJECUTA BIEN
             }
         } catch (error) {
             console.error(error);

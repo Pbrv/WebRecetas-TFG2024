@@ -7,6 +7,11 @@
     justify-content: center;
     border-bottom: 1px solid #A7CAB1;
 } */
+ .div-botones-dificultad {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+ }
 
 .main-recetas {
     display: flex;
@@ -77,16 +82,25 @@
         flex-direction: column;
         width: 87vw;
         margin: auto;
+        gap: 15px;
     }
-    .div-botones-filtros {
-        display: none;
+    .main-recetas .recetas-destacadas {
+        width: auto;
     }
     #filtros_recetas {
-        height: 4vh;
+        position: sticky;
+        top: 0px;
+        height: auto;
         width: 100%;
     }
     .main-recetas {
         padding-top: 1em;
+    }
+}
+
+@media (max-width: 770px) {
+    .div-botones-filtros .boton {
+        width: auto;
     }
 }
 @media (max-width: 1433px) {

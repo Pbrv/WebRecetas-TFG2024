@@ -76,7 +76,7 @@ async def mostrar_recetas(db:db_con):
 
 
 @app.get("/mostrar_receta/{id_receta}") # mostrar receta pasando id
-async def mostrar_receta(id_receta: int, db: db_con):
+async def mostrar_receta_id(id_receta: int, db: db_con):
     try:
         receta_encontrada = db.query(receta.Receta).filter(receta.Receta.id_receta == id_receta).first()
         if receta_encontrada is None:
@@ -150,7 +150,7 @@ async def mostrar_receta(pais_nom: str, db: db_con):
     
 
 @app.get("/recetas_filtros") # mostrar receta pasando un filtro de ingredientes
-async def mostrar_receta(filtro: str, db: db_con, pagina: int = 1, items_por_pagina: int = 12):
+async def mostrar_receta(db: db_con, filtro: str, dificultad: str, tipo: str, pagina: int = 1, items_por_pagina: int = 12):
     try:
 
         # Inicia la consulta
@@ -163,6 +163,13 @@ async def mostrar_receta(filtro: str, db: db_con, pagina: int = 1, items_por_pag
             for ingrediente in ingredientes:
                 query = query.filter(receta.Receta.ingredientes_receta.like(f'%{ingrediente}%'))
 
+        # Si hay un filtro de dificultad
+        if (dificultad != ''):
+            query = query.filter(receta.Receta.dificultad_receta == dificultad)
+            
+        if (tipo != ''):
+            query = query.filter(receta.Receta.tipo_receta == tipo)
+
         # Devuelve 10 items en funcion de la pagina
         recetas = query.offset((pagina - 1) * items_por_pagina).limit(items_por_pagina).all()
 
@@ -173,35 +180,6 @@ async def mostrar_receta(filtro: str, db: db_con, pagina: int = 1, items_por_pag
 
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
-
-# @app.get("/recetas_filtros") # mostrar receta pasando un filtro de ingredientes
-# async def mostrar_receta(filtro: str, dificultad: int = None, db: db_con, pagina: int = 1, items_por_pagina: int = 12):
-#     try:
-
-#         # Inicia la consulta
-#         query = db.query(receta.Receta)
-
-#         # Si hay algun filtro
-#         if(filtro != ''):
-#             # Divide los ingredientes por el caracter ';'
-#             ingredientes = filtro.split(';')
-#             for ingrediente in ingredientes:
-#                 query = query.filter(receta.Receta.ingredientes_receta.notlike(f'%{ingrediente}%'))
-
-#         # Si hay un filtro de dificultad
-#         if dificultad is not None:
-#             query = query.filter(receta.Receta.dificultad_receta == dificultad)
-
-#         # Devuelve 10 items en funcion de la pagina
-#         recetas = query.offset((pagina - 1) * items_por_pagina).limit(items_por_pagina).all()
-
-#         if recetas is None:
-#             return {"error": "No hay recetas con ese filtro"}
-
-#         return recetas
-
-#     except SQLAlchemyError as se:
-#         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
 
 
@@ -300,7 +278,7 @@ async def modificar_receta(id_receta: int, actualizar: dict, db: db_con):
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
 
-@app.post("/modificar_imagen_receta/{id_receta}")
+@app.put("/modificar_imagen_receta/{id_receta}")
 async def modificar_imagen_receta(db: db_con, id_receta: int, imagen_receta: UploadFile = File(...)):
     try:
         # Buscar la receta existente
@@ -334,10 +312,13 @@ async def eliminar_receta(id_receta: int, db: db_con):
         usuarios = db.query(usuario.Usuario).filter(or_(usuario.Usuario.recetas_guardadas_usuario.like(f"{id_receta};%"),
                                                         usuario.Usuario.recetas_guardadas_usuario.like(f"%;{id_receta};%"),
                                                         usuario.Usuario.recetas_guardadas_usuario.like(f"%;{id_receta}"))).all()
-        
+        comentarios = db.query(comentario.Comentario).filter(comentario.Comentario.id_receta_comentario == id_receta).all()
         # Eliminar el id de la receta de la lista de recetas guardadas de cada usuario
         for user in usuarios:
             user.recetas_guardadas_usuario = user.recetas_guardadas_usuario.replace(f"{id_receta};", "").replace(f";{id_receta}", "")
+        for coment in comentarios:
+            db.delete(coment)
+            db.commit()
         
         db.delete(receta_encontrada)
         db.commit()

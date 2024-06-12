@@ -7,55 +7,82 @@ import Boton from "./Boton";
 function Recetas (){
     const [recetas, setRecetas] = useState([]);
     const [filtros, setFiltros] = useState('');
+    const [dificultadSeleccionada, setdificultadSeleccionada] = useState('');
+    const [tipoSeleccionado, setTipoSeleccionado] = useState('');
     const [pagina, setPagina] = useState(1); //Paginacion de las recetas
-    const filtrosDisponibles = ['Salsa','Patata','Queso','Lechuga','Arroz'];
     const [mostrarDificultad, setMostrarDificultad] = useState(false); // Filtro de dificultad
+    const [mostrarTipo, setMostrarTipo] = useState(false); 
+    const [mostrarFiltro, setMostrarFiltro] = useState(false); 
+    const filtrosDisponibles = ['Salsa','Patata','Queso','Lechuga','Arroz', 'Huevo', 'Café'];
+    const dificultad = ['Facil', 'Medio', 'Dificil', 'Muy dificil']
+    const tipo = ['Comida', 'Cena', 'Postre', 'Bebida', 'Desayuno', 'Salsa']
+    
     let valorFiltro;
 
     // Hacer que se muestren todas las recetas si no hay filtros
     useEffect(() => {
-        fetch(`http://localhost:8000/recetas_filtros/?filtro=${filtros}&dificultad=${valorFiltro}&pagina=${pagina}`)
+        fetch(`http://localhost:8000/recetas_filtros/?filtro=${filtros}&dificultad=${dificultadSeleccionada}&tipo=${tipoSeleccionado}&pagina=${pagina}`)
             .then(response => response.json())
             .then((recetas) => {
-                if(recetas.length === 0) {
+                if(recetas.length === 0 && pagina !== 1) {
                     setPagina(pagina - 1);
                 } else {
                     setRecetas(recetas)
                 }
             });
-    }, [filtros, pagina]);
+    }, [filtros, dificultadSeleccionada, tipoSeleccionado, pagina]);
 
     // Funcion para cuando se añada un ingrediente a filtrar o se elimine
     const cambiar_filtros = (value, e) => {
-        let valorFiltro;
-        switch(value) {
-            case 'Muy facil':
-                valorFiltro = 1;
-                break;
-            case 'Facil':
-                valorFiltro = 2;
-                break;
-            case 'Medio':
-                valorFiltro = 3;
-                break;
-            case 'Dificil':
-                valorFiltro = 4;
-                break;
-            case 'Muy dificil':
-                valorFiltro = 5;
-                break;
-            default:
-                valorFiltro = value;
-        }
-        if (filtros.includes(';'+value)){
-            setFiltros(filtros.replace(';'+ value,''))
-        } else if (filtros.includes(value + ';')) {
-            setFiltros(filtros.replace(value + ';',''))
-        } else if(filtros.includes(value)){
-            setFiltros(filtros.replace(value,''))
+
+        if(dificultadSeleccionada - 1 == dificultad.indexOf(value)) {
+            setdificultadSeleccionada('');
         } else {
-            filtros === '' ? setFiltros(value) : setFiltros(filtros.concat(';' + value));
+            if(dificultadSeleccionada && dificultad.includes(value)){
+                document.getElementById(dificultadSeleccionada - 1).classList.toggle('boton-selected');
+            }
+            switch(value) {
+                case 'Facil':
+                    setdificultadSeleccionada(1);
+                    break;
+                case 'Medio':
+                    setdificultadSeleccionada(2);
+                    break;
+                case 'Dificil':
+                    setdificultadSeleccionada(3);
+                    break;
+                case 'Muy dificil':
+                    setdificultadSeleccionada(4);
+                    break;
+                default:
+                    valorFiltro = valorFiltro;
+            }
         }
+        
+        if(!dificultad.includes(value) && !tipo.includes(value)) {
+            if (filtros.includes(';'+ value)){
+                setFiltros(filtros.replace(';'+ value,''))
+            } else if (filtros.includes(value + ';')) {
+                setFiltros(filtros.replace(value + ';',''))
+            } else if(filtros.includes(value)){
+                setFiltros(filtros.replace(value,''))
+            } else {
+                filtros === '' ? setFiltros(value) : setFiltros(filtros.concat(';' + value));
+            }
+        }
+
+        if(tipo.includes(value)) {
+            console.log('no lo incluye ni filtros ni dificultad')
+            if(tipoSeleccionado && tipoSeleccionado !== value){
+                document.getElementById(tipoSeleccionado).classList.toggle('boton-selected')
+            }
+            if(tipoSeleccionado !== value) {
+                setTipoSeleccionado(value)
+            } else {
+                setTipoSeleccionado('')
+            }
+        }
+
         e.classList.toggle("boton-selected");
     }
 
@@ -69,27 +96,44 @@ function Recetas (){
                     <Boton onClick={() => setMostrarDificultad(!mostrarDificultad)} value="Dificultad" />
                         {mostrarDificultad && (
                             <div className="div-botones-dificultad">
-                                {['Muy facil', 'Facil', 'Medio', 'Dificil', 'Muy dificil'].map((dificultad, index) => (
-                                    <Boton key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={dificultad} />
+                                {dificultad.map((dificultad, index) => (
+                                    <Boton id={index} key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={dificultad} />
                                 ))}
                             </div>
                         )}
-                        {filtrosDisponibles.map((filtro, index) => (
-                            <Boton key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={filtro} />
-                        ))}
+                    <Boton onClick={() => setMostrarTipo(!mostrarTipo)} value="Tipo" />
+                    {mostrarTipo && (
+                        <div className="div-botones-dificultad">
+                            {tipo.map((tipo, index) => (
+                                <Boton id={tipo} key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={tipo} />
+                            ))}
+                        </div>
+                    )}
+                    <Boton onClick={() => setMostrarFiltro(!mostrarFiltro)} value="Ingredientes" />
+                    {mostrarFiltro && (
+                        <div className="div-botones-dificultad">
+                            {filtrosDisponibles.map((filtro, index) => (
+                                <Boton id={filtro} key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={filtro} />
+                            ))}
+                        </div>
+                    )}
                         
                     </div>
                 </div>
                 <div className="recetas-destacadas">
-                    {recetas.map((receta) => (
-                        <Receta key={receta.id_receta} {...receta} />
-                    ))}
+                    {recetas.length > 0 ? (
+                            recetas.map((receta) => (
+                                <Receta key={receta.id_receta} {...receta} />
+                            ))
+                    ) : (
+                        <span className="mensaje-error">No hay recetas con esos filtros</span>
+                    )}
                 </div>
             </div>
                 
             <div className="div-paginacion">
                 <Boton key={2} onClick={() => setPagina(pagina > 1 ? pagina - 1 : 1)} value={'Página anterior'} />
-                <Boton key={1} onClick={() => setPagina(pagina + 1)} value={'Siguiente página'} />
+                <Boton key={1} onClick={() => recetas.length > 0 ? setPagina(pagina + 1) : setPagina(pagina)} value={'Siguiente página'} />
                 <span className="mensaje-error" style={{display:'none'}}>Máximo de recetas</span>
             </div>
         </main>

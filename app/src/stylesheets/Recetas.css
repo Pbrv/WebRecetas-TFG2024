@@ -1,9 +1,3 @@
-.div-botones-dificultad {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
 .main-recetas {
     display: flex;
     flex-direction: column;
@@ -17,6 +11,7 @@
     margin: auto;
 }
 #filtros_recetas {
+    margin-top: 0.6em;
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -24,7 +19,10 @@
     align-items: center;
     min-width: 280px;
     max-width: 280px;
+    max-height: 700px;
     background-color: #f1f0ec;
+    gap: 0.1em;
+    /* position: relative; */
 }
 
 #filtros_recetas > h4 {
@@ -33,15 +31,35 @@
     text-align: center;
     width: 100%;
 }
+.flecha-filtros {
+    width: 15px;
+    position: absolute;
+    top: 80px;
+    right: 0;
+    margin-right: 20px;
+}
 
 .div-botones-filtros {
     display: flex;
     flex-direction: column;
+    gap: 0.1em;
     width: 100%;
+}
+.div-botones-filtros-niveles {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    flex-wrap: wrap;
+    width: 80%;
+    justify-content: center;
 }
 
 .div-paginacion {
-    margin: auto;
+    display: flex;
+    gap: 1em;
+    padding: 3em;
+    /* margin: auto; */
 }
 
 @media (max-width: 1800px) {
@@ -74,19 +92,15 @@
     .main-recetas .recetas-destacadas {
         width: auto;
     }
-    .prueba {
-        /* width: 100%; */
-    }
     #filtros_recetas {
         color: #fff;
         display: flex;
         flex-direction: column;
         justify-content: start;
         align-items: center;
-        width: 100vw;
-        /* min-width: 280px;
-        max-width: 280px; */
-        background-color: #f1f0ec;
+        height: auto;
+        width: 100%;
+        max-width: none;
     }
 
     .main-recetas {
@@ -94,22 +108,10 @@
     }
 }
 
-/* ESTILOS FILTROS RESPONSIVE
-display: flex;
-flex-direction: column;
-align-items: stretch;
-gap: 1em; */
-
 @media (max-width: 770px) {
     .div-botones-filtros .boton {
         width: auto;
     }
 }
 @media (max-width: 1433px) {
-    /* .div-recetas-filtros {
-        width: 95vw;
-    }
-    .div-botones-filtros {
-        width: 100%;
-    } */
 }

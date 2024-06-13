@@ -76,7 +76,6 @@ function Navbar({ isLogged, setIsLogged, recetas }) {
         }
     }
 
-
     return (
         <nav>
             <div className="contenedor-hamburguesa">

@@ -3,7 +3,11 @@ import "../stylesheets/Boton.css";
 
 function Boton ({onClick, value, id}) {
     return(
-        <button id={id} className="boton" onClick={onClick}>{value}</button>
+        <button 
+            onClick={onClick}
+            id={id}
+            className="boton">{value}
+        </button>
     );
 };
 

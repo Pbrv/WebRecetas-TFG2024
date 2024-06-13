@@ -91,39 +91,39 @@ function Recetas (){
     return(
         <main className="main-recetas">
             <div className="div-recetas-filtros">
-                <div className="prueba">
                     {/* ID puesto para saber que contiene */}
                     <div id="filtros_recetas">
                         <h4>Filtra aquí tus resultados</h4>
                         <div className="div-botones-filtros">
-                        <Boton onClick={() => setMostrarDificultad(!mostrarDificultad)} value="Dificultad" />
+                        <Boton onClick={() => {setMostrarDificultad(!mostrarDificultad); setMostrarTipo(false); setMostrarFiltro(false);}} value="Dificultad"/>
                             {mostrarDificultad && (
-                                <div className="div-botones-dificultad">
+                                <div className="div-botones-filtros-niveles">
                                     {dificultad.map((dificultad, index) => (
                                         <Boton id={index} key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={dificultad} />
                                     ))}
                                 </div>
                             )}
-                        <Boton onClick={() => setMostrarTipo(!mostrarTipo)} value="Tipo" />
-                        {mostrarTipo && (
-                            <div className="div-botones-dificultad">
-                                {tipo.map((tipo, index) => (
-                                    <Boton id={tipo} key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={tipo} />
-                                ))}
-                            </div>
-                        )}
-                        <Boton onClick={() => setMostrarFiltro(!mostrarFiltro)} value="Ingredientes" />
-                        {mostrarFiltro && (
-                            <div className="div-botones-dificultad">
-                                {filtrosDisponibles.map((filtro, index) => (
-                                    <Boton id={filtro} key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={filtro} />
-                                ))}
-                            </div>
-                        )}
-                            
+                            {/* <img src={mostrarDificultad ? "/flecha-arriba.png" : "/flecha-abajo.png"} alt="desplegable" className="flecha-filtros"/> */}
+                            <Boton onClick={() => {setMostrarTipo(!mostrarTipo); setMostrarDificultad(false); setMostrarFiltro(false);}} value="Tipo" />
+                            {mostrarTipo && (
+                                <div className="div-botones-filtros-niveles">
+                                    {tipo.map((tipo, index) => (
+                                        <Boton id={tipo} key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={tipo} />
+                                    ))}
+                                    {/* <img src={mostrarTipo ? "/flecha-arriba.png" : "/flecha-abajo.png"} alt="desplegable" className="flecha-filtros"/> */}
+                                </div>
+                            )}
+                            <Boton onClick={() => {setMostrarFiltro(!mostrarFiltro); setMostrarTipo(false); setMostrarDificultad(false);}} value="Ingredientes" />
+                            {mostrarFiltro && (
+                                <div className="div-botones-filtros-niveles">
+                                    {filtrosDisponibles.map((filtro, index) => (
+                                        <Boton id={filtro} key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={filtro} />
+                                    ))}
+                                    {/* <img src={mostrarFiltro ? "/flecha-arriba.png" : "/flecha-abajo.png"} alt="desplegable" className="flecha-filtros"/> */}
+                                </div>
+                            )}
                         </div>
                     </div>
-                </div>
                 <div className="recetas-destacadas">
                     {cargando ? (
                         <span className="mensaje-cargando">Cargando recetas...</span>
@@ -136,7 +136,6 @@ function Recetas (){
                     )}
                 </div>
             </div>
-                
             <div className="div-paginacion">
                 <Boton key={2} onClick={() => setPagina(pagina > 1 ? pagina - 1 : 1)} value={'Página anterior'} />
                 <Boton key={1} onClick={() => recetas.length > 0 ? setPagina(pagina + 1) : setPagina(pagina)} value={'Siguiente página'} />

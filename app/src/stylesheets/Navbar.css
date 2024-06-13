@@ -180,7 +180,7 @@ a {
     height: auto;
 }
 
-.dropdown { /* HACER RESPONSIVE */
+.dropdown {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -188,10 +188,8 @@ a {
     gap: 1.5em;
     position: absolute;
     background-color: #ffffff;
-    /* width: 15%; */
+    width: 15%; /* CREO QUE NO DA PROBLEMAS */
     height: 350px;
-    /* min-width: 160px; */
-    /* padding: 0px 0px; */
     right: 0;
     text-align: center;
     top: 80px;
@@ -225,6 +223,11 @@ a {
     }
     .contenedor-hamburguesa {
         display: none;
+    }
+    .dropdown {
+        font-size: 0.8em;
+        width: 17%; /* CREO QUE NO DA PROBLEMAS */
+        top: 65px;
     }
 }
 

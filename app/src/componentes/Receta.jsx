@@ -47,9 +47,7 @@ function Receta(receta) {
                     throw new Error('No se pudo comprobar si la receta está guardada');
                 }
                 const data = await response.json();
-                console.log(data)
                 setEstaGuardada(data.estaGuardada);
-                console.log(data.estaGuardada)
             } catch (error) {
                 console.error('Error al comprobar si la receta está guardada', error);
             }

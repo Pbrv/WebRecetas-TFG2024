@@ -1,7 +1,6 @@
 .main-recetaUnica {
     display: flex;
     flex-direction: column;
-    /* margin-top: 2em; */
 }
 .contenedor-recetaUnica {
     padding-top: 1em;
@@ -9,7 +8,6 @@
     justify-content: center;
     align-items: baseline;
     gap: 2vw;
-    /* border: 1px solid red; */
     margin: 5px;
 }
 
@@ -48,7 +46,6 @@
     z-index: 100;
 }
 .header-recetaUnica {
-    /* border: 1px solid red; */
     display: flex;
     align-items: center;
     object-fit: cover;
@@ -59,7 +56,7 @@
 .nombre-recetaUnica {
     min-width: 370px;
     max-width: 390px;
-    background-color: #f1bbb3;
+    background: linear-gradient(to right, #cae7d3, #66989e);
     padding: 3em;
     display: flex;
     align-self: center;
@@ -99,6 +96,9 @@
     margin-bottom: 0.7vw;
 }
 
+#comentario {
+    padding: 1em;
+}
 .div-comentarios {
     display: flex;
     justify-content: center;    
@@ -124,7 +124,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /* border: 1px solid greenyellow; */
     margin: 10px;
     padding: 5px;
 }
@@ -132,19 +131,10 @@
         display: flex;
         flex-direction: column;
     }
-
-.div-comentario {
-    /* display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    border: 1px solid black;
-    padding: 10px;
-    border-radius: 15px;
-    width: 300px;
-    height: 250px;
-    overflow: hidden; */
-}
+    .enviar-comentario {
+        padding: 0.5em;
+        cursor: pointer;
+    }
 p{
     margin: 5px;
     text-align: center;

@@ -7,6 +7,7 @@ function RecetasGuardadas (){
     const [recetasGuardadas, setRecetasGuardadas] = useState([]);
     const [recetas, setRecetas] = useState([]);
     const [datos, setDatos] = useState();
+    const [cargando, setCargando] = useState(false);
 
     useEffect(() => {
         const fetchDatosUsuario = async () => {
@@ -33,6 +34,7 @@ function RecetasGuardadas (){
     useEffect(() => {
         const fetchRecetas = async () => {
             try {
+                setCargando(true);
                 const recetasGuardadas = await fetch(`http://localhost:8000/recetas_guardadas_usuario/${datos.nombre_usuario}`, {
                     method: 'GET',    
                     headers: {
@@ -49,9 +51,10 @@ function RecetasGuardadas (){
             } catch (error) {
                 console.error("Error al hacer fetch", error);
             }
+            setCargando(false);
         }
+        
         fetchRecetas();
-
     }, [datos])
 
     useEffect(() => {
@@ -75,10 +78,8 @@ function RecetasGuardadas (){
         };
     
         if (recetasGuardadas.length > 0) {
-            // Limpia el estado de recetas
-            setRecetas([]);
+            setRecetas([]); // Limpia el estado de recetas
     
-            // Fetch cada receta y agrega los datos al estado de recetas
             const fetchPromises = recetasGuardadas[0].split(';').map(id_receta => fetchDatosRecetas(id_receta));
             Promise.all(fetchPromises)
                 .then(recetasData => setRecetas(recetasData))
@@ -86,15 +87,17 @@ function RecetasGuardadas (){
         }
     }, [recetasGuardadas]);
     
-    
-    
     return(
         <div className="contenedor-recetasGuardadas">
             <h1 className="titulo-recetasGuardadas">Recetas Guardadas</h1>
             <div className="recetas-destacadas">
-                {recetas.map((receta) => (
-                    <Receta key={receta.id_receta} {...receta} />
-                ))}
+                {cargando ? (
+                    <span className="mensaje-cargando">Cargando recetas...</span>
+                ) : (
+                    recetas.map((receta) => (
+                        <Receta key={receta.id_receta} {...receta} />
+                    ))
+                )}
             </div>
         </div>
     );

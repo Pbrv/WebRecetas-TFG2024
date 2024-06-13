@@ -18,22 +18,15 @@ nav {
     z-index: 1000; */
 }
 .recetas-filtradas-nav {
-    width: 20vw;
-    height: 10vh;
-    /* height: max-content; */
+    width: 18vw;
+    height: auto;
     padding: 10px;
     border-radius: 4px;
     outline: none;
     overflow-y: auto;
-    background-color: #f0f0f0;
+    background-color: #f3f2f2;
     position: absolute;
-    right: 65px;
     top: 110%;
-    /* dis
-    
-    
-    width: 100%; */
-    /* background-color: #f0f0f0; */
 }
 .receta-filtro-nav {
     padding: 10px 0px;

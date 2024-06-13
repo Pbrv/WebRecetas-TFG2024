@@ -16,10 +16,7 @@ function Receta(receta) {
     useEffect(() => {
         const compruebaRecetaGuardada = async () => {
             const token = localStorage.getItem("token");
-            if (!token) { // Si no hay usuario logueado no hay recetas guardadas
-                setEstaGuardada(false);
-                return;
-            }
+            
             const responseValoraciones = await fetch( // Obtiene valoraciones de las recetas
                 `http://localhost:8000/numero_valoraciones/${receta.id_receta}`
             );
@@ -31,7 +28,10 @@ function Receta(receta) {
             );
             const dataValoracionMedia = await responseValoracionMedia.json();
             setValoracionMedia(dataValoracionMedia.valoracion_media);
-
+            if (!token) { // Si no hay usuario logueado no hay recetas guardadas
+                setEstaGuardada(false);
+                return;
+            }
             try {
                 const response = await fetch('http://localhost:8000/comprobar_receta', {
                     method: 'POST',

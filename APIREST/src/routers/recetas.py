@@ -105,11 +105,8 @@ async def mostrar_receta(id_usuario: int, db: db_con):
 @app.get("/numero_valoraciones/{id_receta}") # Para mostrar los votos de cada receta
 async def numero_valoraciones(id_receta: int, db: db_con):
     try:
-        # Obtener la receta existente
         receta_existente = db.query(receta.Receta).filter(receta.Receta.id_receta == id_receta).first()
-        # Obtener la lista de valoraciones
         valoraciones = receta_existente.valoraciones_receta.split(";") if receta_existente.valoraciones_receta else []
-        # Calcular el número de valoraciones
         numero_valoraciones = len(valoraciones)
         return {"numero_valoraciones": numero_valoraciones}
     except ValidationError as ve:
@@ -120,18 +117,14 @@ async def numero_valoraciones(id_receta: int, db: db_con):
 @app.get("/valoracion_media/{id_receta}")
 async def valoracion_media(id_receta: int, db: db_con):
     try:
-        # Obtener la receta existente
         receta_existente = db.query(receta.Receta).filter(receta.Receta.id_receta == id_receta).first()
-        # Obtener la lista de valoraciones
         valoraciones = receta_existente.valoraciones_receta.split(";") if receta_existente.valoraciones_receta else []
-        # Calcular la valoración media
         valoracion_media = sum(int(valoracion) for valoracion in valoraciones) / len(valoraciones) if valoraciones else 0
         return {"valoracion_media": valoracion_media}
     except ValidationError as ve:
         raise HTTPException(status_code=422, detail=f"Validación fallida: {ve}")
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
-
     
     
 @app.get("/recetas_pais/{pais_nom}") # mostrar receta pasando nombre del pais
@@ -155,14 +148,12 @@ async def mostrar_receta(db: db_con, filtro: str, dificultad: str, tipo: str, pa
 
         # Inicia la consulta
         query = db.query(receta.Receta)
-
         # Si hay algun filtro
         if(filtro != ''):
             # Divide los ingredientes por el caracter ';'
             ingredientes = filtro.split(';')
             for ingrediente in ingredientes:
                 query = query.filter(receta.Receta.ingredientes_receta.like(f'%{ingrediente}%'))
-
         # Si hay un filtro de dificultad
         if (dificultad != ''):
             query = query.filter(receta.Receta.dificultad_receta == dificultad)
@@ -180,7 +171,6 @@ async def mostrar_receta(db: db_con, filtro: str, dificultad: str, tipo: str, pa
 
     except SQLAlchemyError as se:
         raise HTTPException(status_code=500, detail=f"Error en la base de datos: {se}")
-
 
 
 # POST
@@ -207,6 +197,7 @@ async def insertar_receta(insertar: receta.InsertarReceta, db: db_con, current_u
         informacion_receta = insertar.dict()
         informacion_receta['usuario_receta'] = current_user.id_usuario
         informacion_receta['fecha_creacion'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        informacion_receta['fecha_modificacion'] = informacion_receta['fecha_creacion']
         # informacion_receta['fecha_modificacion'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         print(informacion_receta)
         print(imagen_receta)

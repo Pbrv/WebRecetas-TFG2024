@@ -280,10 +280,10 @@ function RecetaUnica() {
                             name="descripcion_comentario" 
                             id="comentario" 
                             placeholder="Introduce tu comentario..." 
-                            rows={8} cols={70} 
+                            rows={7} cols={60} 
                             onChange={handleInputChange} />
                     </label>
-                    <button onClick={enviarComentario}>Enviar comentario</button>
+                    <button className="enviar-comentario" onClick={enviarComentario}>Enviar comentario</button>
                     <div className="aviso-error">
                         {error && <p className="error">{error}</p>}
                     </div>
@@ -293,7 +293,7 @@ function RecetaUnica() {
                 <div className="div-comentarios">
                     <div className="comentarios">
                         <h2>Valoraciones</h2>
-                        <div className="">
+                        <div>
                         {comentarios.length > 0 ? (
                             comentarios.map((comentario) => (
                                 <Comentario key={comentario.id_comentario} {...comentario} />

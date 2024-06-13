@@ -1,17 +1,8 @@
-/* .destacados {
-    padding: 3vw 0vw;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 1px solid #A7CAB1;
-} */
- .div-botones-dificultad {
+.div-botones-dificultad {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
- }
+}
 
 .main-recetas {
     display: flex;
@@ -35,7 +26,6 @@
     align-items: center;
     /* gap: 2em; */
     height: 70vh;
-    border: 1px solid greenyellow;
     min-width: 280px;
     /* padding: 1em; */
     background-color: rgb(233, 233, 233);

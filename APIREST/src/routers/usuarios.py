@@ -216,7 +216,7 @@ async def comprobar_receta(request: Request, db: Session = Depends(get_db), curr
     # Comprobar si la receta está guardada
     recetas_guardadas = str(receta_id) in (usuario.recetas_guardadas_usuario or "").split(";")
 
-    return {"isSaved": recetas_guardadas}
+    return {"estaGuardada": recetas_guardadas}
 
 
 # El usuario Guarda la receta

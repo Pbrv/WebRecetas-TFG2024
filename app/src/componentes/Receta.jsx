@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 function Receta(receta) {
     const estrellas = new Array(5).fill(null);
     const gorritos = new Array(4).fill(null);
-    // const [valoracion, setValoracion] = useState(0);
+    const [valoracion, setValoracion] = useState(0);
     const [valoraciones, setValoraciones] = useState(0);
     const [valoracionMedia, setValoracionMedia] = useState(0);
     const [estaGuardada, setEstaGuardada] = useState(false); // estado para saber si el usuario ya se ha guardado esa receta
@@ -16,7 +16,10 @@ function Receta(receta) {
     useEffect(() => {
         const compruebaRecetaGuardada = async () => {
             const token = localStorage.getItem("token");
-            
+            if (!token) { // Si no hay usuario logueado no hay recetas guardadas
+                setEstaGuardada(false);
+                return;
+            }
             const responseValoraciones = await fetch( // Obtiene valoraciones de las recetas
                 `http://localhost:8000/numero_valoraciones/${receta.id_receta}`
             );
@@ -28,11 +31,6 @@ function Receta(receta) {
             );
             const dataValoracionMedia = await responseValoracionMedia.json();
             setValoracionMedia(dataValoracionMedia.valoracion_media);
-
-            if (!token) { // Si no hay usuario logueado no hay recetas guardadas
-                setEstaGuardada(false);
-                return;
-            }
 
             try {
                 const response = await fetch('http://localhost:8000/comprobar_receta', {
@@ -49,7 +47,9 @@ function Receta(receta) {
                     throw new Error('No se pudo comprobar si la receta está guardada');
                 }
                 const data = await response.json();
+                console.log(data)
                 setEstaGuardada(data.estaGuardada);
+                console.log(data.estaGuardada)
             } catch (error) {
                 console.error('Error al comprobar si la receta está guardada', error);
             }

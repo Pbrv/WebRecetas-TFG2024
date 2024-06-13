@@ -19,7 +19,7 @@
     align-items: center;
     min-width: 280px;
     max-width: 280px;
-    max-height: 700px;
+    max-height: 75vh;
     background-color: #f1f0ec;
     gap: 0.1em;
     /* position: relative; */
@@ -59,7 +59,6 @@
     display: flex;
     gap: 1em;
     padding: 3em;
-    /* margin: auto; */
 }
 
 @media (max-width: 1800px) {

@@ -100,8 +100,7 @@ function Paises() {
                                         <Boton 
                                             id="boton-pais"
                                             key={pais.id_pais}
-                                            onClick={(e) => 
-                                                cambiarPaises(pais.nombre_pais, e.target)} value={pais.nombre_pais} />
+                                            onClick={(e) => cambiarPaises(pais.nombre_pais, e.target)} value={pais.nombre_pais} />
                                     ))}
                                 </div>
                                 

@@ -75,7 +75,6 @@ function Recetas (){
         }
 
         if(tipo.includes(value)) {
-            console.log('no lo incluye ni filtros ni dificultad')
             if(tipoSeleccionado && tipoSeleccionado !== value){
                 document.getElementById(tipoSeleccionado).classList.toggle('boton-selected')
             }

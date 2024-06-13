@@ -47,7 +47,6 @@ function RecetasGuardadas (){
                 const DatosRecetasGuardadas = await recetasGuardadas.json();
 
                 setRecetasGuardadas(DatosRecetasGuardadas);
-                console.log(DatosRecetasGuardadas)
             } catch (error) {
                 console.error("Error al hacer fetch", error);
             }

@@ -41,12 +41,10 @@ const NuevaReceta = () => {
     };
 
     const handleCambio = (e) => {
-        console.log(e.target.value)
         setReceta({...receta, [e.target.name]: e.target.value});
     }
 
     const handleCambioArchivo = (e) => {
-        console.log(e.target.files[0].name)
         setArchivoSeleccionado(e.target.files[0]);
         setReceta({...receta, [e.target.name]: e.target.files[0]});
     }

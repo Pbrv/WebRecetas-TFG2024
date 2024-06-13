@@ -13,6 +13,7 @@ function Recetas (){
     const [mostrarDificultad, setMostrarDificultad] = useState(false); // Filtro de dificultad
     const [mostrarTipo, setMostrarTipo] = useState(false); 
     const [mostrarFiltro, setMostrarFiltro] = useState(false); 
+    const [cargando, setCargando] = useState(false);
     const filtrosDisponibles = ['Salsa','Patata','Queso','Lechuga','Arroz', 'Huevo', 'Café'];
     const dificultad = ['Facil', 'Medio', 'Dificil', 'Muy dificil']
     const tipo = ['Comida', 'Cena', 'Postre', 'Bebida', 'Desayuno', 'Salsa']
@@ -21,6 +22,7 @@ function Recetas (){
 
     // Hacer que se muestren todas las recetas si no hay filtros
     useEffect(() => {
+        setCargando(true);
         fetch(`http://localhost:8000/recetas_filtros/?filtro=${filtros}&dificultad=${dificultadSeleccionada}&tipo=${tipoSeleccionado}&pagina=${pagina}`)
             .then(response => response.json())
             .then((recetas) => {
@@ -29,6 +31,7 @@ function Recetas (){
                 } else {
                     setRecetas(recetas)
                 }
+                setCargando(false);
             });
     }, [filtros, dificultadSeleccionada, tipoSeleccionado, pagina]);
 
@@ -121,10 +124,12 @@ function Recetas (){
                     </div>
                 </div>
                 <div className="recetas-destacadas">
-                    {recetas.length > 0 ? (
-                            recetas.map((receta) => (
-                                <Receta key={receta.id_receta} {...receta} />
-                            ))
+                    {cargando ? (
+                        <span className="mensaje-cargando">Cargando recetas...</span>
+                    ) : recetas.length > 0 ? (
+                        recetas.map((receta) => (
+                            <Receta key={receta.id_receta} {...receta} />
+                        ))
                     ) : (
                         <span className="mensaje-error">No hay recetas con esos filtros</span>
                     )}

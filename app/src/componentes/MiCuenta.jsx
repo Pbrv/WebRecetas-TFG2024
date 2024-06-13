@@ -113,7 +113,6 @@ function MiCuenta() {
                     <div className="datos_usuario">
                         <div className="encabezado_datos">
                             <h2 className="titulo-h2">Mis Recetas</h2>
-                            <Link to="#" className="enlace_mod">Editar mis recetas</Link>
                         </div>
                         <div className="cuerpo_datos_recetas">
                         {userData.recetas.map((receta, index) => (

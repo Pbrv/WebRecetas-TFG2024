@@ -28,6 +28,7 @@ function Navbar({ isLogged, setIsLogged }) {
             const usuario = await response.json();
             setNombreUsuario(usuario.nombre_usuario);
             console.log(usuario.nombre_usuario)
+            setDesplegableVisible(false)
         };
         obtenerDatosUsuario();
     }, [isLogged]);
@@ -62,11 +63,17 @@ function Navbar({ isLogged, setIsLogged }) {
 
     return (
         <nav>
-            <div>
+            <div className="contenedor-hamburguesa">
             <button className="hamburguesa" onClick={() => setMenuAbierto(!menuAbierto)}>
                         <img src="../hamburguesa.png" alt="imagen nav hamburguesa">
                         </img>
                     </button>
+                    {menuAbierto && (
+                    <div className="links-hamburguesa">
+                        <Link to={`/recetas`} className="enlace-nav">Recetas</Link>
+                        <Link to={`/paises`} className="enlace-nav">Paises</Link>
+                    </div>
+                )}
             </div>
             <ul>
                 <li><Link to={`/`}><img src="../logo1.jpeg" alt="Logo" id="logo" /></Link></li>
@@ -94,6 +101,11 @@ function Navbar({ isLogged, setIsLogged }) {
                             <Link to={`/mi-cuenta`} className="a-user">Mi Cuenta</Link>
                             <Link to={`/nueva-receta`} className="a-user">Subir Receta</Link>
                             <Link to={`/recetas-guardadas`} className="a-user">Recetas Guardadas</Link>
+                            <LogoutButton setIsLogged={setIsLogged}/>
+                        </div>
+                    )}
+                    {isLogged && (
+                        <div className="cerrar-sesion">
                             <LogoutButton setIsLogged={setIsLogged}/>
                         </div>
                     )}

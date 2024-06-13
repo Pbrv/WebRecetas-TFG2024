@@ -16,8 +16,58 @@ function ModificarReceta() {
     const navigate = useNavigate();
     const [archivoSeleccionado, setArchivoSeleccionado] = useState(null);
     const [mensaje, setMensaje] = useState(null);
+    const [recetaEditable, setRecetaEditable] = useState(false);
+    
 
     const tiposReceta = ["comida", "cena", "postre", "desayuno", "salsa", "bebida"];
+
+    useEffect(() => {
+        const fetchDatosUsuario = async () => {
+            try {
+                const response = await fetch("http://localhost:8000/mi_cuenta", {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error("No se obtuvieron los datos del usuario");
+                }
+                let DatosUsuario = await response.json();
+
+                // Obtiene las recetas CREADAS por el usuario
+                const responseRecetas = await fetch(`http://localhost:8000/usuario/${DatosUsuario.id_usuario}/recetas`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token")
+                    }
+                });
+                if (!responseRecetas.ok) {
+                    throw new Error("No se obtuvieron las recetas del usuario");
+                }
+                const DatosRecetas = await responseRecetas.json();
+
+                let editable = false;
+                DatosRecetas.forEach((receta) => {
+                    if (receta.id_receta == id) {
+                        editable = true;
+                        console.log('Entra en receta editable');
+                    }
+                });
+
+                setRecetaEditable(editable);
+
+                if (!editable) {
+                    console.log('La receta no es editable');
+                    console.log(editable);
+                    navigate('/');
+                }
+            } catch (error) {
+                console.error("Error al hacer fetch", error);
+            }
+        };
+        fetchDatosUsuario();
+    }, [id, navigate]);
 
     useEffect(() => {
         const obtenerDatos = async () => {

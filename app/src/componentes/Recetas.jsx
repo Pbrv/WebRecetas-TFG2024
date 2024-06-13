@@ -92,35 +92,37 @@ function Recetas (){
     return(
         <main className="main-recetas">
             <div className="div-recetas-filtros">
-                {/* ID puesto para saber que contiene */}
-                <div id="filtros_recetas">
-                    <h4>Filtra aquí tus resultados</h4>
-                    <div className="div-botones-filtros">
-                    <Boton onClick={() => setMostrarDificultad(!mostrarDificultad)} value="Dificultad" />
-                        {mostrarDificultad && (
+                <div className="prueba">
+                    {/* ID puesto para saber que contiene */}
+                    <div id="filtros_recetas">
+                        <h4>Filtra aquí tus resultados</h4>
+                        <div className="div-botones-filtros">
+                        <Boton onClick={() => setMostrarDificultad(!mostrarDificultad)} value="Dificultad" />
+                            {mostrarDificultad && (
+                                <div className="div-botones-dificultad">
+                                    {dificultad.map((dificultad, index) => (
+                                        <Boton id={index} key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={dificultad} />
+                                    ))}
+                                </div>
+                            )}
+                        <Boton onClick={() => setMostrarTipo(!mostrarTipo)} value="Tipo" />
+                        {mostrarTipo && (
                             <div className="div-botones-dificultad">
-                                {dificultad.map((dificultad, index) => (
-                                    <Boton id={index} key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={dificultad} />
+                                {tipo.map((tipo, index) => (
+                                    <Boton id={tipo} key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={tipo} />
                                 ))}
                             </div>
                         )}
-                    <Boton onClick={() => setMostrarTipo(!mostrarTipo)} value="Tipo" />
-                    {mostrarTipo && (
-                        <div className="div-botones-dificultad">
-                            {tipo.map((tipo, index) => (
-                                <Boton id={tipo} key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={tipo} />
-                            ))}
+                        <Boton onClick={() => setMostrarFiltro(!mostrarFiltro)} value="Ingredientes" />
+                        {mostrarFiltro && (
+                            <div className="div-botones-dificultad">
+                                {filtrosDisponibles.map((filtro, index) => (
+                                    <Boton id={filtro} key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={filtro} />
+                                ))}
+                            </div>
+                        )}
+                            
                         </div>
-                    )}
-                    <Boton onClick={() => setMostrarFiltro(!mostrarFiltro)} value="Ingredientes" />
-                    {mostrarFiltro && (
-                        <div className="div-botones-dificultad">
-                            {filtrosDisponibles.map((filtro, index) => (
-                                <Boton id={filtro} key={index} onClick={(e) => cambiar_filtros(e.target.innerText, e.target)} value={filtro} />
-                            ))}
-                        </div>
-                    )}
-                        
                     </div>
                 </div>
                 <div className="recetas-destacadas">

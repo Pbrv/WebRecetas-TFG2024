@@ -10,6 +10,7 @@ function Paises() {
     const [continentes, setContinentes] = useState([]);
     const [continenteActivo, setContinenteActivo] = useState(null);
     const [paisActivo, setPaisActivo] = useState(null);
+    const [cargando, setCargando] = useState(false);
 
     useEffect(() => {
         // Obtener continentes
@@ -50,6 +51,7 @@ function Paises() {
     };
 
     useEffect(() => {
+        setCargando(true);
         const obtenerRecetas = async () => {
             let url;
             if (paisActivo === null) {
@@ -60,6 +62,7 @@ function Paises() {
             const response = await fetch(url);
             const receta = await response.json();
             setRecetas(receta);
+            setCargando(false);
         };
         obtenerRecetas();
     }, [paisActivo]);
@@ -107,9 +110,13 @@ function Paises() {
                 ))}
             </div>
             <div className="recetas-destacadas">
-                {recetas.map((receta, index) => (
-                    <Receta key={index} {...receta} />
-                ))}
+                {cargando ? (
+                    <span className="mensaje-cargando">Cargando recetas...</span>
+                ) : (
+                    recetas.map((receta, index) => (
+                        <Receta key={index} {...receta} />
+                    ))
+                )}
             </div>
         </div>
     );

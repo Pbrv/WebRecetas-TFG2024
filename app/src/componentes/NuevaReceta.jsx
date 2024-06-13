@@ -233,7 +233,7 @@ const NuevaReceta = () => {
                             type="file" 
                             name="imagen_receta" 
                             className="input_imagen"
-                            onChange={handleCambioArchivo}
+                            onChange={handleCambioArchivo} required
                         />
                         
                         <div className="div-boton-nueva-receta">

@@ -28,3 +28,7 @@ html, body {
   align-items: center;
   justify-content: center;
 }
+
+.mensaje-cargando {
+  padding: 5em 0 5em 0;
+}

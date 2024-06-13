@@ -34,7 +34,7 @@ function App() {
 
   return (
     <Router>
-      <Navbar isLogged={isLogged} setIsLogged={setIsLogged} />
+      <Navbar isLogged={isLogged} setIsLogged={setIsLogged} recetas={recetas}/>
       <Routes>
         <Route path="/" element={<Home recetas={recetas} isLogged={isLogged} />} />
         <Route path="/login" element={<LoginForm setIsLogged={setIsLogged} />} />

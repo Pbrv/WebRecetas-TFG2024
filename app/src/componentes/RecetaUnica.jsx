@@ -25,29 +25,6 @@ function RecetaUnica() {
         descripcion_comentario: "",
         // valoracion_comentario: 0
     })
-    // const [existeReceta, setExisteReceta] = useState(false);
-
-    // useEffect(() => {
-    //     const checkIdReceta = async () => {
-    //             const response = await fetch(
-    //                 `http://localhost:8000/obtener_id_recetas`
-    //             );
-    //             const ids = await response.json();
-
-    //             for(let i = 0; i<ids.length;i++){
-    //                 if(ids[i] == id){
-    //                     setExisteReceta(true);
-    //                     console.log('existe')
-    //                     return;
-    //                 }
-    //             }
-
-    //             if (!existeReceta) {
-    //                 return navigate('/');
-    //             }
-    //     };
-    //     checkIdReceta();
-    // },[])
 
     // Cuando se carga la receta comprueba si están GUARDADAS por el usuario o no
     useEffect(() => {
@@ -104,7 +81,6 @@ function RecetaUnica() {
                         'Authorization': 'Bearer ' + localStorage.getItem("token")
                     },
                     body: JSON.stringify({
-                        // userId: userData.id_usuario, // Asegúrate de tener el ID del usuario
                         receta_id: recetas.id_receta // Asegúrate de tener el ID de la receta
                     })
                 });
@@ -159,7 +135,6 @@ function RecetaUnica() {
             
             setValoraciones(valoraciones + 1);  // Actualizar el número de valoraciones
             setValoracionMedia((valoracionMedia * valoraciones + nuevaValoracion) / (valoraciones + 1));
-            // console.log(valoracionMedia)
         } catch (error) {
             console.error('Error al valorar la receta:', error);
         }
@@ -232,11 +207,6 @@ function RecetaUnica() {
                     setNuevoComentario(true)
                     document.querySelector('textarea').value = ''
                 }
-                // Se actualiza el comentario y se muestra el nombre de usuario
-                // setComentarios([...comentarios, nuevoComentario]);
-                // console.log(comentarios)
-                // setComentario({ ...comentario, descripcion_comentario: "", valoracion_comentario: 0 });
-                // console.log(comentario)
             }
         } catch (error) {
             console.error(error);

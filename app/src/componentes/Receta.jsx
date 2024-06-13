@@ -128,7 +128,6 @@ function Receta(receta) {
             if (!respuesta.ok) {
                 throw new Error('Error al valorar la receta');
             }
-            console.log(receta.valoracion_receta)
             // Procesar la respuesta (si es necesario)
             const datosRespuesta = await respuesta.json();
 

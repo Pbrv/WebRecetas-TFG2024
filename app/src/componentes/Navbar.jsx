@@ -4,13 +4,14 @@ import "../stylesheets/Navbar.css"
 import LogoutButton from "./Logout";
 import jwtDecode from "jwt-decode";
 
-function Navbar({ isLogged, setIsLogged }) {
+function Navbar({ isLogged, setIsLogged, recetas }) {
     const [desplegableVisible, setDesplegableVisible] = useState(false); // Estado para la el desplegable de usuario
     const [searchVisible, setSearchVisible] = useState(false); // Estado para la barra de búsqueda 
     const [menuAbierto, setMenuAbierto] = useState(false);
     const [nombreUsuario, setNombreUsuario] = useState('');
     // const [isLogged, setIsLogged] = useState(false);
     const dropdownRef = useRef(null);
+    const [recetasFiltradas, setRecetasFiltradas] = useState();
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -61,6 +62,21 @@ function Navbar({ isLogged, setIsLogged }) {
         setSearchVisible(!searchVisible);
     };
 
+    function mostrarFiltradas(valorBusqueda) {
+        console.log(valorBusqueda)
+        if(valorBusqueda !== ''){
+            const nuevasRecetasFiltradas = recetas.filter(receta =>
+                receta.nombre_receta.toLowerCase().includes(valorBusqueda.toLowerCase())
+            );
+            setRecetasFiltradas(nuevasRecetasFiltradas);
+            document.querySelector('.recetas-filtradas-nav').style.display = 'block';
+        } else {
+            setRecetasFiltradas();
+            document.querySelector('.recetas-filtradas-nav').style.display = 'none';
+        }
+    }
+
+
     return (
         <nav>
             <div className="contenedor-hamburguesa">
@@ -83,7 +99,12 @@ function Navbar({ isLogged, setIsLogged }) {
             <div className="div-iconos">
                 {searchVisible && ( // Muestra la barra de búsqueda si searchVisible es true
                     <div className="div-barra-busqueda">
-                        <input type="text" placeholder="Buscar..."  className="barra-busqueda" />
+                        <input type="text" placeholder="Buscar..."  className="barra-busqueda" onChange={(e) => {mostrarFiltradas(e.target.value)}}/>
+                        <div className='recetas-filtradas-nav' style={{display:'none'}}>
+                            {recetasFiltradas && recetasFiltradas.map((receta) => (
+                                <div className='receta-filtro-nav'><Link to={`/receta/${receta.id_receta}`}>{receta.nombre_receta}</Link></div>
+                            ))}
+                        </div>
                         {/* <button onClick={handleSearchClose}>X</button> */}
                     </div>
                 )}

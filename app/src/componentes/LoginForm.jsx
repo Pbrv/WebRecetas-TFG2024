@@ -48,7 +48,7 @@ function LoginForm({ setIsLogged }) {
                 }
             }
         } catch (error) {
-            console.log('Error al enviar la solicitud', error);
+            console.error('Error al enviar la solicitud', error);
         }
     };
 

@@ -58,8 +58,6 @@ function ModificarReceta() {
                 setRecetaEditable(editable);
 
                 if (!editable) {
-                    console.log('La receta no es editable');
-                    console.log(editable);
                     navigate('/');
                 }
             } catch (error) {
@@ -74,17 +72,14 @@ function ModificarReceta() {
             const responseReceta = await fetch(`http://localhost:8000/mostrar_receta/${id}`);
             const receta = await responseReceta.json();
             setReceta(receta);
-            console.log(receta.imagen_receta)
     
             const responsePais = await fetch(`http://localhost:8000/mostrar_pais/${receta.id_receta}`);
             const paisSeleccionado = await responsePais.json();
             setPaisSeleccionado(paisSeleccionado);
-            // console.log(paisSeleccionado)
     
             const responseContinente = await fetch(`http://localhost:8000/mostrar_continente/${paisSeleccionado.continente_pais}`);
             const continenteSeleccionado = await responseContinente.json();
             setContinenteSeleccionado(continenteSeleccionado);
-            console.log(continenteSeleccionado)
             
             const responsePaises = await fetch(`http://localhost:8000/mostrar_paises/${continenteSeleccionado.nombre_continente}`);
             const paises = await responsePaises.json();
@@ -116,7 +111,6 @@ function ModificarReceta() {
             const response = await fetch(`http://localhost:8000/mostrar_paisess/${continenteModificado}`);
             const data = await response.json();
             setPaises(data);
-            console.log(data)
             setPaisSeleccionado({});
         } catch (error) {
             console.error('Error al obtener los países:', error);
@@ -127,15 +121,11 @@ function ModificarReceta() {
         const idPaisSeleccionado = Number(event.target.value);
         const paisSeleccionado = paises.find(pais => pais.id_pais === idPaisSeleccionado);
         setPaisSeleccionado(paisSeleccionado);
-        console.log(paisSeleccionado)
     };
 
     const handleCambioInput = (event) => {
         const { name, value } = event.target;
         setReceta({ ...receta, [name]: value });
-        console.log(`Cambio en ${name}:`, value);
-        console.log(receta.ingredientes_receta)
-        console.log("Nuevo estado de la receta:", receta);
     };
 
     const handleCambioImagen= (e) => {
@@ -151,16 +141,12 @@ function ModificarReceta() {
         newIngredientes.splice(index, 1);
         setIngredientes(newIngredientes);
         setReceta({ ...receta, ingredientes_receta: newIngredientes.join(';') });
-        console.log(receta.ingredientes_receta)
-        console.log("Nuevo estado de la receta:", receta);
     };
     const handleCambioIngrediente = (index, event) => {
         const newIngredientes = [...ingredientes];
         newIngredientes[index] = event.target.value;
         setIngredientes(newIngredientes);
-        // console.log(newIngredientes)
         setReceta({ ...receta, ingredientes_receta: newIngredientes.join(';') });
-        // console.log(receta.ingredientes_receta)
     };
 
     const handleAñadirPaso = () => {
@@ -201,8 +187,7 @@ function ModificarReceta() {
             // Crear un objeto FormData y añadir los datos de la receta y el archivo de imagen
             const formData = new FormData();
             Object.keys(receta).forEach(key => formData.append(key, receta[key]));
-            // formData.append('imagen_receta', archivoSeleccionado);  // Asegúrate de tener una referencia al archivo seleccionado
-            console.log(formData)
+            
             // Enviar la receta y la IMAGEN al servidor
             const response = await fetch(`/modificar_receta/${id}`, {
                 method: 'PUT',
